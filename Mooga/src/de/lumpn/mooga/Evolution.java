@@ -21,7 +21,7 @@ public class Evolution {
 	public List<Genome> initialize() {
 		List<Genome> result = new ArrayList<Genome>();
 		for (int i = 0; i < populationSize; i++) {
-			Genome genome = factory.createChromosome();
+			Genome genome = factory.createGenome();
 			result.add(genome);
 		}
 		return result;
@@ -50,7 +50,7 @@ public class Evolution {
 
 		// fill up
 		for (int i = result.size(); i < populationSize; i++) {
-			Genome genome = factory.createChromosome();
+			Genome genome = factory.createGenome();
 			result.add(genome);
 		}
 

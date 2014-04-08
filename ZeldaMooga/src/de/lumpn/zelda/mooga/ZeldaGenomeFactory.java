@@ -11,7 +11,7 @@ public final class ZeldaGenomeFactory implements GenomeFactory {
 	}
 
 	@Override
-	public ZeldaGenome createChromosome() {
+	public ZeldaGenome createGenome() {
 		return new ZeldaGenome(configuration, random);
 	}
 

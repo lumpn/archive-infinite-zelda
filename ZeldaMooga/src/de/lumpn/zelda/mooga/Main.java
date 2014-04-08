@@ -17,7 +17,7 @@ public class Main {
 
 		ZeldaGenomeFactory factory = new ZeldaGenomeFactory(configuration, random);
 
-		ZeldaGenome best = factory.createChromosome();
+		ZeldaGenome best = factory.createGenome();
 		ZeldaIndividual individual = best.spawn();
 		/*
 		System.out.println("target: " + individual);
