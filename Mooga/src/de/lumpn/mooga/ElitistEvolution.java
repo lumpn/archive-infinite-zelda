@@ -1,6 +1,7 @@
 package de.lumpn.mooga;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import de.lumpn.mooga.ranking.CrowdingDistanceRanking;
@@ -34,12 +35,17 @@ public class ElitistEvolution {
 		// combine with archive
 		population.addAll(archive);
 
+		// distinct
+		population = new ArrayList<Individual>(new HashSet<Individual>(population));
+
 		// rank population
 		List<Individual> rankedPopulation = ranking.rank(population);
 
 		// update archive
 		archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
-		print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
+		// print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
+		// System.out.println(rankedPopulation.size() + " distinct individuals");
+		System.out.println(rankedPopulation.get(0).getScore(0));
 
 		// evolve population
 		return evolution.evolve(rankedPopulation, random);
