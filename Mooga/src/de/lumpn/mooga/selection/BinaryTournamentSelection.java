@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Random;
 import de.lumpn.mooga.Individual;
 
-public class BinaryTournamentSelection implements Selection {
+public final class BinaryTournamentSelection implements Selection {
+
+	public BinaryTournamentSelection(Random random) {
+		this.random = random;
+	}
 
 	@Override
 	public Individual select(List<Individual> individuals) {
 		int size = individuals.size();
-		int a = random.nextInt(size);
-		int b = random.nextInt(size);
-		if (a < b) {
-			return individuals.get(a);
-		}
-		return individuals.get(b);
+		int pos1 = random.nextInt(size);
+		int pos2 = random.nextInt(size);
+		return individuals.get(Math.min(pos1, pos2));
 	}
 
 	@Override
@@ -30,5 +31,5 @@ public class BinaryTournamentSelection implements Selection {
 		return result;
 	}
 
-	private final Random random = new Random();
+	private final Random random;
 }

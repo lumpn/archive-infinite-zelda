@@ -1,28 +1,22 @@
 package de.lumpn.mooga.ranking;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
-import de.lumpn.mooga.CharacteristicEvaluator;
 import de.lumpn.mooga.Individual;
-import de.lumpn.mooga.ranking.impl.CharacteristicComparator;
+import de.lumpn.mooga.ranking.impl.CrowdingDistanceComparator;
+import de.lumpn.mooga.ranking.impl.CrowdingDistanceIndividual;
+import de.lumpn.mooga.ranking.impl.DominationComparator;
 import de.lumpn.mooga.ranking.impl.ScoreComparator;
-import de.lumpn.mooga.ranking.impl.ScoredIndividual;
 
-public class CrowdingDistanceRanking implements Ranking {
-
-	public CrowdingDistanceRanking(Comparator<Individual> comparator,
-			Iterable<CharacteristicEvaluator> evaluators) {
-		this.comparator = comparator;
-		this.evaluators = evaluators;
-	}
+public final class CrowdingDistanceRanking implements Ranking {
 
 	@Override
 	public List<Individual> rank(List<Individual> individuals) {
 
 		// trivial?
-		if (individuals.isEmpty()) {
-			return new ArrayList<Individual>();
+		if (individuals.size() < 2) {
+			return new ArrayList<Individual>(individuals);
 		}
 
 		// split into non-dominated and dominated
@@ -40,6 +34,7 @@ public class CrowdingDistanceRanking implements Ranking {
 				}
 			}
 
+			// put in respective list
 			if (isDominated) {
 				dominated.add(individual);
 			} else {
@@ -53,73 +48,70 @@ public class CrowdingDistanceRanking implements Ranking {
 		// recursively rank the dominated individuals
 		List<Individual> rankedDominated = rank(dominated);
 
-		// concatenate
+		// concatenate both lists
 		List<Individual> result = new ArrayList<Individual>();
 		result.addAll(sortedNonDominated);
 		result.addAll(rankedDominated);
-
 		return result;
 	}
 
-	/**
-	 * crowding distance calculation
-	 */
 	private List<Individual> sortByCrowdingDistance(List<Individual> individuals) {
 
 		// trivial?
-		if (individuals.isEmpty()) {
-			return new ArrayList<Individual>();
+		if (individuals.size() < 2) {
+			return new ArrayList<Individual>(individuals);
 		}
 
-		// initialize scores
-		List<ScoredIndividual> scoredIndividuals = new ArrayList<ScoredIndividual>();
+		// create crowding distance wrapper
+		List<CrowdingDistanceIndividual> wrappedIndividuals = new ArrayList<CrowdingDistanceIndividual>();
 		for (Individual individual : individuals) {
-			scoredIndividuals.add(new ScoredIndividual(individual));
+			wrappedIndividuals.add(new CrowdingDistanceIndividual(individual));
 		}
 
 		// calculate each crowding distance
-		int lastIndex = scoredIndividuals.size() - 1;
-		for (CharacteristicEvaluator evaluator : evaluators) {
+		final int lastIndex = wrappedIndividuals.size() - 1;
+		final int numAttributes = individuals.get(0).numAttributes();
+		for (int attribute = 0; attribute < numAttributes; attribute++) {
+			wrappedIndividuals.sort(new ScoreComparator(attribute));
 
-			scoredIndividuals.sort(new CharacteristicComparator(evaluator));
+			CrowdingDistanceIndividual min = wrappedIndividuals.get(0);
+			CrowdingDistanceIndividual max = wrappedIndividuals.get(lastIndex);
 
-			ScoredIndividual min = scoredIndividuals.get(0);
-			ScoredIndividual max = scoredIndividuals.get(lastIndex);
-
-			double minValue = evaluator.getValue(min.getIndividual());
-			double maxValue = evaluator.getValue(max.getIndividual());
+			final double minValue = min.getIndividual().getScore(attribute);
+			final double maxValue = max.getIndividual().getScore(attribute);
 
 			// no divergence?
 			if (minValue >= maxValue) continue;
 
 			// calculate crowding distance
-			for (int j = 1; j < lastIndex; j++) {
-				ScoredIndividual current = scoredIndividuals.get(j);
-				ScoredIndividual leftNeighbor = scoredIndividuals.get(j - 1);
-				ScoredIndividual rightNeighbor = scoredIndividuals.get(j + 1);
+			for (int i = 1; i < lastIndex; i++) {
+				CrowdingDistanceIndividual current = wrappedIndividuals.get(i);
+				CrowdingDistanceIndividual leftNeighbor = wrappedIndividuals.get(i - 1);
+				CrowdingDistanceIndividual rightNeighbor = wrappedIndividuals.get(i + 1);
 
-				// calculate normalized crowding distance & update score
-				double leftValue = evaluator.getValue(leftNeighbor.getIndividual());
-				double rightValue = evaluator.getValue(rightNeighbor.getIndividual());
-				double distance = (rightValue - leftValue) / (maxValue - minValue);
-				current.accumulateScore(distance);
+				// calculate & accumulate normalized crowding distance
+				final double leftValue = leftNeighbor.getIndividual().getScore(attribute);
+				final double rightValue = rightNeighbor.getIndividual().getScore(attribute);
+				final double distance = (rightValue - leftValue) / (maxValue - minValue);
+				current.addCrowdingDistance(distance);
 			}
 
 			// update extremes
-			min.accumulateScore(1);
-			max.accumulateScore(1);
+			min.addCrowdingDistance(1.0);
+			max.addCrowdingDistance(1.0);
 		}
 
-		// sort by contribution
-		scoredIndividuals.sort(new ScoreComparator());
+		// sort by descending crowding distance
+		wrappedIndividuals.sort(Collections.reverseOrder(new CrowdingDistanceComparator()));
+
+		// strip crowding distance wrapper
 		List<Individual> result = new ArrayList<Individual>();
-		for (ScoredIndividual scoredIndividual : scoredIndividuals) {
-			result.add(scoredIndividual.getIndividual());
+		for (CrowdingDistanceIndividual crowdingDistanceIndividual : wrappedIndividuals) {
+			result.add(crowdingDistanceIndividual.getIndividual());
 		}
+
 		return result;
 	}
 
-	private final Comparator<Individual> comparator;
-
-	private final Iterable<CharacteristicEvaluator> evaluators;
+	private final DominationComparator comparator = new DominationComparator();
 }

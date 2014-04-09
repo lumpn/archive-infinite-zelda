@@ -6,7 +6,7 @@ import de.lumpn.mooga.Individual;
 public interface Selection {
 
 	/**
-	 * Selects a single individual
+	 * Selects a single individual.
 	 * 
 	 * @param individuals Candidates
 	 * @return Selected candidate
@@ -14,7 +14,7 @@ public interface Selection {
 	Individual select(List<Individual> individuals);
 
 	/**
-	 * Selects a bunch of mutually different individuals
+	 * Selects a bunch of mutually different individuals.
 	 * 
 	 * @param individuals Candidates
 	 * @param count Number of candidates to select

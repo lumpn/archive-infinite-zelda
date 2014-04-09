@@ -2,18 +2,21 @@ package de.lumpn.mooga.ranking.impl;
 
 import java.util.Comparator;
 
-public class ScoreComparator implements Comparator<ScoredIndividual> {
+/**
+ * Compares individuals by score of specific attribute.
+ */
+public final class ScoreComparator implements Comparator<CrowdingDistanceIndividual> {
+
+	public ScoreComparator(int attribute) {
+		this.attribute = attribute;
+	}
 
 	@Override
-	public int compare(ScoredIndividual a, ScoredIndividual b) {
-		double scoreA = a.getScore();
-		double scoreB = b.getScore();
-		if (scoreA > scoreB) {
-			return 1;
-		}
-		if (scoreA < scoreB) {
-			return -1;
-		}
-		return 0;
+	public int compare(CrowdingDistanceIndividual a, CrowdingDistanceIndividual b) {
+		double score1 = a.getIndividual().getScore(attribute);
+		double score2 = b.getIndividual().getScore(attribute);
+		return Double.compare(score1, score2);
 	}
+
+	private final int attribute;
 }

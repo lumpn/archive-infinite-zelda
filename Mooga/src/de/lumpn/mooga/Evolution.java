@@ -8,8 +8,8 @@ import de.lumpn.util.Pair;
 
 public class Evolution {
 
-	public Evolution(int populationSize, double crossoverFraction, double mutationFraction, GenomeFactory factory,
-			Selection selection) {
+	public Evolution(int populationSize, double crossoverFraction, double mutationFraction,
+			GenomeFactory factory, Selection selection) {
 
 		this.populationSize = populationSize;
 		this.crossoverQuota = (int) (populationSize * crossoverFraction);
@@ -28,7 +28,6 @@ public class Evolution {
 	}
 
 	public List<Genome> evolve(List<Individual> rankedPopulation, Random random) {
-
 		List<Genome> result = new ArrayList<Genome>();
 
 		// crossover

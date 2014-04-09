@@ -1,7 +1,6 @@
 package de.lumpn.mooga;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import de.lumpn.mooga.ranking.CrowdingDistanceRanking;
@@ -10,11 +9,11 @@ import de.lumpn.mooga.selection.BinaryTournamentSelection;
 
 public class ElitistEvolution {
 
-	public ElitistEvolution(GenomeFactory factory, Comparator<Individual> comparator,
-			Iterable<CharacteristicEvaluator> evaluators) {
-		this.archiveSize = 100;
-		this.evolution = new Evolution(100, 0.5, 0.4, factory, new BinaryTournamentSelection());
-		this.ranking = new CrowdingDistanceRanking(comparator, evaluators);
+	public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory) {
+		this.archiveSize = archiveSize;
+		this.evolution = new Evolution(populationSize, 0.5, 0.4, factory,
+				new BinaryTournamentSelection(new Random()));
+		this.ranking = new CrowdingDistanceRanking();
 	}
 
 	public List<Genome> initialize() {
@@ -26,7 +25,7 @@ public class ElitistEvolution {
 		// spawn individuals
 		List<Individual> population = new ArrayList<Individual>();
 		for (Genome genome : genomes) {
-			Individual individual = genome.spawn();
+			Individual individual = genome.evaluate();
 			population.add(individual);
 		}
 

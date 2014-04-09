@@ -6,7 +6,7 @@ import de.lumpn.mooga.Individual;
 public interface Ranking {
 
 	/**
-	 * Rank individuals
+	 * Rank individuals. Highest score comes first.
 	 * 
 	 * @param individuals Individuals to rank
 	 * @return Individuals sorted by rank
