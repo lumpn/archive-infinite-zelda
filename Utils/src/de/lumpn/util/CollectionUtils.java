@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -53,4 +54,25 @@ public final class CollectionUtils {
 		result.addAll(b);
 		return result;
 	}
+
+	public static <T> List<Pair<T>> zip(Collection<T> a, Collection<T> b) {
+		assert (a.size() == b.size());
+
+		List<Pair<T>> result = new ArrayList<Pair<T>>();
+		Iterator<T> i = a.iterator();
+		Iterator<T> j = b.iterator();
+		while (i.hasNext() && j.hasNext()) {
+			result.add(new Pair<T>(i.next(), j.next()));
+		}
+		return result;
+	}
+
+	public static <T, TResult> List<TResult> select(Iterable<T> items, Func<T, TResult> func) {
+		List<TResult> result = new ArrayList<TResult>();
+		for (T item : items) {
+			result.add(func.invoke(item));
+		}
+		return result;
+	}
+
 }
