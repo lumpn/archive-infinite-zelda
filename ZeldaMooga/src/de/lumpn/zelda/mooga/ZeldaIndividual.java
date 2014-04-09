@@ -17,6 +17,18 @@ public final class ZeldaIndividual implements Individual {
 	}
 
 	@Override
+	public int numAttributes() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getScore(int attribute) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%s", puzzle);
 	}

@@ -23,11 +23,12 @@ public final class ZeldaGenome implements Genome {
 
 		// add some more genes
 		int count = configuration.calcNumInitialGenes(random);
-		this.genes = CollectionUtils.immutable(GeneUtils.generate(count, factory, configuration, random));
+		this.genes = CollectionUtils.immutable(GeneUtils.generate(count, factory,
+				configuration, random));
 	}
 
-	private ZeldaGenome(ZeldaConfiguration configuration, KeyLockChromosome keyLock, SwitchPistonChromosome switchPiston,
-			List<ZeldaGene> genes) {
+	private ZeldaGenome(ZeldaConfiguration configuration, KeyLockChromosome keyLock,
+			SwitchPistonChromosome switchPiston, List<ZeldaGene> genes) {
 		this.configuration = configuration;
 		this.keyLock = keyLock;
 		this.switchPiston = switchPiston;
@@ -40,14 +41,18 @@ public final class ZeldaGenome implements Genome {
 
 		// crossover unique genes
 		Pair<KeyLockChromosome> keyLocks = keyLock.crossover(other.keyLock, random);
-		Pair<SwitchPistonChromosome> switchPistons = switchPiston.crossover(other.switchPiston, random);
+		Pair<SwitchPistonChromosome> switchPistons = switchPiston.crossover(
+				other.switchPiston, random);
 
 		// randomly distribute remaining genes
-		Pair<List<ZeldaGene>> distributedGenes = CollectionUtils.distribute(genes, other.genes, random);
+		Pair<List<ZeldaGene>> distributedGenes = CollectionUtils.distribute(genes,
+				other.genes, random);
 
 		// assemble offsprings
-		ZeldaGenome x = new ZeldaGenome(configuration, keyLocks.first(), switchPistons.first(), distributedGenes.first());
-		ZeldaGenome y = new ZeldaGenome(configuration, keyLocks.second(), switchPistons.second(), distributedGenes.second());
+		ZeldaGenome x = new ZeldaGenome(configuration, keyLocks.first(),
+				switchPistons.first(), distributedGenes.first());
+		ZeldaGenome y = new ZeldaGenome(configuration, keyLocks.second(),
+				switchPistons.second(), distributedGenes.second());
 		return new Pair<Genome>(x, y);
 	}
 
@@ -65,15 +70,12 @@ public final class ZeldaGenome implements Genome {
 		return new ZeldaGenome(configuration, newKeyLock, newSwitchPiston, newGenes);
 	}
 
-	@Override
-	public ZeldaIndividual spawn() {
-		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
+	public void express(ZeldaPuzzleBuilder builder) {
 		keyLock.express(builder);
 		switchPiston.express(builder);
 		for (ZeldaGene gene : genes) {
 			gene.express(builder);
 		}
-		return new ZeldaIndividual(this, builder.puzzle());
 	}
 
 	@Override

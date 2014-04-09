@@ -1,11 +1,6 @@
 package de.lumpn.zelda.mooga;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import de.lumpn.mooga.CharacteristicEvaluator;
-import de.lumpn.mooga.Genome;
-import de.lumpn.mooga.ElitistEvolution;
 
 public class Main {
 
@@ -14,11 +9,14 @@ public class Main {
 		Random random = new Random();
 
 		ZeldaConfiguration configuration = new ZeldaConfiguration();
+		ZeldaEnvironment environment = new ZeldaEnvironment();
 
 		ZeldaGenomeFactory factory = new ZeldaGenomeFactory(configuration, random);
 
 		ZeldaGenome best = factory.createGenome();
-		ZeldaIndividual individual = best.spawn();
+		ZeldaIndividual individual = environment.evaluate(best);
+		System.out.println("target: " + individual);
+
 		/*
 		System.out.println("target: " + individual);
 		DummyIndividualComparator comparator = new DummyIndividualComparator(individual.toString());
@@ -41,6 +39,6 @@ public class Main {
 			genomes = evolution.evolve(genomes, random);
 			System.out.println(individual);
 		}
-*/
+		*/
 	}
 }
