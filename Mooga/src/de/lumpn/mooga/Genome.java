@@ -14,9 +14,4 @@ public interface Genome {
 	 * Mutate genome returning the mutation.
 	 */
 	Genome mutate(Random random);
-
-	/**
-	 * Evaluate genome producing an individual.
-	 */
-	Individual evaluate();
 }
