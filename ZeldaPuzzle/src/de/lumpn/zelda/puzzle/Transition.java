@@ -4,16 +4,18 @@ import de.lumpn.zelda.puzzle.script.ZeldaScript;
 
 public final class Transition {
 
-	public Transition(Node destination, ZeldaScript script) {
+	public Transition(Location source, Location destination, ZeldaScript script) {
+		this.source = source;
 		this.destination = destination;
 		this.script = script;
 	}
 
 	public void express(DotTransitionBuilder builder) {
-		destination.express(builder);
+		builder.setSource(source.id());
+		builder.setDestination(destination.id());
 		script.express(builder);
 	}
 
-	private final Node destination;
+	private final Location source, destination;
 	private final ZeldaScript script;
 }

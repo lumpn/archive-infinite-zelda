@@ -17,11 +17,11 @@ public class DotBuilder {
 	}
 
 	public void addNode(int id) {
-		out.format("node%d [label=\"%d\"];\n", id, id);
+		out.format("loc%d [label=\"%d\"];\n", id, id);
 	}
 
-	public void addTransition(int start, int end, String script) {
-		out.format("node%d -> node%d [label=\"%s\"];\n", start, end, script);
+	public void addEdge(int start, int end, String script) {
+		out.format("loc%d -> loc%d [label=\"%s\"];\n", start, end, script);
 	}
 
 	private final PrintStream out;

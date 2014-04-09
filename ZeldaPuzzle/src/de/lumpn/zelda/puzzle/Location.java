@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mutable node
+ * Mutable location
  */
-public class Node {
+public class Location {
 
-	public Node(int id) {
+	public Location(int id) {
 		this.id = id;
+	}
+
+	public int id() {
+		return id;
 	}
 
 	public void addTransition(Transition transition) {
@@ -20,14 +24,9 @@ public class Node {
 		builder.addNode(id);
 		for (Transition transition : transitions) {
 			DotTransitionBuilder transitionBuilder = new DotTransitionBuilder();
-			transitionBuilder.setStart(id);
 			transition.express(transitionBuilder);
 			transitionBuilder.express(builder);
 		}
-	}
-
-	public void express(DotTransitionBuilder builder) {
-		builder.setDestination(id);
 	}
 
 	private final int id;

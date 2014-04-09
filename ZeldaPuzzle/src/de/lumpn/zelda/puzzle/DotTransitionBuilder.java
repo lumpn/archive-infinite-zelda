@@ -2,7 +2,7 @@ package de.lumpn.zelda.puzzle;
 
 public class DotTransitionBuilder {
 
-	public void setStart(int id) {
+	public void setSource(int id) {
 		this.start = id;
 	}
 
@@ -15,7 +15,7 @@ public class DotTransitionBuilder {
 	}
 
 	public void express(DotBuilder builder) {
-		builder.addTransition(start, end, label);
+		builder.addEdge(start, end, label);
 	}
 
 	private int start, end;
