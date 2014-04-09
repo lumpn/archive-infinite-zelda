@@ -9,8 +9,8 @@ public final class OneWayGene extends ZeldaGene {
 	public OneWayGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 
-		this.wayStart = randomNode(random);
-		this.wayEnd = differentNode(wayStart, random);
+		this.wayStart = randomLocation(random);
+		this.wayEnd = differentLocation(wayStart, random);
 	}
 
 	public OneWayGene(ZeldaConfiguration configuration, int wayStart, int wayEnd) {
@@ -22,8 +22,8 @@ public final class OneWayGene extends ZeldaGene {
 	@Override
 	public OneWayGene mutate(Random random) {
 		// TODO: make less random than fully random constructor!
-		int newStart = randomNode(random);
-		int newEnd = differentNode(newStart, random);
+		int newStart = randomLocation(random);
+		int newEnd = differentLocation(newStart, random);
 		return new OneWayGene(getConfiguration(), newStart, newEnd);
 	}
 

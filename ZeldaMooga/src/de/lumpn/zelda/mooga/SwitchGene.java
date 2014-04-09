@@ -9,7 +9,7 @@ public final class SwitchGene extends ZeldaGene {
 
 	public SwitchGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
-		this.switchLocation = randomNode(random);
+		this.switchLocation = randomLocation(random);
 	}
 
 	@Override

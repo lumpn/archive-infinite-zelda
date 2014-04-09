@@ -23,8 +23,8 @@ public final class PistonGene extends ZeldaGene {
 	public PistonGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 		this.color = randomColor(random);
-		this.pistonStart = randomNode(random);
-		this.pistonEnd = differentNode(pistonStart, random);
+		this.pistonStart = randomLocation(random);
+		this.pistonEnd = differentLocation(pistonStart, random);
 	}
 
 	@Override

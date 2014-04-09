@@ -10,9 +10,9 @@ public final class KeyLockGene extends ZeldaGene {
 	public KeyLockGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 
-		this.keyLocation = randomNode(random);
-		this.lockStart = randomNode(random);
-		this.lockEnd = differentNode(lockStart, random);
+		this.keyLocation = randomLocation(random);
+		this.lockStart = randomLocation(random);
+		this.lockEnd = differentLocation(lockStart, random);
 	}
 
 	private KeyLockGene(ZeldaConfiguration configuration, int keyLocation, int lockStart, int lockEnd) {
@@ -25,9 +25,9 @@ public final class KeyLockGene extends ZeldaGene {
 	@Override
 	public KeyLockGene mutate(Random random) {
 		// TODO: make less random than fully random constructor!
-		int newKey = randomNode(random);
-		int newStart = randomNode(random);
-		int newEnd = differentNode(newStart, random);
+		int newKey = randomLocation(random);
+		int newStart = randomLocation(random);
+		int newEnd = differentLocation(newStart, random);
 		return new KeyLockGene(getConfiguration(), newKey, newStart, newEnd);
 	}
 

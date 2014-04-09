@@ -2,7 +2,6 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
-import de.lumpn.mooga.Individual;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 
 public final class ZeldaEnvironment implements Environment {

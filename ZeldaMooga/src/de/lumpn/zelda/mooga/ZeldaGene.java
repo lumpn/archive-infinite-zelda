@@ -13,16 +13,16 @@ public abstract class ZeldaGene implements Gene {
 		return configuration;
 	}
 
-	public int randomNode(Random random) {
-		return configuration.randomNode(random);
+	public int randomLocation(Random random) {
+		return configuration.randomLocation(random);
 	}
 
-	public int differentNode(int forbiddenNode, Random random) {
-		int node;
+	public int differentLocation(int forbidden, Random random) {
+		int location;
 		do {
-			node = configuration.randomNode(random);
-		} while (node == forbiddenNode);
-		return node;
+			location = configuration.randomLocation(random);
+		} while (location == forbidden);
+		return location;
 	}
 
 	public abstract void express(ZeldaPuzzleBuilder builder);

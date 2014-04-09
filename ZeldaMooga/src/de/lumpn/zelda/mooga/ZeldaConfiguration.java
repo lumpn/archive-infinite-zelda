@@ -6,21 +6,21 @@ import de.lumpn.util.MathUtils;
 public final class ZeldaConfiguration {
 
 	// environment
-	private final int numNodes = 10;
+	private final int numLocations = 10;
 
 	// initialization
 	private final double initialKeyLockMedian = 5;
 	private final double initialSwitchMedian = 2;
 	private final double initialPistonMedian = 4;
-	private final double initialGeneMedian = numNodes; // linear
+	private final double initialGeneMedian = numLocations; // linear
 
 	// complexification
 	private final double mutationCoefficient = 0.10; // ~10% ([0%, 75%])
 	private final double deletionCoefficient = 0.05; // ~5% ([0%, 35%])
 	private final double insertionCoefficient = 0.10; // ~10% ([0%, 75%])
 
-	public int randomNode(Random random) {
-		return random.nextInt(numNodes);
+	public int randomLocation(Random random) {
+		return random.nextInt(numLocations);
 	}
 
 	public int calcNumInitialKeyLocks(Random random) {
