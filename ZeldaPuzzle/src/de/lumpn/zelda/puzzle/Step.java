@@ -8,6 +8,8 @@ public final class Step {
 	public Step(Location location, State state) {
 		this.location = location;
 		this.state = state;
+		this.distanceFromEntry = -1;
+		this.distanceFromExit = -1;
 	}
 
 	public Location location() {
@@ -26,6 +28,14 @@ public final class Step {
 		return successors;
 	}
 
+	public int distanceFromEntry() {
+		return distanceFromEntry;
+	}
+
+	public int distanceFromExit() {
+		return distanceFromExit;
+	}
+
 	public void addPredecessor(Step predecessor) {
 		predecessors.add(predecessor);
 	}
@@ -34,9 +44,20 @@ public final class Step {
 		successors.add(successor);
 	}
 
+	public void setDistanceFromEntry(int distance) {
+		distanceFromEntry = distance;
+	}
+
+	public void setDistanceFromExit(int distance) {
+		distanceFromExit = distance;
+	}
+
 	private final Location location;
 	private final State state;
 
 	private final List<Step> predecessors = new ArrayList<Step>();
 	private final List<Step> successors = new ArrayList<Step>();
+
+	private int distanceFromEntry, distanceFromExit;
+
 }

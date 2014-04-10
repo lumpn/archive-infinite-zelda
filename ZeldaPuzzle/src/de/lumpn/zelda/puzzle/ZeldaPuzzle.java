@@ -1,8 +1,13 @@
 package de.lumpn.zelda.puzzle;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import de.lumpn.report.ProgressConsumer;
 import de.lumpn.util.CollectionUtils;
 
 public final class ZeldaPuzzle {
@@ -14,44 +19,117 @@ public final class ZeldaPuzzle {
 		this.locations = CollectionUtils.immutable(locations);
 	}
 
-	public void crawl(State initialState) {
+	public void crawl(State initialState, ProgressConsumer progressConsumer) {
 
-		// find entrance and exit
+		// find entrance
 		Location entrance = locations.get(entranceId);
 		if (entrance == null) {
 			return; // invalid puzzle
 		}
 
-		// crawl!
+		// initialize first step
 		Step initialStep = entrance.createStep(initialState);
+		initialStep.setDistanceFromEntry(0);
+
+		// forward crawl (keep track of states at exit location for backward pass)
+		List<Step> terminalSteps = forwardPass(initialStep, progressConsumer);
+
+		// initialize distance from exit
+		for (Step step : terminalSteps) {
+			step.setDistanceFromExit(0);
+		}
+
+		// backward crawl
+		backwardPass(terminalSteps, progressConsumer);
+	}
+
+	private static List<Step> forwardPass(Step initialStep,
+			ProgressConsumer progressConsumer) {
+
+		// keep track of terminals
+		List<Step> terminalSteps = new ArrayList<Step>();
+
+		// initialize BFS
 		Queue<Step> queue = new ArrayDeque<Step>();
-
-		// BFS
 		queue.add(initialStep);
-		while (!queue.isEmpty()) {
-			Step step = queue.remove();
+		int visitedSteps = 0;
+		int totalSteps = 1;
 
+		// crawl!
+		progressConsumer.reset("forward pass");
+		progressConsumer.set(visitedSteps, totalSteps);
+		while (!queue.isEmpty()) {
+
+			// fetch step
+			Step step = queue.remove();
+			visitedSteps++;
+			progressConsumer.set(visitedSteps, totalSteps);
+
+			// keep track of terminals
 			Location location = step.location();
+			if (location.id() == exitId) {
+				terminalSteps.add(step);
+			}
+
+			// try every transition
 			State state = step.state();
+			int distanceFromEntry = step.distanceFromEntry();
 			for (Transition transition : location.transitions()) {
 
 				// execute transition
 				Location nextLocation = transition.destination();
 				State nextState = transition.execute(state);
-				if (nextState == null) continue;
+				if (nextState == null) continue; // transition impossible
 
-				// build next step
+				// find reached step
 				Step nextStep = nextLocation.getStep(nextState);
 				if (nextStep == null) {
 
 					// location reached with new state -> enqueue
 					nextStep = nextLocation.createStep(nextState);
+					step.setDistanceFromEntry(distanceFromEntry + 1);
 					queue.add(nextStep);
+					totalSteps++;
 				}
 
-				// link steps
+				// connect steps
 				nextStep.addPredecessor(step);
 				step.addSuccessor(nextStep);
+			}
+		}
+
+		return terminalSteps;
+	}
+
+	private static void backwardPass(List<Step> terminalSteps,
+			ProgressConsumer progressConsumer) {
+
+		// initialize BFS
+		Queue<Step> queue = new ArrayDeque<Step>(terminalSteps);
+		Set<Step> visited = new HashSet<Step>();
+		int visitedSteps = 0;
+		int totalSteps = terminalSteps.size();
+
+		// crawl
+		progressConsumer.reset("backward pass");
+		progressConsumer.set(visitedSteps, totalSteps);
+		while (!queue.isEmpty()) {
+
+			// fetch step
+			Step step = queue.remove();
+			visitedSteps++;
+			progressConsumer.set(visitedSteps, totalSteps);
+
+			// try every predecessor
+			int distanceFromExit = step.distanceFromExit();
+			for (Step nextStep : step.precedessors()) {
+				if (visited.add(nextStep)) {
+
+					// unseen step reached -> enqueue
+					nextStep.setDistanceFromExit(distanceFromExit + 1);
+					queue.add(nextStep);
+					totalSteps++;
+				}
 			}
 		}
 	}
