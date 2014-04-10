@@ -2,6 +2,8 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
+import de.lumpn.zelda.mooga.evaluators.ErrorCounter;
+import de.lumpn.zelda.mooga.evaluators.PathFinder;
 import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
@@ -17,15 +19,24 @@ public final class ZeldaEnvironment implements Environment {
 		ZeldaGenome genome = (ZeldaGenome) g;
 
 		// build puzzle
+		System.out.println("building puzzle " + genome);
 		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
 		genome.express(builder);
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		// crawl puzzle
+		System.out.println("crawling puzzle " + genome);
 		puzzle.crawl(initialState);
 
+		// evaluate puzzle
+		System.out.println("evaluating puzzle " + genome);
+		int numErrors = ErrorCounter.countErrors(puzzle, initialState);
+		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState,
+				ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
+
 		// create individual
-		return new ZeldaIndividual(genome, puzzle, initialState);
+		System.out.println("creating individual " + genome);
+		return new ZeldaIndividual(genome, puzzle, numErrors, shortestPathLength);
 	}
 
 	private final State initialState;

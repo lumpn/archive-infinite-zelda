@@ -9,9 +9,9 @@ public final class ZeldaConfiguration {
 	private final int numLocations = 10;
 
 	// initialization
-	private final double initialKeyLockMedian = 5;
-	private final double initialSwitchMedian = 2;
-	private final double initialPistonMedian = 4;
+	private final double initialKeyLockMedian = 4;
+	private final double initialSwitchMedian = 0;
+	private final double initialPistonMedian = 0;
 	private final double initialGeneMedian = numLocations; // linear
 
 	// complexification

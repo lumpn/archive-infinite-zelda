@@ -2,9 +2,6 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Genome;
 import de.lumpn.mooga.Individual;
-import de.lumpn.zelda.mooga.evaluators.ErrorCounter;
-import de.lumpn.zelda.mooga.evaluators.PathFinder;
-import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
 public final class ZeldaIndividual implements Individual {
@@ -17,12 +14,12 @@ public final class ZeldaIndividual implements Individual {
 		return value;
 	}
 
-	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, State initialState) {
+	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors,
+			int shortestPathLength) {
 		this.genome = genome;
 		this.puzzle = puzzle;
-		numErrors = ErrorCounter.countErrors(puzzle, initialState);
-		shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState,
-				ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
+		this.numErrors = numErrors;
+		this.shortestPathLength = shortestPathLength;
 	}
 
 	@Override
