@@ -29,7 +29,7 @@ public final class State {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (!(obj instanceof State)) return false;
 		State other = (State) obj;
 		return variables.equals(other.variables);
 	}

@@ -15,6 +15,7 @@ public final class VariableIdentifier {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
+		if (!(obj instanceof VariableIdentifier)) return false;
 		VariableIdentifier other = (VariableIdentifier) obj;
 		return (id == other.id);
 	}
