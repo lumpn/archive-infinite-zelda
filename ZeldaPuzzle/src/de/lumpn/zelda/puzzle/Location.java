@@ -16,6 +16,11 @@ public class Location {
 		return id;
 	}
 
+	public List<State> states() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void addTransition(Transition transition) {
 		transitions.add(transition);
 	}
