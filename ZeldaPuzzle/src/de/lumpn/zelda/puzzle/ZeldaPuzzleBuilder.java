@@ -30,13 +30,7 @@ public class ZeldaPuzzleBuilder {
 	}
 
 	public ZeldaPuzzle puzzle() {
-		DotBuilder builder = new DotBuilder();
-		builder.begin();
-		for (Location location : locations.values()) {
-			location.express(builder);
-		}
-		builder.end();
-		return null; // TODO
+		return new ZeldaPuzzle(locations);
 	}
 
 	private Location getOrCreateLocation(int id) {

@@ -35,7 +35,6 @@ public final class Step {
 	}
 
 	private final Location location;
-
 	private final State state;
 
 	private final List<Step> predecessors = new ArrayList<Step>();

@@ -10,6 +10,14 @@ public final class Transition {
 		this.script = script;
 	}
 
+	public Location destination() {
+		return destination;
+	}
+
+	public State execute(State state) {
+		return script.execute(state);
+	}
+
 	public void express(DotTransitionBuilder builder) {
 		builder.setSource(source.id());
 		builder.setDestination(destination.id());

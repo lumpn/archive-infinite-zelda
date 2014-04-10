@@ -1,7 +1,9 @@
 package de.lumpn.zelda.puzzle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Mutable location
@@ -16,13 +18,23 @@ public class Location {
 		return id;
 	}
 
-	public List<State> states() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void addTransition(Transition transition) {
 		transitions.add(transition);
+	}
+
+	public List<Transition> transitions() {
+		return transitions;
+	}
+
+	public Step getStep(State state) {
+		return steps.get(state);
+	}
+
+	public Step createStep(State state) {
+		Step step = new Step(this, state);
+		Step previous = steps.put(state, step);
+		assert previous == null;
+		return step;
 	}
 
 	public void express(DotBuilder builder) {
@@ -37,4 +49,6 @@ public class Location {
 	private final int id;
 
 	private final List<Transition> transitions = new ArrayList<Transition>();
+
+	private final Map<State, Step> steps = new HashMap<State, Step>();
 }
