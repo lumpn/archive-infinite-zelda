@@ -20,8 +20,9 @@ public final class ZeldaIndividual implements Individual {
 	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, State initialState) {
 		this.genome = genome;
 		this.puzzle = puzzle;
-		numErrors = ErrorCounter.countErrors(puzzle);
-		shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState, 0, 1);
+		numErrors = ErrorCounter.countErrors(puzzle, initialState);
+		shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState,
+				ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
 	}
 
 	@Override

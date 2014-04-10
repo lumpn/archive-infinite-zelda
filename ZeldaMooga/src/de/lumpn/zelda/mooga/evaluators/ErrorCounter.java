@@ -1,29 +1,24 @@
 package de.lumpn.zelda.mooga.evaluators;
 
-import de.lumpn.zelda.puzzle.Location;
 import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
 public final class ErrorCounter {
 
-	public static int countErrors(ZeldaPuzzle puzzle) {
+	public static int countErrors(ZeldaPuzzle puzzle, State initialState) {
 		int errors = 0;
-		errors += countDeadEnds(puzzle);
+		errors += countDeadEnds(puzzle, initialState);
 		return errors;
 	}
 
-	private static int countDeadEnds(ZeldaPuzzle puzzle) {
+	private static int countDeadEnds(ZeldaPuzzle puzzle, State initialState) {
 		int deadEnds = 0;
 
-		// find path to exit for every reached location & state
-		for (Location location : puzzle.locations()) {
-			int source = location.id();
-			for (State state : location.states()) {
-				int pathLength = PathFinder.shortestPathLength(puzzle, state, source,
-						ZeldaPuzzle.exitLocation);
-				if (pathLength < 0) deadEnds++;
-			}
-		}
+		// TODO find path to exit for every reached location & state
+		int pathLength = PathFinder.shortestPathLength(puzzle, initialState,
+				ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
+		if (pathLength < 0) deadEnds++;
+
 		return deadEnds;
 	}
 }
