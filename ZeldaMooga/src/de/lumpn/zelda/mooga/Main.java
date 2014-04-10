@@ -1,6 +1,9 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.Collections;
 import java.util.Random;
+import de.lumpn.zelda.puzzle.State;
+import de.lumpn.zelda.puzzle.VariableIdentifier;
 
 public class Main {
 
@@ -9,9 +12,11 @@ public class Main {
 		Random random = new Random();
 
 		ZeldaConfiguration configuration = new ZeldaConfiguration();
-		ZeldaEnvironment environment = new ZeldaEnvironment();
 
 		ZeldaGenomeFactory factory = new ZeldaGenomeFactory(configuration, random);
+
+		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
+		ZeldaEnvironment environment = new ZeldaEnvironment(initialState);
 
 		ZeldaGenome best = factory.createGenome();
 		ZeldaIndividual individual = environment.evaluate(best);

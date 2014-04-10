@@ -2,10 +2,15 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
+import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 
 public final class ZeldaEnvironment implements Environment {
+
+	public ZeldaEnvironment(State intialState) {
+		this.initialState = intialState;
+	}
 
 	@Override
 	public ZeldaIndividual evaluate(Genome g) {
@@ -17,9 +22,11 @@ public final class ZeldaEnvironment implements Environment {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		// crawl puzzle
-		puzzle.crawl();
+		puzzle.crawl(initialState);
 
 		// create individual
-		return new ZeldaIndividual(genome, puzzle);
+		return new ZeldaIndividual(genome, puzzle, initialState);
 	}
+
+	private final State initialState;
 }
