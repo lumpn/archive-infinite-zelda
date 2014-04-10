@@ -20,7 +20,7 @@ public final class PistonScript implements ZeldaScript {
 			return state; // pass
 		}
 
-		return State.NULL; // you shall not pass!
+		return null; // you shall not pass!
 	}
 
 	@Override

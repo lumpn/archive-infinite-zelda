@@ -25,7 +25,7 @@ public final class DoorScript implements ZeldaScript {
 		// has key?
 		int numKeys = state.getOrDefault(keyIdentifier, 0);
 		if (numKeys == 0) {
-			return State.NULL; // you shall not pass!
+			return null; // you shall not pass!
 		}
 
 		// consume key & unlock

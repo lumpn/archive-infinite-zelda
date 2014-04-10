@@ -8,8 +8,6 @@ import de.lumpn.util.CollectionUtils;
  */
 public final class State {
 
-	public static final State NULL = null;
-
 	public State(Map<VariableIdentifier, Integer> variables) {
 		this.variables = CollectionUtils.immutable(variables);
 	}
@@ -20,6 +18,20 @@ public final class State {
 
 	public StateBuilder mutable() {
 		return new StateBuilder(variables);
+	}
+
+	@Override
+	public int hashCode() {
+		return variables.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		State other = (State) obj;
+		return variables.equals(other.variables);
 	}
 
 	private final Map<VariableIdentifier, Integer> variables;
