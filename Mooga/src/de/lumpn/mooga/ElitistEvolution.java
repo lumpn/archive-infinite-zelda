@@ -44,8 +44,13 @@ public class ElitistEvolution {
 		// update archive
 		archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
 		// print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
-		// System.out.println(rankedPopulation.size() + " distinct individuals");
-		System.out.println(rankedPopulation.get(0).getScore(0));
+		System.out.println(rankedPopulation.size() + " distinct individuals");
+		Individual best = rankedPopulation.get(0);
+		System.out.print("best: ");
+		for (int i = 0; i < best.numAttributes(); i++) {
+			System.out.print(best.getScore(i) + ", ");
+		}
+		System.out.println(best.getGenome());
 
 		// evolve population
 		return evolution.evolve(rankedPopulation, random);
