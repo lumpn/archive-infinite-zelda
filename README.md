@@ -6,3 +6,5 @@ Infinite Zelda
 > [Procedural Content Generation: Goals, Challenges and Actionable Steps](http://julian.togelius.com/) - Togelius et al. (2013)
 
 **CHALLENGE ACCEPTED**
+
+Please note that this is work in progress! The code is far from production ready and huge structural changes will occur.
