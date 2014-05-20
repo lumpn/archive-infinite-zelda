@@ -2,6 +2,7 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
+import de.lumpn.report.ConsoleProgressBar;
 import de.lumpn.zelda.mooga.evaluators.ErrorCounter;
 import de.lumpn.zelda.mooga.evaluators.PathFinder;
 import de.lumpn.zelda.puzzle.State;
@@ -26,7 +27,7 @@ public final class ZeldaEnvironment implements Environment {
 
 		// crawl puzzle
 		System.out.println("crawling puzzle " + genome);
-		puzzle.crawl(initialState);
+		puzzle.crawl(initialState, new ConsoleProgressBar());
 
 		// evaluate puzzle
 		System.out.println("evaluating puzzle " + genome);
