@@ -30,7 +30,6 @@ public final class Position {
 
 	public List<Position> getNeighbors() {
 		// TODO: add neighbors in third dimension
-		// TODO: only generate valid positions (obey grid boundaries)
 		List<Position> result = new ArrayList<Position>();
 		result.add(new Position(x + 1, y, z));
 		result.add(new Position(x - 1, y, z));

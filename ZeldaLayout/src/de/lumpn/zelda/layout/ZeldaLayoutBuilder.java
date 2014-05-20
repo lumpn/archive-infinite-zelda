@@ -1,9 +1,12 @@
 package de.lumpn.zelda.layout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import de.lumpn.util.list.ImmutableArrayList;
 
 public class ZeldaLayoutBuilder {
 
@@ -96,7 +99,17 @@ public class ZeldaLayoutBuilder {
 		// transition 0 to 2 (implicit room creation)
 		// transition 1 to 2 (connect existing rooms)
 
-		State initialState; // TODO create pre-room A
+		// TODO sort schedule for faster convergence
+
+		// TODO create pre-room A
+		Map<Position, Cell> initialCells = new HashMap<Position, Cell>();
+		initialCells.put(new Position(0, 0, 0),
+				new Cell(new Position(0, 0, 0), lookup.resolve(preId, "A"),
+						ScriptIdentifier.EMPTY, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED,
+						ScriptIdentifier.BLOCKED));
+		Grid initialGrid = new Grid(initialCells);
+		State initialState = new State(initialGrid, new ImmutableArrayList<Transition>(
+				schedule));
 
 		Set<State> closedSet = new HashSet<State>();
 		Set<State> openSet = new HashSet<State>();
@@ -113,7 +126,7 @@ public class ZeldaLayoutBuilder {
 			openSet.remove(current);
 			closedSet.add(current);
 
-			List<State> neighbors = current.getNeighbors();
+			List<State> neighbors = current.getNeighbors(); // magic happens here
 			for (State next : neighbors) {
 				if (closedSet.contains(next)) continue;
 				openSet.add(next);

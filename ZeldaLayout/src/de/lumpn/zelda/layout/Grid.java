@@ -1,23 +1,21 @@
 package de.lumpn.zelda.layout;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import de.lumpn.util.Pair;
+import de.lumpn.util.map.ImmutableHashMap;
+import de.lumpn.util.map.ImmutableMap;
 
 /**
  * Collection of cells representing the state of the grid
  */
 public final class Grid {
 
-	public Grid() {
-		this.cells = new HashMap<Position, Cell>();
-	}
-
-	private Grid(Map<Position, Cell> cells) {
-		this.cells = cells;
+	public Grid(Map<Position, Cell> cells) {
+		this.cells = new ImmutableHashMap<Position, Cell>(cells);
 	}
 
 	public boolean containsRoom(RoomIdentifier room) {
@@ -59,12 +57,12 @@ public final class Grid {
 
 	private List<Grid> implementConnection(Transition transition) {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	private List<Grid> implementLocal(Transition transition) {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	private List<Grid> implementExtension(Transition transition) {
@@ -75,24 +73,17 @@ public final class Grid {
 
 		// implement
 		List<Grid> result = new ArrayList<Grid>();
-		for (Cell cell : cells.values()) {
-
-			// skip non-source cells
-			if (!cell.hasRoom(source)) continue;
+		for (Cell cell : getCells(source)) {
 
 			// implement transition in each direction
 			Position position = cell.getPosition();
-			List<Position> neighbors = position.getNeighbors();
-			for (Position neighbor : neighbors) {
-
-				// skip occupied positions
-				if (cells.containsKey(neighbor)) continue;
+			for (Position neighbor : getNeighbors(position)) {
 
 				// implement transition, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor, destination, script);
 
 				// create new grid
-				Map<Position, Cell> nextCells = new HashMap<Position, Cell>(cells);
+				Map<Position, Cell> nextCells = cells.toMap();
 				nextCells.put(extension.first().getPosition(), extension.first());
 				nextCells.put(extension.second().getPosition(), extension.second());
 
@@ -112,17 +103,13 @@ public final class Grid {
 
 			// extend in each direction
 			Position position = cell.getPosition();
-			List<Position> neighbors = position.getNeighbors();
-			for (Position neighbor : neighbors) {
-
-				// skip occupied positions
-				if (cells.containsKey(neighbor)) continue;
+			for (Position neighbor : getNeighbors(position)) {
 
 				// create extension, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor);
 
 				// create new grid
-				Map<Position, Cell> nextCells = new HashMap<Position, Cell>(cells);
+				Map<Position, Cell> nextCells = cells.toMap();
 				nextCells.put(extension.first().getPosition(), extension.first());
 				nextCells.put(extension.second().getPosition(), extension.second());
 
@@ -131,6 +118,27 @@ public final class Grid {
 			}
 		}
 
+		return result;
+	}
+
+	private Collection<Cell> getCells(RoomIdentifier room) {
+		List<Cell> result = new ArrayList<Cell>();
+		for (Cell cell : cells.values()) {
+			// skip wrong rooms
+			if (!cell.hasRoom(room)) continue;
+			result.add(cell);
+		}
+		return result;
+	}
+
+	private Collection<Position> getNeighbors(Position position) {
+		List<Position> result = new ArrayList<Position>();
+		for (Position neighbor : position.getNeighbors()) {
+			// skip occupied positions
+			if (cells.containsKey(neighbor)) continue;
+			// TODO: only accept valid positions (obey grid boundaries)
+			result.add(neighbor);
+		}
 		return result;
 	}
 
@@ -148,5 +156,5 @@ public final class Grid {
 		return cells.equals(other.cells);
 	}
 
-	private final Map<Position, Cell> cells;
+	private final ImmutableMap<Position, Cell> cells;
 }

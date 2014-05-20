@@ -9,7 +9,8 @@ public final class Transition {
 		this.isLocal = true;
 	}
 
-	public Transition(RoomIdentifier source, RoomIdentifier destination, ScriptIdentifier scriptIdentifier) {
+	public Transition(RoomIdentifier source, RoomIdentifier destination,
+			ScriptIdentifier scriptIdentifier) {
 		this.source = source;
 		this.destination = destination;
 		this.scriptIdentifier = scriptIdentifier;
@@ -29,6 +30,8 @@ public final class Transition {
 	}
 
 	public boolean isLocal() {
+		// TODO smart transitions: transition interface, local and actual transition
+		// implementations, effect onto grid via polymorphism
 		return isLocal;
 	}
 
