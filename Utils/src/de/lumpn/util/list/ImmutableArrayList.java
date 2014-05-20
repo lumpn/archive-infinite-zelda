@@ -10,18 +10,22 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, RandomAccess {
 
 	private final List<T> items;
 
-	public ImmutableArrayList(Collection<T> items) {
-		this.items = new ArrayList<T>(items);
+	/**
+	 * Constructs an immutable list by copying the collection of items.
+	 * @param source Source collection of items.
+	 */
+	public ImmutableArrayList(Collection<T> source) {
+		this.items = new ArrayList<T>(source);
 	}
 
 	/**
-	 * Constructs from an existing immutable list.
-	 * @param items Immutable list of items. Must not be modified externally ever.
-	 * @param dummy Dummy parameter to disambiguate against standard constructor.
+	 * Constructs an immutable list from an existing immutable list without copying.
+	 * @param source Immutable list of items. Must not be modified ever.
+	 * @param isImmutable Dummy parameter for disambiguation. Must be <code>true</code>.
 	 */
-	@SuppressWarnings("unused")
-	private ImmutableArrayList(List<T> items, int dummy) {
-		this.items = items;
+	private ImmutableArrayList(List<T> source, boolean isImmutable) {
+		assert isImmutable;
+		this.items = source;
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, RandomAccess {
 
 	@Override
 	public ImmutableArrayList<T> subList(int fromIndex, int toIndex) {
-		return new ImmutableArrayList<T>(items.subList(fromIndex, toIndex), 0);
+		return new ImmutableArrayList<T>(items.subList(fromIndex, toIndex), true);
 	}
 
 	@Override
