@@ -41,12 +41,13 @@ public final class Position {
 	}
 
 	public List<Position> getNeighbors() {
-		// TODO: add neighbors in third dimension
 		List<Position> result = new ArrayList<Position>();
 		result.add(new Position(x + 1, y, z));
 		result.add(new Position(x - 1, y, z));
 		result.add(new Position(x, y + 1, z));
 		result.add(new Position(x, y - 1, z));
+		result.add(new Position(x, y, z + 1));
+		result.add(new Position(x, y, z - 1));
 		return result;
 	}
 
