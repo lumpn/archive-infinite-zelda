@@ -28,5 +28,10 @@ public final class ScriptIdentifier {
 		return label.equals(other.label);
 	}
 
+	@Override
+	public String toString() {
+		return label;
+	}
+
 	private final String label;
 }

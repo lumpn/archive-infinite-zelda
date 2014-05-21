@@ -28,6 +28,18 @@ public final class Position {
 		this.z = z;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getZ() {
+		return z;
+	}
+
 	public List<Position> getNeighbors() {
 		// TODO: add neighbors in third dimension
 		List<Position> result = new ArrayList<Position>();

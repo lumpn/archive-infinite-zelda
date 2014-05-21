@@ -8,8 +8,8 @@ import de.lumpn.util.Pair;
  */
 public final class Cell {
 
-	public Cell(Position position, RoomIdentifier room, ScriptIdentifier center, ScriptIdentifier north,
-			ScriptIdentifier east, ScriptIdentifier up) {
+	public Cell(Position position, RoomIdentifier room, ScriptIdentifier center,
+			ScriptIdentifier north, ScriptIdentifier east, ScriptIdentifier up) {
 		this.position = position;
 		this.room = room;
 		this.center = center;
@@ -20,6 +20,22 @@ public final class Cell {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	public RoomIdentifier getRoom() {
+		return room;
+	}
+
+	public ScriptIdentifier getCenterScript() {
+		return center;
+	}
+
+	public ScriptIdentifier getNorthScript() {
+		return north;
+	}
+
+	public ScriptIdentifier getEastScript() {
+		return east;
 	}
 
 	public boolean hasRoom(RoomIdentifier source) {
@@ -77,8 +93,8 @@ public final class Cell {
 
 		// build resulting cells
 		Cell cell1 = new Cell(position, room, center, north1, east1, up1);
-		Cell cell2 = new Cell(neighborPosition, neighborRoom, ScriptIdentifier.EMPTY, north2, east2,
-				up2);
+		Cell cell2 = new Cell(neighborPosition, neighborRoom, ScriptIdentifier.EMPTY, north2,
+				east2, up2);
 		return new Pair<Cell>(cell1, cell2);
 	}
 

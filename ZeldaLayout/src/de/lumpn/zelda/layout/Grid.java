@@ -156,5 +156,67 @@ public final class Grid {
 		return cells.equals(other.cells);
 	}
 
+	@Override
+	public String toString() {
+		int minX = 0;
+		int maxX = 0;
+		int minY = 0;
+		int maxY = 0;
+		for (Cell cell : cells.values()) {
+			Position position = cell.getPosition();
+			minX = Math.min(minX, position.getX());
+			maxX = Math.max(maxX, position.getX());
+			minY = Math.min(minY, position.getY());
+			maxY = Math.max(maxY, position.getY());
+		}
+
+		StringBuilder result = new StringBuilder();
+		int z = 0; // TODO iterate over z axis too
+		for (int y = minY; y <= maxY; y++) {
+			for (int line = 0; line < 4; line++) {
+				for (int x = minX; x <= maxX; x++) {
+					Position position = new Position(x, maxY - y, z);
+					Cell cell = cells.get(position);
+					if (cell == null) {
+						// TODO add walls for north/east neighbors
+						result.append("         ");
+					} else {
+						switch (line) {
+							case 0:
+								result.append("---");
+								result.append(cell.getNorthScript().toString());
+								result.append("---+");
+								break;
+							case 1:
+								result.append("     ");
+								result.append(cell.getCenterScript().toString());
+								result.append(" |");
+								break;
+							case 2:
+								result.append("   ");
+								result.append(cell.getRoom().toString());
+								result.append("   ");
+								result.append(cell.getEastScript().toString());
+								break;
+							case 3:
+								result.append("       |");
+								break;
+						}
+					}
+				}
+				result.append("\n");
+			}
+		}
+
+		// 0 +--- ---+
+		// 1 | . . . |
+		// 2 . . . . .
+		// 3 | . . . |
+		// 4 +--- ---+
+		// 5
+
+		return result.toString();
+	}
+
 	private final ImmutableMap<Position, Cell> cells;
 }
