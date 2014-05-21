@@ -105,8 +105,7 @@ public class ZeldaLayoutBuilder {
 
 		// TODO sort schedule for faster convergence
 
-		// TODO create pre-room A
-
+		// create pre-room A
 		Position preRoomPosition = new Position(0, -1, 0);
 		Map<Position, Cell> initialCells = new HashMap<Position, Cell>();
 		initialCells
