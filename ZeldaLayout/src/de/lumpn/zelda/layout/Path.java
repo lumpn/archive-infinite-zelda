@@ -1,7 +1,5 @@
 package de.lumpn.zelda.layout;
 
-import de.lumpn.util.Pair;
-
 public class Path {
 
 	public static int length(Path path) {
@@ -9,32 +7,13 @@ public class Path {
 		return length(path.next()) + 1;
 	}
 
-	public static Pair<Path> split(Path path, int splitPosition) {
-		Path iterator = path;
-		
-		Path first = new Path(iterator.position);
-		Path current = first;
-		for (int i = 0; i < splitPosition; i++) {
-			iterator = iterator.next();
-			Path next = new Path(iterator.position);
-			current.next = next;
-			current = next;
-		}
-
-		Path second = new Path(iterator.position);
-		current = second;
-		while (iterator.hasNext()) {
-			iterator = iterator.next();
-			Path next = new Path(iterator.position);
-			current.next = next;
-			current = next;
-		}
-
-		return new Pair<Path>(first, second);
+	public Path(Position position) {
+		this(position, null);
 	}
 
-	public Path(Position position) {
+	public Path(Position position, Path next) {
 		this.position = position;
+		this.next = next;
 	}
 
 	public Position getPosition() {
@@ -48,12 +27,7 @@ public class Path {
 	public Path next() {
 		return next;
 	}
-	
-	public void setNext(Path next) {
-		// TODO implement immutable?
-		this.next = next;
-	}
 
 	private final Position position;
-	private Path next;
+	private final Path next;
 }
