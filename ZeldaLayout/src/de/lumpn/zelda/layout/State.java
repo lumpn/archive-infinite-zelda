@@ -82,10 +82,6 @@ public final class State {
 		List<State> result = new ArrayList<State>();
 		for (Transition transition : schedule) {
 
-			// source exists?
-			RoomIdentifier source = transition.getSource();
-			if (!grid.containsRoom(source)) continue;
-
 			// remove from schedule
 			List<Transition> tmpSchedule = schedule.toList();
 			tmpSchedule.remove(transition);

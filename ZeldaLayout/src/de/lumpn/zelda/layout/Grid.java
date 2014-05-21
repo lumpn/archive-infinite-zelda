@@ -39,7 +39,14 @@ public final class Grid {
 	}
 
 	public List<Grid> implement(Transition transition) {
-		assert containsRoom(transition.getSource());
+		RoomIdentifier source = transition.getSource();
+		RoomIdentifier destination = transition.getDestination();
+
+		// see if source or destination exists
+		if (!containsRoom(source) && !containsRoom(destination)) {
+			// both rooms do not exist -> transition can not be implemented yet
+			return Collections.emptyList();
+		}
 
 		// implement script
 		if (transition.isLocal()) {
@@ -47,13 +54,18 @@ public final class Grid {
 		}
 
 		// connect rooms if both source and destination exist
-		RoomIdentifier destination = transition.getDestination();
-		if (containsRoom(destination)) {
+		if (containsRoom(source) && containsRoom(destination)) {
 			return implementConnection(transition);
 		}
 
 		// implement extension to new room
-		return implementExtension(transition);
+		// HACK: swap source/destination if source is missing
+		// TODO: fix this hack and make directed transitions printable
+		Transition extension = transition;
+		if (!containsRoom(source)) {
+			extension = new Transition(destination, source, transition.getScript());
+		}
+		return implementTransition(extension);
 	}
 
 	private List<Grid> implementConnection(Transition transition) {
@@ -66,7 +78,7 @@ public final class Grid {
 		return Collections.emptyList();
 	}
 
-	private List<Grid> implementExtension(Transition transition) {
+	private List<Grid> implementTransition(Transition transition) {
 
 		RoomIdentifier source = transition.getSource();
 		RoomIdentifier destination = transition.getDestination();
