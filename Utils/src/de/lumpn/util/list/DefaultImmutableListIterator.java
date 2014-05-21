@@ -14,8 +14,7 @@ public final class DefaultImmutableListIterator<T> implements ImmutableListItera
 
 	@Override
 	public T next() {
-		index++;
-		return list.get(index);
+		return list.get(index++);
 	}
 
 	@Override
@@ -25,8 +24,7 @@ public final class DefaultImmutableListIterator<T> implements ImmutableListItera
 
 	@Override
 	public T previous() {
-		index--;
-		return list.get(index);
+		return list.get(index--);
 	}
 
 	@Override
