@@ -37,6 +37,10 @@ public class Path {
 		this.position = position;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
+
 	public boolean hasNext() {
 		return (next != null);
 	}
@@ -44,9 +48,10 @@ public class Path {
 	public Path next() {
 		return next;
 	}
-
-	public Position getPosition() {
-		return position;
+	
+	public void setNext(Path next) {
+		// TODO implement immutable?
+		this.next = next;
 	}
 
 	private final Position position;

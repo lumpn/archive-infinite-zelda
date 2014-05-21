@@ -89,7 +89,8 @@ public final class Grid {
 		return result;
 	}
 
-	private Grid implementConnection(Cell source, Cell destination, ScriptIdentifier script) {
+	private Grid implementConnection(Cell source, Cell destination,
+			ScriptIdentifier transitionScript) {
 
 		// find a path between source and destination involving only free cells
 		// source and destination are both included in path
@@ -103,35 +104,25 @@ public final class Grid {
 			return null;
 		}
 
-		// cut path in two equal parts
-		Pair<Path> splitPath = Path.split(path, length / 2);
-
-		// implement first part
 		Map<Position, Cell> nextCells = cells.toMap();
+
 		Cell current = source;
-		Path step = splitPath.first();
-		while (step.hasNext()) {
-			step.next();
-			Pair<Cell> extension = current.extend(step.getPosition());
-			setCell(nextCells, extension.first());
-			current = extension.second();
-		}
-
-		// implement transition at split
-		step = splitPath.second();
-		Pair<Cell> transition = current.extend(step.getPosition(), destination.getRoom(),
-				script);
-		setCell(nextCells, transition.first());
-		current = transition.second();
-
-		// implement second part
 		Cell previous = current;
-		while (step.hasNext()) {
-			step.next();
-			Pair<Cell> extension = current.extend(step.getPosition());
+		RoomIdentifier room = source.getRoom();
+
+		int i = 0;
+		// NOTE that we start at path.next!
+		for (Path step = path.next(); step.hasNext(); step = step.next()) {
+			ScriptIdentifier script = ScriptIdentifier.OPEN;
+			if (i == length / 2) {
+				script = transitionScript;
+				room = destination.getRoom();
+			}
+			Pair<Cell> extension = current.extend(step.getPosition(), room, script);
 			setCell(nextCells, extension.first());
 			previous = current;
 			current = extension.second();
+			i++;
 		}
 
 		// fix up destination room
