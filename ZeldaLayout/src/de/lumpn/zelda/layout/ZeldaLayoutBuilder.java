@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import de.lumpn.util.list.ImmutableArrayList;
 
@@ -17,7 +18,10 @@ public class ZeldaLayoutBuilder {
 
 	private static final int epsilon = 0;
 
-	public ZeldaLayoutBuilder() {
+	public ZeldaLayoutBuilder(Boundary boundary, Random random) {
+		this.boundary = boundary;
+		this.random = random;
+
 		schedule.add(new Transition(lookup.resolve(preId, "A"), lookup.resolve(entranceId),
 				ScriptIdentifier.OPEN));
 		schedule.add(new Transition(lookup.resolve(exitId), lookup.resolve(postId, "B"),
@@ -102,12 +106,14 @@ public class ZeldaLayoutBuilder {
 		// TODO sort schedule for faster convergence
 
 		// TODO create pre-room A
+
+		Position preRoomPosition = new Position(0, -1, 0);
 		Map<Position, Cell> initialCells = new HashMap<Position, Cell>();
-		initialCells.put(new Position(0, 0, 0),
-				new Cell(new Position(0, 0, 0), lookup.resolve(preId, "A"),
+		initialCells
+				.put(preRoomPosition, new Cell(preRoomPosition, lookup.resolve(preId, "A"),
 						ScriptIdentifier.EMPTY, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED,
 						ScriptIdentifier.BLOCKED));
-		Grid initialGrid = new Grid(initialCells);
+		Grid initialGrid = new Grid(boundary, initialCells);
 		State initialState = new State(initialGrid, new ImmutableArrayList<Transition>(
 				schedule));
 
@@ -116,7 +122,8 @@ public class ZeldaLayoutBuilder {
 		openSet.add(initialState);
 
 		while (!openSet.isEmpty()) {
-			State current = getMinimum(openSet);
+			// choose one of the minimum states at random
+			State current = getRandomMinimum(openSet, random);
 
 			// goal reached?
 			if (current.getSchedule().isEmpty()) {
@@ -136,21 +143,52 @@ public class ZeldaLayoutBuilder {
 		return null;
 	}
 
-	private static State getMinimum(Set<State> openSet) {
+	private static State getRandomMinimum(Set<State> states, Random random) {
 		State min = null;
-		for (State state : openSet) {
-			if (min == null || estimatedTotalCost(state) < estimatedTotalCost(min)) {
+		double minCost = 0;
+		int minWeight = 0;
+		for (State state : states) {
+			double cost = estimateTotalCost(state);
+			int weight = random.nextInt();
+			if (min == null || cost < minCost || (cost == minCost && weight < minWeight)) {
 				min = state;
+				minCost = cost;
+				minWeight = weight;
 			}
 		}
 		return min;
 	}
 
-	private static double estimatedTotalCost(State state) {
+	private static List<State> getMinima(Set<State> states) {
+
+		// first pass: find minimum cost
+		double minCost = Double.MAX_VALUE;
+		for (State state : states) {
+			double cost = estimateTotalCost(state);
+			if (cost < minCost) {
+				minCost = cost;
+			}
+		}
+
+		// second pass: select minima
+		List<State> minima = new ArrayList<State>();
+		for (State state : states) {
+			double cost = estimateTotalCost(state);
+			if (cost <= minCost) {
+				minima.add(state);
+			}
+		}
+
+		return minima;
+	}
+
+	private static double estimateTotalCost(State state) {
 		// static weighting relaxation on A*
 		return state.getCost() + (1 + epsilon) * state.getEstimate();
 	}
 
-	private List<Transition> schedule = new ArrayList<Transition>();
+	private Boundary boundary;
+	private Random random;
 	private RoomLookup lookup = new RoomLookup();
+	private List<Transition> schedule = new ArrayList<Transition>();
 }

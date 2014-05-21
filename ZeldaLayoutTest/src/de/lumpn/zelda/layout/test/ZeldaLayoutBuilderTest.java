@@ -1,7 +1,8 @@
 package de.lumpn.zelda.layout.test;
 
-import org.junit.Assert;
+import java.util.Random;
 import org.junit.Test;
+import de.lumpn.zelda.layout.Boundary;
 import de.lumpn.zelda.layout.ScriptIdentifier;
 import de.lumpn.zelda.layout.ZeldaLayout;
 import de.lumpn.zelda.layout.ZeldaLayoutBuilder;
@@ -10,13 +11,18 @@ public class ZeldaLayoutBuilderTest {
 
 	@Test
 	public void testBuild1() {
-		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder();
+		// TODO terminate earlier than exhaustive search by extension
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 1);
+		Random random = new Random();
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
 		ZeldaLayout layout = builder.build();
 	}
 
 	@Test
 	public void testBuild2() {
-		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder();
+		Random random = new Random();
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 1);
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
 		builder.addUndirectedTransition(0, 1, ScriptIdentifier.EMPTY.toString());
 		ZeldaLayout layout = builder.build();
 	}

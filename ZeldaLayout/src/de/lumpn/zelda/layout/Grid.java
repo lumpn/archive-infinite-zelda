@@ -14,7 +14,8 @@ import de.lumpn.util.map.ImmutableMap;
  */
 public final class Grid {
 
-	public Grid(Map<Position, Cell> cells) {
+	public Grid(Boundary boundary, Map<Position, Cell> cells) {
+		this.boundary = boundary;
 		this.cells = new ImmutableHashMap<Position, Cell>(cells);
 	}
 
@@ -88,7 +89,7 @@ public final class Grid {
 				nextCells.put(extension.second().getPosition(), extension.second());
 
 				// add to result
-				result.add(new Grid(nextCells));
+				result.add(new Grid(boundary, nextCells));
 			}
 		}
 
@@ -114,7 +115,7 @@ public final class Grid {
 				nextCells.put(extension.second().getPosition(), extension.second());
 
 				// add to result
-				result.add(new Grid(nextCells));
+				result.add(new Grid(boundary, nextCells));
 			}
 		}
 
@@ -134,9 +135,14 @@ public final class Grid {
 	private Collection<Position> getNeighbors(Position position) {
 		List<Position> result = new ArrayList<Position>();
 		for (Position neighbor : position.getNeighbors()) {
+
+			// skip out of bounds positions
+			if (!boundary.contains(neighbor)) continue;
+
 			// skip occupied positions
 			if (cells.containsKey(neighbor)) continue;
-			// TODO: only accept valid positions (obey grid boundaries)
+
+			// valid neighbor
 			result.add(neighbor);
 		}
 		return result;
@@ -170,16 +176,40 @@ public final class Grid {
 			maxY = Math.max(maxY, position.getY());
 		}
 
+		// for placing north/east walls
+		minX--;
+		minY--;
+
+		// 0 +#--- ---+
+		// 1 |# . . . |
+		// 2 .# . . . .
+		// 3 |# . . . |
+		// . ##########
+		// 4 +#--- ---+
+		// 5
+
+		// TODO refactor big time. this code is unreadable!
 		StringBuilder result = new StringBuilder();
 		int z = 0; // TODO iterate over z axis too
-		for (int y = minY; y <= maxY; y++) {
+		for (int y = maxY; y >= minY; y--) {
 			for (int line = 0; line < 4; line++) {
 				for (int x = minX; x <= maxX; x++) {
-					Position position = new Position(x, maxY - y, z);
+					Position position = new Position(x, y, z);
 					Cell cell = cells.get(position);
 					if (cell == null) {
-						// TODO add walls for north/east neighbors
-						result.append("         ");
+						Position north = new Position(x, y + 1, z);
+						Position east = new Position(x + 1, y, z);
+						if (cells.containsKey(north) && (line == 0)) {
+							result.append("-------+");
+						} else if (cells.containsKey(east)) {
+							if (line == 0) {
+								result.append("       +");
+							} else {
+								result.append("       |");
+							}
+						} else {
+							result.append("        ");
+						}
 					} else {
 						switch (line) {
 							case 0:
@@ -201,6 +231,9 @@ public final class Grid {
 							case 3:
 								result.append("       |");
 								break;
+							default:
+								assert false;
+								break;
 						}
 					}
 				}
@@ -208,15 +241,9 @@ public final class Grid {
 			}
 		}
 
-		// 0 +--- ---+
-		// 1 | . . . |
-		// 2 . . . . .
-		// 3 | . . . |
-		// 4 +--- ---+
-		// 5
-
 		return result.toString();
 	}
 
+	private final Boundary boundary;
 	private final ImmutableMap<Position, Cell> cells;
 }
