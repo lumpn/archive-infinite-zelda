@@ -1,6 +1,7 @@
 package de.lumpn.zelda.layout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,8 +65,8 @@ public final class State {
 		return grid;
 	}
 
-	public ImmutableList<Transition> getSchedule() {
-		return schedule;
+	public boolean scheduleIsEmpty() {
+		return schedule.isEmpty();
 	}
 
 	public int getCost() {
@@ -100,10 +101,11 @@ public final class State {
 		}
 
 		// extend room
-		List<Grid> extensions = grid.extend();
-		for (Grid extension : extensions) {
-			result.add(new State(extension, schedule));
-		}
+		// HACK: disable extensions for now!
+		// List<Grid> extensions = grid.extend();
+		// for (Grid extension : extensions) {
+		// result.add(new State(extension, schedule));
+		// }
 
 		return result;
 	}

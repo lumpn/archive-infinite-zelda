@@ -126,7 +126,7 @@ public class ZeldaLayoutBuilder {
 			State current = getRandomMinimum(openSet, random);
 
 			// goal reached?
-			if (current.getSchedule().isEmpty()) {
+			if (current.scheduleIsEmpty()) {
 				return new ZeldaLayout(current.getGrid());
 			}
 
