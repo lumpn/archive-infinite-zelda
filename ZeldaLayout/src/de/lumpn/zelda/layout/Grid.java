@@ -14,6 +14,11 @@ import de.lumpn.util.map.ImmutableMap;
  */
 public final class Grid {
 
+	// TODO extract mutable grid builder for transition implementations
+	private static void setCell(Map<Position, Cell> cells, Cell cell) {
+		cells.put(cell.getPosition(), cell);
+	}
+
 	public Grid(Boundary boundary, Map<Position, Cell> cells) {
 		this.boundary = boundary;
 		this.cells = new ImmutableHashMap<Position, Cell>(cells);
@@ -69,8 +74,73 @@ public final class Grid {
 	}
 
 	private List<Grid> implementConnection(Transition transition) {
-		// TODO Auto-generated method stub
-		return Collections.emptyList();
+		List<Grid> result = new ArrayList<Grid>();
+
+		Collection<Cell> sources = getCells(transition.getSource());
+		Collection<Cell> destinations = getCells(transition.getDestination());
+		for (Cell source : sources) {
+			for (Cell destination : destinations) {
+				Grid connection = implementConnection(source, destination, transition.getScript());
+				if (connection == null) continue;
+				result.add(connection);
+			}
+		}
+
+		return result;
+	}
+
+	private Grid implementConnection(Cell source, Cell destination, ScriptIdentifier script) {
+
+		// find a path between source and destination involving only free cells
+		// source and destination are both included in path
+		Path path = findPath(source.getPosition(), destination.getPosition());
+		if (path == null) return null;
+
+		int length = Path.length(path);
+		if (length < 2) {
+			// source and destination are neighbors
+			// TODO connect cells
+			return null;
+		}
+
+		// cut path in two equal parts
+		Pair<Path> splitPath = Path.split(path, length / 2);
+
+		// implement first part
+		Map<Position, Cell> nextCells = cells.toMap();
+		Cell current = source;
+		Path step = splitPath.first();
+		while (step.hasNext()) {
+			step.next();
+			Pair<Cell> extension = current.extend(step.getPosition());
+			setCell(nextCells, extension.first());
+			current = extension.second();
+		}
+
+		// implement transition at split
+		step = splitPath.second();
+		Pair<Cell> transition = current.extend(step.getPosition(), destination.getRoom(),
+				script);
+		setCell(nextCells, transition.first());
+		current = transition.second();
+
+		// implement second part
+		Cell previous = current;
+		while (step.hasNext()) {
+			step.next();
+			Pair<Cell> extension = current.extend(step.getPosition());
+			setCell(nextCells, extension.first());
+			previous = current;
+			current = extension.second();
+		}
+
+		// fix up destination room
+		// NOTE: implicitly throw away current and fixup.second!
+		Pair<Cell> fixup = destination.extend(previous.getPosition());
+		setCell(nextCells, fixup.first());
+
+		// build grid
+		return new Grid(boundary, nextCells);
 	}
 
 	private List<Grid> implementLocal(Transition transition) {
@@ -97,8 +167,8 @@ public final class Grid {
 
 				// create new grid
 				Map<Position, Cell> nextCells = cells.toMap();
-				nextCells.put(extension.first().getPosition(), extension.first());
-				nextCells.put(extension.second().getPosition(), extension.second());
+				setCell(nextCells, extension.first());
+				setCell(nextCells, extension.second());
 
 				// add to result
 				result.add(new Grid(boundary, nextCells));
@@ -123,8 +193,8 @@ public final class Grid {
 
 				// create new grid
 				Map<Position, Cell> nextCells = cells.toMap();
-				nextCells.put(extension.first().getPosition(), extension.first());
-				nextCells.put(extension.second().getPosition(), extension.second());
+				setCell(nextCells, extension.first());
+				setCell(nextCells, extension.second());
 
 				// add to result
 				result.add(new Grid(boundary, nextCells));
@@ -132,6 +202,11 @@ public final class Grid {
 		}
 
 		return result;
+	}
+
+	private Path findPath(Position source, Position destination) {
+		// TODO implement A*
+		return null;
 	}
 
 	private Collection<Cell> getCells(RoomIdentifier room) {
