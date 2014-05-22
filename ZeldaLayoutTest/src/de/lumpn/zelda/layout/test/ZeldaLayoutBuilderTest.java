@@ -38,6 +38,7 @@ public class ZeldaLayoutBuilderTest {
 
 	@Test
 	public void testBuildDoubleTransition() {
+		// TODO make this test case work
 		Random random = new Random();
 		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 0);
 		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
@@ -45,4 +46,29 @@ public class ZeldaLayoutBuilderTest {
 		builder.addUndirectedTransition(0, 1, " ");
 		ZeldaLayout layout = builder.build();
 	}
+
+	@Test
+	public void testBuildCycle() {
+		Random random = new Random();
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 0);
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
+		builder.addUndirectedTransition(0, 1, " ");
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(2, 3, " ");
+		builder.addUndirectedTransition(3, 1, " ");
+		ZeldaLayout layout = builder.build();
+	}
+
+	@Test
+	public void testBuildConnection() {
+		Random random = new Random();
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 0);
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(0, 3, " ");
+		builder.addUndirectedTransition(2, 1, " ");
+		builder.addUndirectedTransition(3, 1, " ");
+		ZeldaLayout layout = builder.build();
+	}
+
 }
