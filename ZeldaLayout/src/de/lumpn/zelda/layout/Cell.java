@@ -8,6 +8,25 @@ import de.lumpn.util.Pair;
  */
 public final class Cell {
 
+	public static ScriptIdentifier getTransitionScript(Cell from, Cell to) {
+		switch (Position.getDirection(from.position, to.position)) {
+			case NORTH:
+				return from.north;
+			case SOUTH:
+				return to.north;
+			case EAST:
+				return from.east;
+			case WEST:
+				return to.east;
+			case UP:
+				return from.up;
+			case DOWN:
+				return to.up;
+			default:
+				return null;
+		}
+	}
+
 	public Cell(Position position, RoomIdentifier room, ScriptIdentifier center,
 			ScriptIdentifier north, ScriptIdentifier east, ScriptIdentifier up) {
 		this.position = position;

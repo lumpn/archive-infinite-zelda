@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import de.lumpn.util.Pair;
 import de.lumpn.util.map.ImmutableHashMap;
@@ -162,7 +163,7 @@ public final class Grid {
 
 			// implement transition in each direction
 			Position position = cell.getPosition();
-			for (Position neighbor : getValidNeighbors(position, boundary, cells)) {
+			for (Position neighbor : getValidNeighbors(position)) {
 
 				// implement transition, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor, destination, script);
@@ -188,7 +189,7 @@ public final class Grid {
 
 			// extend in each direction
 			Position position = cell.getPosition();
-			for (Position neighbor : getValidNeighbors(position, boundary, cells)) {
+			for (Position neighbor : getValidNeighbors(position)) {
 
 				// create extension, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor);
@@ -208,13 +209,6 @@ public final class Grid {
 
 	private Path findPath(Position source, Position destination) {
 
-		// HACK free up destination
-		// TODO hack enables reusing existing door to destination. Fix it!
-		Map<Position, Cell> tmpCells = cells.toMap();
-		tmpCells.remove(destination);
-		ImmutableMap<Position, Cell> searchCells = new ImmutableHashMap<Position, Cell>(
-				tmpCells);
-
 		Set<Position> closedSet = new HashSet<Position>();
 		Set<Position> openSet = new HashSet<Position>();
 		openSet.add(source);
@@ -228,14 +222,16 @@ public final class Grid {
 
 		while (!openSet.isEmpty()) {
 			Position current = getMinimum(openSet, fScore);
-			if (current.equals(destination)) {
-				return reconstructPath(current, null, cameFrom);
+
+			// are we next to the destination and able to connect?
+			if (canConnect(current, destination)) {
+				return reconstructPath(current, new Path(destination), cameFrom);
 			}
 
 			openSet.remove(current);
 			closedSet.add(current);
 
-			for (Position neighbor : getValidNeighbors(current, boundary, searchCells)) {
+			for (Position neighbor : getValidNeighbors(current)) {
 				if (closedSet.contains(neighbor)) continue;
 
 				int tentativeScore = gScore.get(current) + 1;
@@ -250,6 +246,21 @@ public final class Grid {
 		}
 
 		return null;
+	}
+
+	public boolean canConnect(Position from, Position to) {
+
+		// too far?
+		if (Position.getDistance(from, to) > 1) return false;
+
+		// empty cells?
+		Cell source = cells.get(from);
+		Cell destination = cells.get(to);
+		if (source == null || destination == null) return true;
+
+		// transition available?
+		return Objects.equals(Cell.getTransitionScript(source, destination),
+				ScriptIdentifier.BLOCKED);
 	}
 
 	public static Position getMinimum(Collection<Position> positions,
@@ -286,8 +297,7 @@ public final class Grid {
 		return result;
 	}
 
-	private static List<Position> getValidNeighbors(Position position, Boundary boundary,
-			ImmutableMap<Position, Cell> cells) {
+	private List<Position> getValidNeighbors(Position position) {
 		List<Position> result = new ArrayList<Position>();
 		for (Position neighbor : position.getNeighbors()) {
 
