@@ -22,6 +22,10 @@ public final class Position {
 		return Direction.NONE;
 	}
 
+	public static int getDistance(Position from, Position to) {
+		return Math.abs(to.x - from.x) + Math.abs(to.y - from.y) + Math.abs(to.z - from.z);
+	}
+
 	public Position(int x, int y, int z) {
 		this.x = x;
 		this.y = y;

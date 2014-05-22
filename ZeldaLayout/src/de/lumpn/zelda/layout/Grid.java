@@ -3,8 +3,11 @@ package de.lumpn.zelda.layout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import de.lumpn.util.Pair;
 import de.lumpn.util.map.ImmutableHashMap;
 import de.lumpn.util.map.ImmutableMap;
@@ -97,14 +100,22 @@ public final class Grid {
 		Path path = findPath(source.getPosition(), destination.getPosition());
 		if (path == null) return null;
 
+		Map<Position, Cell> newCells = cells.toMap();
+
 		int length = Path.length(path);
 		if (length < 2) {
 			// source and destination are neighbors
-			// TODO connect cells
-			return null;
-		}
+			Pair<Cell> fix1 = source.extend(destination.getPosition(), destination.getRoom(),
+					transitionScript);
+			Pair<Cell> fix2 = destination.extend(source.getPosition(), source.getRoom(),
+					transitionScript);
 
-		Map<Position, Cell> nextCells = cells.toMap();
+			// NOTE: implicitly throw away duplicate cells
+			setCell(newCells, fix1.first());
+			setCell(newCells, fix2.first());
+
+			return new Grid(boundary, newCells);
+		}
 
 		Cell current = source;
 		Cell previous = current;
@@ -119,7 +130,7 @@ public final class Grid {
 				room = destination.getRoom();
 			}
 			Pair<Cell> extension = current.extend(step.getPosition(), room, script);
-			setCell(nextCells, extension.first());
+			setCell(newCells, extension.first());
 			previous = current;
 			current = extension.second();
 			i++;
@@ -128,10 +139,10 @@ public final class Grid {
 		// fix up destination room
 		// NOTE: implicitly throw away current and fixup.second!
 		Pair<Cell> fixup = destination.extend(previous.getPosition());
-		setCell(nextCells, fixup.first());
+		setCell(newCells, fixup.first());
 
 		// build grid
-		return new Grid(boundary, nextCells);
+		return new Grid(boundary, newCells);
 	}
 
 	private List<Grid> implementLocal(Transition transition) {
@@ -151,7 +162,7 @@ public final class Grid {
 
 			// implement transition in each direction
 			Position position = cell.getPosition();
-			for (Position neighbor : getNeighbors(position)) {
+			for (Position neighbor : getValidNeighbors(position, boundary, cells)) {
 
 				// implement transition, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor, destination, script);
@@ -177,7 +188,7 @@ public final class Grid {
 
 			// extend in each direction
 			Position position = cell.getPosition();
-			for (Position neighbor : getNeighbors(position)) {
+			for (Position neighbor : getValidNeighbors(position, boundary, cells)) {
 
 				// create extension, link cell and extension
 				Pair<Cell> extension = cell.extend(neighbor);
@@ -196,8 +207,73 @@ public final class Grid {
 	}
 
 	private Path findPath(Position source, Position destination) {
-		// TODO implement A*
+
+		// HACK free up destination
+		// TODO hack enables reusing existing door to destination. Fix it!
+		Map<Position, Cell> tmpCells = cells.toMap();
+		tmpCells.remove(destination);
+		ImmutableMap<Position, Cell> searchCells = new ImmutableHashMap<Position, Cell>(
+				tmpCells);
+
+		Set<Position> closedSet = new HashSet<Position>();
+		Set<Position> openSet = new HashSet<Position>();
+		openSet.add(source);
+
+		Map<Position, Integer> gScore = new HashMap<Position, Integer>();
+		Map<Position, Integer> fScore = new HashMap<Position, Integer>();
+		gScore.put(source, 0);
+		fScore.put(source, Position.getDistance(source, destination));
+
+		Map<Position, Position> cameFrom = new HashMap<Position, Position>();
+
+		while (!openSet.isEmpty()) {
+			Position current = getMinimum(openSet, fScore);
+			if (current.equals(destination)) {
+				return reconstructPath(current, null, cameFrom);
+			}
+
+			openSet.remove(current);
+			closedSet.add(current);
+
+			for (Position neighbor : getValidNeighbors(current, boundary, searchCells)) {
+				if (closedSet.contains(neighbor)) continue;
+
+				int tentativeScore = gScore.get(current) + 1;
+				if (!openSet.contains(neighbor) || tentativeScore < gScore.get(neighbor)) {
+					cameFrom.put(neighbor, current);
+					gScore.put(neighbor, tentativeScore);
+					fScore.put(neighbor,
+							tentativeScore + Position.getDistance(neighbor, destination));
+					openSet.add(neighbor);
+				}
+			}
+		}
+
 		return null;
+	}
+
+	public static Position getMinimum(Collection<Position> positions,
+			Map<Position, Integer> cost) {
+		Position min = null;
+		int minCost = 0;
+		for (Position position : positions) {
+			if (min == null || minCost < cost.get(position)) {
+				min = position;
+				minCost = cost.get(position);
+			}
+		}
+		return min;
+	}
+
+	public static Path reconstructPath(Position position, Path next,
+			Map<Position, Position> cameFrom) {
+
+		Path current = new Path(position, next);
+
+		Position predecessor = cameFrom.get(position);
+		if (predecessor == null) return current;
+
+		return reconstructPath(predecessor, current, cameFrom);
 	}
 
 	private Collection<Cell> getCells(RoomIdentifier room) {
@@ -210,7 +286,8 @@ public final class Grid {
 		return result;
 	}
 
-	private Collection<Position> getNeighbors(Position position) {
+	private static List<Position> getValidNeighbors(Position position, Boundary boundary,
+			ImmutableMap<Position, Cell> cells) {
 		List<Position> result = new ArrayList<Position>();
 		for (Position neighbor : position.getNeighbors()) {
 
@@ -242,16 +319,21 @@ public final class Grid {
 
 	@Override
 	public String toString() {
+
 		int minX = 0;
 		int maxX = 0;
 		int minY = 0;
 		int maxY = 0;
+		int minZ = 0;
+		int maxZ = 0;
 		for (Cell cell : cells.values()) {
 			Position position = cell.getPosition();
 			minX = Math.min(minX, position.getX());
 			maxX = Math.max(maxX, position.getX());
 			minY = Math.min(minY, position.getY());
 			maxY = Math.max(maxY, position.getY());
+			minZ = Math.min(minZ, position.getZ());
+			maxZ = Math.max(maxZ, position.getZ());
 		}
 
 		// for placing north/east walls
@@ -268,55 +350,58 @@ public final class Grid {
 
 		// TODO refactor big time. this code is unreadable!
 		StringBuilder result = new StringBuilder();
-		int z = 0; // TODO iterate over z axis too
-		for (int y = maxY; y >= minY; y--) {
-			for (int line = 0; line < 4; line++) {
-				for (int x = minX; x <= maxX; x++) {
-					Position position = new Position(x, y, z);
-					Cell cell = cells.get(position);
-					if (cell == null) {
-						Position north = new Position(x, y + 1, z);
-						Position east = new Position(x + 1, y, z);
-						if (cells.containsKey(north) && (line == 0)) {
-							result.append("-------+");
-						} else if (cells.containsKey(east)) {
-							if (line == 0) {
-								result.append("       +");
+		for (int z = maxZ; z >= minZ; z--) {
+			for (int y = maxY; y >= minY; y--) {
+				for (int line = 0; line < 4; line++) { // TODO how about 4 stringbuilders instead
+																								// of this?
+					for (int x = minX; x <= maxX; x++) {
+						Position position = new Position(x, y, z);
+						Cell cell = cells.get(position);
+						if (cell == null) {
+							Position north = new Position(x, y + 1, z);
+							Position east = new Position(x + 1, y, z);
+							if (cells.containsKey(north) && (line == 0)) {
+								result.append("-------+");
+							} else if (cells.containsKey(east)) {
+								if (line == 0) {
+									result.append("       +");
+								} else {
+									result.append("       |");
+								}
 							} else {
-								result.append("       |");
+								result.append("        ");
 							}
 						} else {
-							result.append("        ");
-						}
-					} else {
-						switch (line) {
-							case 0:
-								result.append("---");
-								result.append(cell.getNorthScript().toString());
-								result.append("---+");
-								break;
-							case 1:
-								result.append("     ");
-								result.append(cell.getCenterScript().toString());
-								result.append(" |");
-								break;
-							case 2:
-								result.append("   ");
-								result.append(cell.getRoom().toString());
-								result.append("   ");
-								result.append(cell.getEastScript().toString());
-								break;
-							case 3:
-								result.append("       |");
-								break;
-							default:
-								assert false;
-								break;
+							switch (line) {
+								case 0:
+									result.append("---");
+									result.append(cell.getNorthScript().toString());
+									result.append("---+");
+									break;
+								case 1:
+									result.append("     ");
+									result.append(cell.getCenterScript().toString());
+									result.append(" |");
+									break;
+								case 2:
+									result.append("   ");
+									result.append(cell.getRoom().toString());
+									result.append("   ");
+									result.append(cell.getEastScript().toString());
+									break;
+								case 3:
+									result.append("       |");
+									break;
+								default:
+									assert false;
+									break;
+							}
 						}
 					}
+					result.append("\n");
 				}
-				result.append("\n");
 			}
+			result.append("\n");
 		}
 
 		return result.toString();
