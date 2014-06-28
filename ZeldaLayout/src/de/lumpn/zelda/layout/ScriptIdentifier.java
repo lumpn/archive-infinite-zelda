@@ -4,7 +4,7 @@ public final class ScriptIdentifier {
 
 	public static final ScriptIdentifier EMPTY = new ScriptIdentifier(" ");
 	public static final ScriptIdentifier OPEN = new ScriptIdentifier(" ");
-	public static final ScriptIdentifier BLOCKED = new ScriptIdentifier("#");
+	public static final ScriptIdentifier BLOCKED = new ScriptIdentifier("+");
 
 	public ScriptIdentifier(String label) {
 		this.label = label;

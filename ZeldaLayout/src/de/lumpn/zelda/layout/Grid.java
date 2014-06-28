@@ -333,63 +333,51 @@ public final class Grid {
 			maxZ = Math.max(maxZ, position.getZ());
 		}
 
-		// 0 +---.---+
-		// 1 |.......|
-		// 2 .........
-		// 3 |.......|
-		// 4 +---.---+
-
 		StringBuilder result = new StringBuilder();
 		for (int z = maxZ; z >= minZ; z--) {
 			for (int y = maxY; y >= minY; y--) {
 
-				StringBuilder line0 = new StringBuilder();
 				StringBuilder line1 = new StringBuilder();
 				StringBuilder line2 = new StringBuilder();
 				StringBuilder line3 = new StringBuilder();
 				StringBuilder line4 = new StringBuilder();
+				StringBuilder line5 = new StringBuilder();
 
 				for (int x = minX; x <= maxX; x++) {
 					Position position = new Position(x, y, z);
 					Cell cell = cells.get(position);
 					if (cell == null) {
-						// cell is empty -> place walls for neighbors
-						Position north = new Position(x, y + 1, z);
-						Position east = new Position(x + 1, y, z);
-						if (cells.containsKey(north)) {
-							line0.append("-------+");
-						} else if (cells.containsKey(east)) {
-							line0.append("       +");
-						} else {
-							line0.append("        ");
-						}
-						if (cells.containsKey(east)) {
-							line1.append("       |");
-							line2.append("       |");
-							line3.append("       |");
-						} else {
-							line1.append("        ");
-							line2.append("        ");
-							line3.append("        ");
-						}
+						// cell is empty
+						line1.append("         ");
+						line2.append("         ");
+						line3.append("         ");
+						line4.append("         ");
+						line5.append("         ");
 					} else {
-						line0.append(String.format("+---%s---+", cell.getNorthScript()));
-						line1.append(String.format("|     %s |", cell.getCenterScript()));
-						line2.append(String.format("    %s   %s", cell.getRoom(), cell.getEastScript()));
-						line3.append(String.format("|       |"));
-						line4.append(String.format("+--- ---+"));
+						// print room
+						ScriptIdentifier west = ScriptIdentifier.EMPTY;
+						ScriptIdentifier south = ScriptIdentifier.EMPTY;
+						if (cells.get(new Position(x - 1, y, z)) == null) west = ScriptIdentifier.BLOCKED;
+						if (cells.get(new Position(x, y - 1, z)) == null) south = ScriptIdentifier.BLOCKED;
+						line1.append(String.format("+---%s---+", cell.getNorthScript()));
+						line2.append(String.format("|     %s |", cell.getCenterScript()));
+						line3.append(String.format("%s   %s   %s", west, cell.getRoom(), cell.getEastScript()));
+						line4.append(String.format("|       |"));
+						line5.append(String.format("+---%s---+", south));
 					}
 				}
 
 				// stitch together
-				line0.append("\n");
 				line1.append("\n");
 				line2.append("\n");
 				line3.append("\n");
-				result.append(line0);
+				line4.append("\n");
+				line5.append("\n");
 				result.append(line1);
 				result.append(line2);
 				result.append(line3);
+				result.append(line4);
+				result.append(line5);
 			}
 
 			// next layer
