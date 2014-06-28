@@ -97,6 +97,7 @@ public final class State {
 
 		// extend room
 		// HACK: disable extensions for now!
+		// TODO: Are extensions really necessary if no room has more than 3 neighbors?
 		// List<Grid> extensions = grid.extend();
 		// for (Grid extension : extensions) {
 		// result.add(new State(extension, schedule));

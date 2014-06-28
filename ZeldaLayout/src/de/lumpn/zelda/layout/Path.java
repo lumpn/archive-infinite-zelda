@@ -3,7 +3,7 @@ package de.lumpn.zelda.layout;
 public class Path {
 
 	public static int length(Path path) {
-		if (!path.hasNext()) return 0;
+		if (!path.hasNext()) return 1;
 		return length(path.next()) + 1;
 	}
 

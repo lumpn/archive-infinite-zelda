@@ -70,11 +70,11 @@ public final class Grid {
 		// implement extension to new room
 		// HACK: swap source/destination if source is missing
 		// TODO: fix this hack and make directed transitions printable
-		Transition extension = transition;
+		Transition inverse = transition;
 		if (!containsRoom(source)) {
-			extension = new Transition(destination, source, transition.getScript());
+			inverse = new Transition(destination, source, transition.getScript());
 		}
-		return implementTransition(extension);
+		return implementTransition(inverse);
 	}
 
 	private List<Grid> implementConnection(Transition transition) {
@@ -101,35 +101,26 @@ public final class Grid {
 		Path path = findPath(source.getPosition(), destination.getPosition());
 		if (path == null) return null;
 
+		// implement found path
 		Map<Position, Cell> newCells = cells.toMap();
-
-		int length = Path.length(path);
-		if (length < 2) {
-			// source and destination are neighbors
-			Pair<Cell> fix1 = source.extend(destination.getPosition(), destination.getRoom(),
-					transitionScript);
-			Pair<Cell> fix2 = destination.extend(source.getPosition(), source.getRoom(),
-					transitionScript);
-
-			// NOTE: implicitly throw away duplicate cells
-			setCell(newCells, fix1.first());
-			setCell(newCells, fix2.first());
-
-			return new Grid(boundary, newCells);
-		}
-
 		Cell current = source;
 		Cell previous = current;
 		RoomIdentifier room = source.getRoom();
 
-		int i = 0;
 		// NOTE that we start at path.next!
+		int i = 1;
+		int halfLength = Path.length(path) / 2;
 		for (Path step = path.next(); step != null; step = step.next()) {
+
+			// transition script only at mid of path
 			ScriptIdentifier script = ScriptIdentifier.OPEN;
-			if (i == length / 2) {
+			if (i == halfLength) {
 				script = transitionScript;
 				room = destination.getRoom();
 			}
+
+			// extend current room, store, continue with extension
+			// NOTE: implicitly throw away current
 			Pair<Cell> extension = current.extend(step.getPosition(), room, script);
 			setCell(newCells, extension.first());
 			previous = current;

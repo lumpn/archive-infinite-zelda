@@ -46,8 +46,8 @@ public class PathTest {
 		Path b = new Path(new Position(1, 0, 0), c);
 		Path a = new Path(new Position(0, 0, 0), b);
 
-		Assert.assertEquals(0, Path.length(c));
-		Assert.assertEquals(1, Path.length(b));
-		Assert.assertEquals(2, Path.length(a));
+		Assert.assertEquals(1, Path.length(c));
+		Assert.assertEquals(2, Path.length(b));
+		Assert.assertEquals(3, Path.length(a));
 	}
 }
