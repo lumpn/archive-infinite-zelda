@@ -59,7 +59,7 @@ public final class Grid {
 
 		// implement script
 		if (transition.isLocal()) {
-			return implementLocal(transition);
+			return implementLocal(transition, true);
 		}
 
 		// connect rooms if both source and destination exist
@@ -136,7 +136,7 @@ public final class Grid {
 		return new Grid(boundary, newCells);
 	}
 
-	private List<Grid> implementLocal(Transition transition) {
+	private List<Grid> implementLocal(Transition transition, boolean mayExtend) {
 
 		// find empty rooms
 		List<Grid> result = new ArrayList<Grid>();
@@ -153,11 +153,17 @@ public final class Grid {
 			}
 		}
 
-		// no results yet? -> extend sources and try again
-		if (result.isEmpty()) {
+		// successfully implemented?
+		if (!result.isEmpty()) {
+			return result;
+		}
+
+		// all cells occupied -> extend sources and try again
+		if (mayExtend) {
 			for (Cell cell : sourceCells) {
-				for (Grid extension : extend(cell)) {
-					result.addAll(extension.implement(transition));
+				List<Grid> extensions = extend(cell);
+				for (Grid extension : extensions) {
+					result.addAll(extension.implementLocal(transition, false));
 				}
 			}
 		}

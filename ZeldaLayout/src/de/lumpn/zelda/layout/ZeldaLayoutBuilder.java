@@ -22,6 +22,7 @@ public class ZeldaLayoutBuilder {
 		this.boundary = boundary;
 		this.random = random;
 
+		// TODO: re-think post room. Is it really necessary?
 		schedule.add(new Transition(lookup.resolve(preId, "A"), lookup.resolve(entranceId), ScriptIdentifier.OPEN));
 		schedule.add(new Transition(lookup.resolve(exitId), lookup.resolve(postId, "B"), ScriptIdentifier.OPEN));
 	}

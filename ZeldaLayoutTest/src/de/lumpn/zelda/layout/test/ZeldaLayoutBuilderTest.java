@@ -80,7 +80,7 @@ public class ZeldaLayoutBuilderTest {
 		builder.addScript(2, "k");
 		ZeldaLayout layout = builder.build();
 	}
-	
+
 	@Test
 	public void testBuildDoubleItem() {
 		Random random = new Random(9);
@@ -92,11 +92,11 @@ public class ZeldaLayoutBuilderTest {
 		builder.addScript(2, "c");
 		ZeldaLayout layout = builder.build();
 	}
-	
+
 	@Test
 	public void testGnarledRootDungeon() {
 		Random random = new Random(1);
-		Boundary boundary = new Boundary(-5, 5, 0, 10, 0, 0);
+		Boundary boundary = new Boundary(-10, 10, 0, 10, 0, 0);
 		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
 		builder.addScript(0, "k");
 		builder.addUndirectedTransition(0, 2, "d");
