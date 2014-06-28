@@ -93,8 +93,7 @@ public final class Grid {
 		return result;
 	}
 
-	private Grid implementConnection(Cell source, Cell destination,
-			ScriptIdentifier transitionScript) {
+	private Grid implementConnection(Cell source, Cell destination, ScriptIdentifier transitionScript) {
 
 		// find a path between source and destination involving only free cells
 		// source and destination are both included in path
@@ -138,7 +137,7 @@ public final class Grid {
 	}
 
 	private List<Grid> implementLocal(Transition transition) {
-		// TODO Auto-generated method stub
+		// TODO: implement local scripts at all
 		return Collections.emptyList();
 	}
 
@@ -229,8 +228,7 @@ public final class Grid {
 				if (!openSet.contains(neighbor) || tentativeScore < gScore.get(neighbor)) {
 					cameFrom.put(neighbor, current);
 					gScore.put(neighbor, tentativeScore);
-					fScore.put(neighbor,
-							tentativeScore + Position.getDistance(neighbor, destination));
+					fScore.put(neighbor, tentativeScore + Position.getDistance(neighbor, destination));
 					openSet.add(neighbor);
 				}
 			}
@@ -250,12 +248,10 @@ public final class Grid {
 		if (source == null || destination == null) return true;
 
 		// transition available?
-		return Objects.equals(Cell.getTransitionScript(source, destination),
-				ScriptIdentifier.BLOCKED);
+		return Objects.equals(Cell.getTransitionScript(source, destination), ScriptIdentifier.BLOCKED);
 	}
 
-	public static Position getMinimum(Collection<Position> positions,
-			Map<Position, Integer> cost) {
+	public static Position getMinimum(Collection<Position> positions, Map<Position, Integer> cost) {
 		Position min = null;
 		int minCost = 0;
 		for (Position position : positions) {
@@ -267,8 +263,7 @@ public final class Grid {
 		return min;
 	}
 
-	public static Path reconstructPath(Position position, Path next,
-			Map<Position, Position> cameFrom) {
+	public static Path reconstructPath(Position position, Path next, Map<Position, Position> cameFrom) {
 
 		Path current = new Path(position, next);
 
@@ -321,6 +316,7 @@ public final class Grid {
 	@Override
 	public String toString() {
 
+		// compute boundaries
 		int minX = 0;
 		int maxX = 0;
 		int minY = 0;
@@ -337,71 +333,66 @@ public final class Grid {
 			maxZ = Math.max(maxZ, position.getZ());
 		}
 
-		// for placing north/east walls
-		minX--;
-		minY--;
+		// 0 +---.---+
+		// 1 |.......|
+		// 2 .........
+		// 3 |.......|
+		// 4 +---.---+
 
-		// 0 +#--- ---+
-		// 1 |# . . . |
-		// 2 .# . . . .
-		// 3 |# . . . |
-		// . ##########
-		// 4 +#--- ---+
-		// 5
-
-		// TODO refactor big time. this code is unreadable!
 		StringBuilder result = new StringBuilder();
 		for (int z = maxZ; z >= minZ; z--) {
 			for (int y = maxY; y >= minY; y--) {
-				for (int line = 0; line < 4; line++) { // TODO how about 4 stringbuilders instead
-																								// of this?
-					for (int x = minX; x <= maxX; x++) {
-						Position position = new Position(x, y, z);
-						Cell cell = cells.get(position);
-						if (cell == null) {
-							Position north = new Position(x, y + 1, z);
-							Position east = new Position(x + 1, y, z);
-							if (cells.containsKey(north) && (line == 0)) {
-								result.append("-------+");
-							} else if (cells.containsKey(east)) {
-								if (line == 0) {
-									result.append("       +");
-								} else {
-									result.append("       |");
-								}
-							} else {
-								result.append("        ");
-							}
+
+				StringBuilder line0 = new StringBuilder();
+				StringBuilder line1 = new StringBuilder();
+				StringBuilder line2 = new StringBuilder();
+				StringBuilder line3 = new StringBuilder();
+				StringBuilder line4 = new StringBuilder();
+
+				for (int x = minX; x <= maxX; x++) {
+					Position position = new Position(x, y, z);
+					Cell cell = cells.get(position);
+					if (cell == null) {
+						// cell is empty -> place walls for neighbors
+						Position north = new Position(x, y + 1, z);
+						Position east = new Position(x + 1, y, z);
+						if (cells.containsKey(north)) {
+							line0.append("-------+");
+						} else if (cells.containsKey(east)) {
+							line0.append("       +");
 						} else {
-							switch (line) {
-								case 0:
-									result.append("---");
-									result.append(cell.getNorthScript().toString());
-									result.append("---+");
-									break;
-								case 1:
-									result.append("     ");
-									result.append(cell.getCenterScript().toString());
-									result.append(" |");
-									break;
-								case 2:
-									result.append("   ");
-									result.append(cell.getRoom().toString());
-									result.append("   ");
-									result.append(cell.getEastScript().toString());
-									break;
-								case 3:
-									result.append("       |");
-									break;
-								default:
-									assert false;
-									break;
-							}
+							line0.append("        ");
 						}
+						if (cells.containsKey(east)) {
+							line1.append("       |");
+							line2.append("       |");
+							line3.append("       |");
+						} else {
+							line1.append("        ");
+							line2.append("        ");
+							line3.append("        ");
+						}
+					} else {
+						line0.append(String.format("+---%s---+", cell.getNorthScript()));
+						line1.append(String.format("|     %s |", cell.getCenterScript()));
+						line2.append(String.format("    %s   %s", cell.getRoom(), cell.getEastScript()));
+						line3.append(String.format("|       |"));
+						line4.append(String.format("+--- ---+"));
 					}
-					result.append("\n");
 				}
+
+				// stitch together
+				line0.append("\n");
+				line1.append("\n");
+				line2.append("\n");
+				line3.append("\n");
+				result.append(line0);
+				result.append(line1);
+				result.append(line2);
+				result.append(line3);
 			}
+
+			// next layer
 			result.append("\n");
 		}
 
