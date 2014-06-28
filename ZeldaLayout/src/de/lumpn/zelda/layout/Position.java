@@ -77,6 +77,11 @@ public final class Position {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("(%d, %d, %d)", x, y, z);
+	}
+
 	/**
 	 * Position in grid.
 	 */

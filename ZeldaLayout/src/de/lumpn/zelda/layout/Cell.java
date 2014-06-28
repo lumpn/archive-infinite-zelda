@@ -144,6 +144,15 @@ public final class Cell {
 		if (!up.equals(other.up)) return false;
 		return true;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return String.format("Cell @%s: %s", position, room);
+	}
+
+
 
 	/**
 	 * Position in grid.
