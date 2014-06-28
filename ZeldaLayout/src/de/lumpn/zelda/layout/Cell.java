@@ -57,6 +57,10 @@ public final class Cell {
 		return east;
 	}
 
+	public ScriptIdentifier getUpScript() {
+		return east;
+	}
+
 	public boolean hasRoom(RoomIdentifier source) {
 		return (source.equals(room));
 	}

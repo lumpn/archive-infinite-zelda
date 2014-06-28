@@ -70,4 +70,14 @@ public class ZeldaLayoutBuilderTest {
 		ZeldaLayout layout = builder.build();
 	}
 
+	@Test
+	public void testBuildKeyDoor() {
+		Random random = new Random(1);
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 0);
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(2, 1, "d");
+		builder.addScript(2, "k");
+		ZeldaLayout layout = builder.build();
+	}
 }

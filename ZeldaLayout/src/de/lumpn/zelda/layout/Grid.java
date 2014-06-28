@@ -137,8 +137,23 @@ public final class Grid {
 	}
 
 	private List<Grid> implementLocal(Transition transition) {
-		// TODO: implement local scripts at all
-		return Collections.emptyList();
+
+		// find empty rooms
+		List<Grid> result = new ArrayList<Grid>();
+		Collection<Cell> sourceCells = getCells(transition.getSource());
+		for (Cell cell : sourceCells) {
+			if (cell.getCenterScript().equals(ScriptIdentifier.EMPTY)) {
+
+				// implement script
+				Map<Position, Cell> nextCells = cells.toMap();
+				setCell(nextCells, new Cell(cell.getPosition(), cell.getRoom(), transition.getScript(), cell.getNorthScript(), cell.getEastScript(), cell.getUpScript()));
+
+				// add to result
+				result.add(new Grid(boundary, nextCells));
+			}
+		}
+
+		return result;
 	}
 
 	private List<Grid> implementTransition(Transition transition) {
@@ -355,15 +370,11 @@ public final class Grid {
 						line5.append("         ");
 					} else {
 						// print room
-						ScriptIdentifier west = ScriptIdentifier.EMPTY;
-						ScriptIdentifier south = ScriptIdentifier.EMPTY;
-						if (cells.get(new Position(x - 1, y, z)) == null) west = ScriptIdentifier.BLOCKED;
-						if (cells.get(new Position(x, y - 1, z)) == null) south = ScriptIdentifier.BLOCKED;
 						line1.append(String.format("+---%s---+", cell.getNorthScript()));
 						line2.append(String.format("|     %s |", cell.getCenterScript()));
-						line3.append(String.format("%s   %s   %s", west, cell.getRoom(), cell.getEastScript()));
+						line3.append(String.format("%s   %s   %s", matchEastScript(new Position(x - 1, y, z)), cell.getRoom(), cell.getEastScript()));
 						line4.append(String.format("|       |"));
-						line5.append(String.format("+---%s---+", south));
+						line5.append(String.format("+---%s---+", matchNorthScript(new Position(x, y - 1, z))));
 					}
 				}
 
@@ -385,6 +396,22 @@ public final class Grid {
 		}
 
 		return result.toString();
+	}
+
+	private ScriptIdentifier matchEastScript(Position position) {
+		Cell cell = cells.get(position);
+		if (cell == null || cell.getEastScript().equals(ScriptIdentifier.BLOCKED)) {
+			return ScriptIdentifier.BLOCKED;
+		}
+		return ScriptIdentifier.OPEN;
+	}
+
+	private ScriptIdentifier matchNorthScript(Position position) {
+		Cell cell = cells.get(position);
+		if (cell == null || cell.getNorthScript().equals(ScriptIdentifier.BLOCKED)) {
+			return ScriptIdentifier.BLOCKED;
+		}
+		return ScriptIdentifier.OPEN;
 	}
 
 	private final Boundary boundary;

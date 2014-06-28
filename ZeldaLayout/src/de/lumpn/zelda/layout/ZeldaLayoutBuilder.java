@@ -22,10 +22,8 @@ public class ZeldaLayoutBuilder {
 		this.boundary = boundary;
 		this.random = random;
 
-		schedule.add(new Transition(lookup.resolve(preId, "A"), lookup.resolve(entranceId),
-				ScriptIdentifier.OPEN));
-		schedule.add(new Transition(lookup.resolve(exitId), lookup.resolve(postId, "B"),
-				ScriptIdentifier.OPEN));
+		schedule.add(new Transition(lookup.resolve(preId, "A"), lookup.resolve(entranceId), ScriptIdentifier.OPEN));
+		schedule.add(new Transition(lookup.resolve(exitId), lookup.resolve(postId, "B"), ScriptIdentifier.OPEN));
 	}
 
 	public void addDirectedTransition(int start, int end, String script) {
@@ -108,13 +106,9 @@ public class ZeldaLayoutBuilder {
 		// create pre-room A
 		Position preRoomPosition = new Position(0, -1, 0);
 		Map<Position, Cell> initialCells = new HashMap<Position, Cell>();
-		initialCells
-				.put(preRoomPosition, new Cell(preRoomPosition, lookup.resolve(preId, "A"),
-						ScriptIdentifier.EMPTY, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED,
-						ScriptIdentifier.BLOCKED));
+		initialCells.put(preRoomPosition, new Cell(preRoomPosition, lookup.resolve(preId, "A"), ScriptIdentifier.EMPTY, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED));
 		Grid initialGrid = new Grid(boundary, initialCells);
-		State initialState = new State(initialGrid, new ImmutableArrayList<Transition>(
-				schedule));
+		State initialState = new State(initialGrid, new ImmutableArrayList<Transition>(schedule));
 
 		Set<State> closedSet = new HashSet<State>();
 		Set<State> openSet = new HashSet<State>();
