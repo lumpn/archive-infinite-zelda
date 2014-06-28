@@ -5,7 +5,7 @@ public final class Transition {
 	public Transition(RoomIdentifier location, ScriptIdentifier scriptIdentifier) {
 		this.source = location;
 		this.destination = location;
-		this.scriptIdentifier = scriptIdentifier;
+		this.script = scriptIdentifier;
 		this.isLocal = true;
 	}
 
@@ -13,7 +13,7 @@ public final class Transition {
 			ScriptIdentifier scriptIdentifier) {
 		this.source = source;
 		this.destination = destination;
-		this.scriptIdentifier = scriptIdentifier;
+		this.script = scriptIdentifier;
 		this.isLocal = false;
 	}
 
@@ -26,12 +26,12 @@ public final class Transition {
 	}
 
 	public ScriptIdentifier getScript() {
-		return scriptIdentifier;
+		return script;
 	}
 
 	public boolean isLocal() {
 		// TODO smart transitions: transition interface, local and actual transition
-		// implementations, effect onto grid via polymorphism
+		// implementations, effect onto grid via polymorphism and inversion of control.
 		return isLocal;
 	}
 
@@ -41,7 +41,7 @@ public final class Transition {
 		int result = 1;
 		result = prime * result + source.hashCode();
 		result = prime * result + destination.hashCode();
-		result = prime * result + scriptIdentifier.hashCode();
+		result = prime * result + script.hashCode();
 		return result;
 	}
 
@@ -53,13 +53,18 @@ public final class Transition {
 		Transition other = (Transition) obj;
 		if (!source.equals(other.source)) return false;
 		if (!destination.equals(other.destination)) return false;
-		if (!scriptIdentifier.equals(other.scriptIdentifier)) return false;
+		if (!script.equals(other.script)) return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s -%s- %s", source, script, destination);
 	}
 
 	private final RoomIdentifier source, destination;
 
-	private final ScriptIdentifier scriptIdentifier;
+	private final ScriptIdentifier script;
 
 	private final boolean isLocal;
 }
