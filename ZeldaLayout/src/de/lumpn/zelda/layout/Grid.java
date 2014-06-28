@@ -124,7 +124,7 @@ public final class Grid {
 
 		int i = 0;
 		// NOTE that we start at path.next!
-		for (Path step = path.next(); step.hasNext(); step = step.next()) {
+		for (Path step = path.next(); step != null; step = step.next()) {
 			ScriptIdentifier script = ScriptIdentifier.OPEN;
 			if (i == length / 2) {
 				script = transitionScript;
@@ -268,7 +268,7 @@ public final class Grid {
 		Position min = null;
 		int minCost = 0;
 		for (Position position : positions) {
-			if (min == null || minCost < cost.get(position)) {
+			if (min == null || cost.get(position) < minCost) {
 				min = position;
 				minCost = cost.get(position);
 			}
