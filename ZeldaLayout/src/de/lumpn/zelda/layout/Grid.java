@@ -153,6 +153,15 @@ public final class Grid {
 			}
 		}
 
+		// no results yet? -> extend sources and try again
+		if (result.isEmpty()) {
+			for (Cell cell : sourceCells) {
+				for (Grid extension : extend(cell)) {
+					result.addAll(extension.implement(transition));
+				}
+			}
+		}
+
 		return result;
 	}
 
@@ -162,25 +171,10 @@ public final class Grid {
 		RoomIdentifier destination = transition.getDestination();
 		ScriptIdentifier script = transition.getScript();
 
-		// implement
+		// implement transition in each direction
 		List<Grid> result = new ArrayList<Grid>();
 		for (Cell cell : getCells(source)) {
-
-			// implement transition in each direction
-			Position position = cell.getPosition();
-			for (Position neighbor : getValidNeighbors(position)) {
-
-				// implement transition, link cell and extension
-				Pair<Cell> extension = cell.extend(neighbor, destination, script);
-
-				// create new grid
-				Map<Position, Cell> nextCells = cells.toMap();
-				setCell(nextCells, extension.first());
-				setCell(nextCells, extension.second());
-
-				// add to result
-				result.add(new Grid(boundary, nextCells));
-			}
+			result.addAll(extend(cell, destination, script));
 		}
 
 		return result;
@@ -191,22 +185,33 @@ public final class Grid {
 		// extend each cell
 		List<Grid> result = new ArrayList<Grid>();
 		for (Cell cell : cells.values()) {
+			result.addAll(extend(cell));
+		}
 
-			// extend in each direction
-			Position position = cell.getPosition();
-			for (Position neighbor : getValidNeighbors(position)) {
+		return result;
+	}
 
-				// create extension, link cell and extension
-				Pair<Cell> extension = cell.extend(neighbor);
+	private List<Grid> extend(Cell cell) {
+		return extend(cell, cell.getRoom(), ScriptIdentifier.OPEN);
+	}
 
-				// create new grid
-				Map<Position, Cell> nextCells = cells.toMap();
-				setCell(nextCells, extension.first());
-				setCell(nextCells, extension.second());
+	private List<Grid> extend(Cell cell, RoomIdentifier destination, ScriptIdentifier script) {
 
-				// add to result
-				result.add(new Grid(boundary, nextCells));
-			}
+		// extend in each direction
+		List<Grid> result = new ArrayList<Grid>();
+		Position position = cell.getPosition();
+		for (Position neighbor : getValidNeighbors(position)) {
+
+			// create extension, link cell and extension
+			Pair<Cell> extension = cell.extend(neighbor, destination, script);
+
+			// create new grid
+			Map<Position, Cell> nextCells = cells.toMap();
+			setCell(nextCells, extension.first());
+			setCell(nextCells, extension.second());
+
+			// add to result
+			result.add(new Grid(boundary, nextCells));
 		}
 
 		return result;
