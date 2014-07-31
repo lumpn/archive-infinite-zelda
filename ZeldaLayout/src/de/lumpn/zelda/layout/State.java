@@ -14,8 +14,9 @@ import de.lumpn.util.list.ImmutableList;
  */
 public final class State {
 
-	private static final int roomCost = 10;
-	private static final int scriptCost = 1;
+	private static final int roomCost = 100;
+	private static final int scriptCost = 10;
+	private static final int stairsCost = 5;
 
 	/**
 	 * Each room cost something, each door cost at least as much 
@@ -25,6 +26,7 @@ public final class State {
 		int result = 0;
 		result += grid.numRooms() * roomCost;
 		result += grid.numScripts() * scriptCost;
+		result += grid.numStairs() * stairsCost;
 		return result;
 	}
 
