@@ -3,6 +3,7 @@ package de.lumpn.zelda.layout;
 /**
  * Immutable boundaries.
  */
+// TODO: rename to "Bounds"
 public class Boundary {
 
 	public Boundary(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
