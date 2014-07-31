@@ -27,8 +27,7 @@ public final class Cell {
 		}
 	}
 
-	public Cell(Position position, RoomIdentifier room, ScriptIdentifier center,
-			ScriptIdentifier north, ScriptIdentifier east, ScriptIdentifier up) {
+	public Cell(Position position, RoomIdentifier room, ScriptIdentifier center, ScriptIdentifier north, ScriptIdentifier east, ScriptIdentifier up) {
 		this.position = position;
 		this.room = room;
 		this.center = center;
@@ -58,7 +57,7 @@ public final class Cell {
 	}
 
 	public ScriptIdentifier getUpScript() {
-		return east;
+		return up;
 	}
 
 	public boolean hasRoom(RoomIdentifier source) {
@@ -78,8 +77,7 @@ public final class Cell {
 		return extend(neighborPosition, room, ScriptIdentifier.OPEN);
 	}
 
-	public Pair<Cell> extend(Position neighborPosition, RoomIdentifier neighborRoom,
-			ScriptIdentifier transitionScript) {
+	public Pair<Cell> extend(Position neighborPosition, RoomIdentifier neighborRoom, ScriptIdentifier transitionScript) {
 
 		// initialize new scripts
 		ScriptIdentifier north1 = north;
@@ -116,8 +114,7 @@ public final class Cell {
 
 		// build resulting cells
 		Cell cell1 = new Cell(position, room, center, north1, east1, up1);
-		Cell cell2 = new Cell(neighborPosition, neighborRoom, ScriptIdentifier.EMPTY, north2,
-				east2, up2);
+		Cell cell2 = new Cell(neighborPosition, neighborRoom, ScriptIdentifier.EMPTY, north2, east2, up2);
 		return new Pair<Cell>(cell1, cell2);
 	}
 
@@ -148,15 +145,11 @@ public final class Cell {
 		if (!up.equals(other.up)) return false;
 		return true;
 	}
-	
-	
 
 	@Override
 	public String toString() {
-		return String.format("Cell @%s: %s", position, room);
+		return String.format("Cell @%s: %s (n %s, e %s, u %s)", position, room, north, east, up);
 	}
-
-
 
 	/**
 	 * Position in grid.
