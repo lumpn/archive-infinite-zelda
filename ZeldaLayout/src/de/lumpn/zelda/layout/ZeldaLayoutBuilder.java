@@ -16,7 +16,7 @@ public class ZeldaLayoutBuilder {
 	public static final int entranceId = 0;
 	public static final int exitId = 1;
 
-	private static final int epsilon = 0;
+	private static final int epsilon = 4;
 
 	public ZeldaLayoutBuilder(Boundary boundary, Random random) {
 		this.boundary = boundary;
@@ -121,6 +121,7 @@ public class ZeldaLayoutBuilder {
 
 			// goal reached?
 			if (current.scheduleIsEmpty()) {
+				System.out.printf("Visited %d states to find layout. %d remain open.\n", closedSet.size(), openSet.size());
 				return new ZeldaLayout(current.getGrid());
 			}
 
@@ -134,6 +135,7 @@ public class ZeldaLayoutBuilder {
 			}
 		}
 
+		System.out.printf("Visited %d states without success\n", closedSet.size());
 		return null;
 	}
 
@@ -141,7 +143,7 @@ public class ZeldaLayoutBuilder {
 		State min = null;
 		double minCost = 0;
 		int minWeight = 0;
-		for (State state : states) {
+		for (State state : states) { // TODO: iterate in reproducible order
 			double cost = estimateTotalCost(state);
 			int weight = random.nextInt();
 			if (min == null || cost < minCost || (cost == minCost && weight < minWeight)) {
@@ -166,7 +168,7 @@ public class ZeldaLayoutBuilder {
 
 		// second pass: select minima
 		List<State> minima = new ArrayList<State>();
-		for (State state : states) {
+		for (State state : states) { // TODO: iterate in reproducible order
 			double cost = estimateTotalCost(state);
 			if (cost <= minCost) {
 				minima.add(state);
