@@ -47,6 +47,14 @@ public final class Grid {
 		return result;
 	}
 
+	public int numStairs() {
+		int result = 0;
+		for (Cell cell : cells.values()) {
+			if (!cell.getUpScript().equals(ScriptIdentifier.BLOCKED)) result++;
+		}
+		return result;
+	}
+
 	public List<Grid> implement(Transition transition) {
 		RoomIdentifier source = transition.getSource();
 		RoomIdentifier destination = transition.getDestination();
@@ -70,11 +78,11 @@ public final class Grid {
 		// implement extension to new room
 		// HACK: swap source/destination if source is missing
 		// TODO: fix this hack and make directed transitions printable
-		Transition inverse = transition;
+		Transition canonicalTransition = transition;
 		if (!containsRoom(source)) {
-			inverse = new Transition(destination, source, transition.getScript());
+			canonicalTransition = new Transition(destination, source, transition.getScript());
 		}
-		return implementTransition(inverse);
+		return implementTransition(canonicalTransition);
 	}
 
 	private List<Grid> implementConnection(Transition transition) {
@@ -190,7 +198,7 @@ public final class Grid {
 
 		// extend each cell
 		List<Grid> result = new ArrayList<Grid>();
-		for (Cell cell : cells.values()) {
+		for (Cell cell : cells.values()) { // TODO: iterate in reproducible order
 			result.addAll(extend(cell));
 		}
 
@@ -280,7 +288,7 @@ public final class Grid {
 	public static Position getMinimum(Collection<Position> positions, Map<Position, Integer> cost) {
 		Position min = null;
 		int minCost = 0;
-		for (Position position : positions) {
+		for (Position position : positions) { // TODO: iterate in reproducible order
 			if (min == null || cost.get(position) < minCost) {
 				min = position;
 				minCost = cost.get(position);
@@ -301,7 +309,7 @@ public final class Grid {
 
 	private Collection<Cell> getCells(RoomIdentifier room) {
 		List<Cell> result = new ArrayList<Cell>();
-		for (Cell cell : cells.values()) {
+		for (Cell cell : cells.values()) { // TODO: iterate in reproducible order
 			// skip wrong rooms
 			if (!cell.hasRoom(room)) continue;
 			result.add(cell);
@@ -382,16 +390,16 @@ public final class Grid {
 					} else {
 						// print room
 						line1.append(String.format("+---%s---+", cell.getNorthScript()));
-						line2.append(String.format("|     %s |", cell.getCenterScript()));
-						line3.append(String.format("%s   %s   %s", matchEastScript(new Position(x - 1, y, z)), cell.getRoom(), cell.getEastScript()));
-						line4.append(String.format("|       |"));
+						line2.append(String.format("| %s   %s |", stairs(cell.getUpScript(), matchUpScript(new Position(x, y, z - 1))), cell.getCenterScript()));
+						line3.append(String.format("%s       %s", matchEastScript(new Position(x - 1, y, z)), cell.getEastScript()));
+						line4.append(String.format("|%s      |", cell.getRoom()));
 						line5.append(String.format("+---%s---+", matchNorthScript(new Position(x, y - 1, z))));
 					}
 				}
 
 				// stitch together
 				line1.append("\n");
-				line2.append("\n");
+				line2.append(String.format(" %3d,%3d\n", y, z));
 				line3.append("\n");
 				line4.append("\n");
 				line5.append("\n");
@@ -423,6 +431,19 @@ public final class Grid {
 			return ScriptIdentifier.BLOCKED;
 		}
 		return ScriptIdentifier.OPEN;
+	}
+
+	private ScriptIdentifier matchUpScript(Position position) {
+		Cell cell = cells.get(position);
+		if (cell == null || cell.getUpScript().equals(ScriptIdentifier.BLOCKED)) {
+			return ScriptIdentifier.BLOCKED;
+		}
+		return ScriptIdentifier.OPEN;
+	}
+
+	private static char stairs(ScriptIdentifier up, ScriptIdentifier down) {
+		if (up.equals(ScriptIdentifier.BLOCKED)) return down.equals(ScriptIdentifier.BLOCKED) ? ' ' : 'v';
+		return down.equals(ScriptIdentifier.BLOCKED) ? '^' : 'X';
 	}
 
 	private final Boundary boundary;
