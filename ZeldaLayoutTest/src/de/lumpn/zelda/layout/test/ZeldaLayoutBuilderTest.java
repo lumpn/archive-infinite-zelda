@@ -72,7 +72,7 @@ public class ZeldaLayoutBuilderTest {
 
 	@Test
 	public void testBuildKeyDoor() {
-		Random random = new Random(1);
+		Random random = new Random(2);
 		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 0);
 		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
 		builder.addUndirectedTransition(0, 2, " ");
@@ -94,9 +94,23 @@ public class ZeldaLayoutBuilderTest {
 	}
 
 	@Test
+	public void testBuildMultilevel() {
+		Random random = new Random(9);
+		Boundary boundary = new Boundary(-2, 2, 0, 4, 0, 1);
+		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(0, 2, " ");
+		builder.addUndirectedTransition(2, 1, " ");
+		ZeldaLayout layout = builder.build();
+		int foo = layout.hashCode();
+	}
+
+	@Test
 	public void testGnarledRootDungeon() {
 		Random random = new Random(1);
-		Boundary boundary = new Boundary(-10, 10, 0, 10, 0, 0);
+		Boundary boundary = new Boundary(-10, 10, 0, 10, -5, 1);
 		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(boundary, random);
 		builder.addScript(0, "k");
 		builder.addUndirectedTransition(0, 2, "d");
