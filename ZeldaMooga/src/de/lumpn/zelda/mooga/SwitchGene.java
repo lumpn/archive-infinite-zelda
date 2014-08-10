@@ -43,7 +43,7 @@ public final class SwitchGene extends ZeldaGene {
 
 	@Override
 	public String toString() {
-		return String.format("Switch: %d", switchLocation);
+		return String.format("switch %d", switchLocation);
 	}
 
 	private final int switchLocation;

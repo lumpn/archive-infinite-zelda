@@ -13,6 +13,17 @@ public final class PistonGene extends ZeldaGene {
 		COLOR_RED, COLOR_BLUE,
 	}
 
+	private static String ColorToString(Color color) {
+		switch (color) {
+			case COLOR_RED:
+				return "red";
+			case COLOR_BLUE:
+				return "blue";
+			default:
+				return "?";
+		}
+	}
+
 	private static Color randomColor(Random random) {
 		if (random.nextBoolean()) {
 			return Color.COLOR_RED;
@@ -23,8 +34,10 @@ public final class PistonGene extends ZeldaGene {
 	public PistonGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 		this.color = randomColor(random);
-		this.pistonStart = randomLocation(random);
-		this.pistonEnd = differentLocation(pistonStart, random);
+		int a = randomLocation(random);
+		int b = differentLocation(a, random);
+		this.pistonStart = Math.min(a, b);
+		this.pistonEnd = Math.max(a, b);
 	}
 
 	@Override
@@ -74,7 +87,7 @@ public final class PistonGene extends ZeldaGene {
 
 	@Override
 	public String toString() {
-		return String.format("Piston: %d--%d", pistonStart, pistonEnd);
+		return String.format("%s piston %d--%d", ColorToString(color), pistonStart, pistonEnd);
 	}
 
 	/**

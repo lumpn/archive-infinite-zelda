@@ -9,8 +9,10 @@ public final class TwoWayGene extends ZeldaGene {
 	public TwoWayGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 
-		this.wayStart = randomLocation(random);
-		this.wayEnd = differentLocation(wayStart, random);
+		int a = randomLocation(random);
+		int b = differentLocation(a, random);
+		this.wayStart = Math.min(a, b);
+		this.wayEnd = Math.max(a, b);
 	}
 
 	public TwoWayGene(ZeldaConfiguration configuration, int wayStart, int wayEnd) {

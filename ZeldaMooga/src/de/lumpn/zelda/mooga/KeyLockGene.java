@@ -11,8 +11,10 @@ public final class KeyLockGene extends ZeldaGene {
 		super(configuration);
 
 		this.keyLocation = randomLocation(random);
-		this.lockStart = randomLocation(random);
-		this.lockEnd = differentLocation(lockStart, random);
+		int a = randomLocation(random);
+		int b = differentLocation(a, random);
+		this.lockStart = Math.min(a, b);
+		this.lockEnd = Math.max(a, b);
 	}
 
 	private KeyLockGene(ZeldaConfiguration configuration, int keyLocation, int lockStart, int lockEnd) {
@@ -62,7 +64,7 @@ public final class KeyLockGene extends ZeldaGene {
 
 	@Override
 	public String toString() {
-		return String.format("Key: %d, Lock: %d--%d", keyLocation, lockStart, lockEnd);
+		return String.format("key %d, lock %d--%d", keyLocation, lockStart, lockEnd);
 	}
 
 	// location of key
