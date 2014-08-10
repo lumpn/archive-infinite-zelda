@@ -23,8 +23,8 @@ public final class Grid {
 		cells.put(cell.getPosition(), cell);
 	}
 
-	public Grid(Boundary boundary, Map<Position, Cell> cells) {
-		this.boundary = boundary;
+	public Grid(Bounds bounds, Map<Position, Cell> cells) {
+		this.bounds = bounds;
 		this.cells = new ImmutableHashMap<Position, Cell>(cells);
 	}
 
@@ -141,7 +141,7 @@ public final class Grid {
 		setCell(newCells, fixup.first());
 
 		// build grid
-		return new Grid(boundary, newCells);
+		return new Grid(bounds, newCells);
 	}
 
 	private List<Grid> implementLocal(Transition transition, boolean mayExtend) {
@@ -157,7 +157,7 @@ public final class Grid {
 				setCell(nextCells, new Cell(cell.getPosition(), cell.getRoom(), transition.getScript(), cell.getNorthScript(), cell.getEastScript(), cell.getUpScript()));
 
 				// add to result
-				result.add(new Grid(boundary, nextCells));
+				result.add(new Grid(bounds, nextCells));
 			}
 		}
 
@@ -225,7 +225,7 @@ public final class Grid {
 			setCell(nextCells, extension.second());
 
 			// add to result
-			result.add(new Grid(boundary, nextCells));
+			result.add(new Grid(bounds, nextCells));
 		}
 
 		return result;
@@ -322,7 +322,7 @@ public final class Grid {
 		for (Position neighbor : position.getNeighbors()) {
 
 			// skip out of bounds positions
-			if (!boundary.contains(neighbor)) continue;
+			if (!bounds.contains(neighbor)) continue;
 
 			// skip occupied positions
 			if (cells.containsKey(neighbor)) continue;
@@ -350,7 +350,7 @@ public final class Grid {
 	@Override
 	public String toString() {
 
-		// compute boundaries
+		// compute bounds
 		int minX = 0;
 		int maxX = 0;
 		int minY = 0;
@@ -446,6 +446,6 @@ public final class Grid {
 		return down.equals(ScriptIdentifier.BLOCKED) ? '^' : 'X';
 	}
 
-	private final Boundary boundary;
+	private final Bounds bounds;
 	private final ImmutableMap<Position, Cell> cells;
 }

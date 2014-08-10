@@ -18,8 +18,8 @@ public class ZeldaLayoutBuilder {
 
 	private static final int epsilon = 4;
 
-	public ZeldaLayoutBuilder(Boundary boundary, Random random) {
-		this.boundary = boundary;
+	public ZeldaLayoutBuilder(Bounds bounds, Random random) {
+		this.bounds = bounds;
 		this.random = random;
 
 		// TODO: re-think post room. Is it really necessary?
@@ -108,7 +108,7 @@ public class ZeldaLayoutBuilder {
 		Position preRoomPosition = new Position(0, -1, 0);
 		Map<Position, Cell> initialCells = new HashMap<Position, Cell>();
 		initialCells.put(preRoomPosition, new Cell(preRoomPosition, lookup.resolve(preId, "A"), ScriptIdentifier.EMPTY, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED, ScriptIdentifier.BLOCKED));
-		Grid initialGrid = new Grid(boundary, initialCells);
+		Grid initialGrid = new Grid(bounds, initialCells);
 		State initialState = new State(initialGrid, new ImmutableArrayList<Transition>(schedule));
 
 		Set<State> closedSet = new HashSet<State>();
@@ -183,7 +183,7 @@ public class ZeldaLayoutBuilder {
 		return state.getCost() + (1 + epsilon) * state.getEstimate();
 	}
 
-	private Boundary boundary;
+	private Bounds bounds;
 	private Random random;
 	private RoomLookup lookup = new RoomLookup();
 	private List<Transition> schedule = new ArrayList<Transition>();

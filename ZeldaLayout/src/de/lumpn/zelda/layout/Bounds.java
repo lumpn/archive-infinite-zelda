@@ -1,12 +1,11 @@
 package de.lumpn.zelda.layout;
 
 /**
- * Immutable boundaries.
+ * Immutable bounds.
  */
-// TODO: rename to "Bounds"
-public class Boundary {
+public class Bounds {
 
-	public Boundary(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public Bounds(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		this.minX = minX;
 		this.maxX = maxX;
 		this.minY = minY;
