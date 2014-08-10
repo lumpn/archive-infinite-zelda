@@ -9,9 +9,6 @@ public final class ZeldaConfiguration {
 	private final int numLocations = 10;
 
 	// initialization
-	private final double initialKeyLockMedian = 4;
-	private final double initialSwitchMedian = 0;
-	private final double initialPistonMedian = 0;
 	private final double initialGeneMedian = numLocations; // linear
 
 	// complexification
@@ -21,18 +18,6 @@ public final class ZeldaConfiguration {
 
 	public int randomLocation(Random random) {
 		return random.nextInt(numLocations);
-	}
-
-	public int calcNumInitialKeyLocks(Random random) {
-		return (int) (initialKeyLockMedian * MathUtils.randomWeibull2(random));
-	}
-
-	public int calcNumInitialSwitches(Random random) {
-		return (int) (initialSwitchMedian * MathUtils.randomWeibull2(random));
-	}
-
-	public int calcNumInitialPistons(Random random) {
-		return (int) (initialPistonMedian * MathUtils.randomWeibull2(random));
 	}
 
 	public int calcNumInitialGenes(Random random) {

@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.Arrays;
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
 import de.lumpn.report.ConsoleProgressBar;
@@ -11,8 +12,8 @@ import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 
 public final class ZeldaEnvironment implements Environment {
 
-	public ZeldaEnvironment(State intialState) {
-		this.initialState = intialState;
+	public ZeldaEnvironment(State initialState) {
+		this.initialState = initialState;
 	}
 
 	@Override
@@ -27,13 +28,12 @@ public final class ZeldaEnvironment implements Environment {
 
 		// crawl puzzle
 		System.out.println("crawling puzzle " + genome);
-		puzzle.crawl(initialState, new ConsoleProgressBar());
+		puzzle.crawl(Arrays.asList(initialState), new ConsoleProgressBar());
 
 		// evaluate puzzle
 		System.out.println("evaluating puzzle " + genome);
 		int numErrors = ErrorCounter.countErrors(puzzle, initialState);
-		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState,
-				ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
+		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState, ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
 
 		// create individual
 		System.out.println("creating individual " + genome);
