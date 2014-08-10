@@ -48,10 +48,29 @@ public final class ZeldaGenome implements Genome {
 		return new ZeldaGenome(configuration, newGenes);
 	}
 
+	public int size() {
+		return genes.size();
+	}
+
 	public void express(ZeldaPuzzleBuilder builder) {
 		for (ZeldaGene gene : genes) {
 			gene.express(builder);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return genes.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ZeldaGenome)) return false;
+		ZeldaGenome other = (ZeldaGenome) obj;
+		if (!genes.equals(other.genes)) return false;
+		return true;
 	}
 
 	@Override

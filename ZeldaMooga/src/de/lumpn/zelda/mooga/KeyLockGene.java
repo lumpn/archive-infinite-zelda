@@ -39,6 +39,28 @@ public final class KeyLockGene extends ZeldaGene {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + keyLocation;
+		result = prime * result + lockEnd;
+		result = prime * result + lockStart;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof KeyLockGene)) return false;
+		KeyLockGene other = (KeyLockGene) obj;
+		if (keyLocation != other.keyLocation) return false;
+		if (lockEnd != other.lockEnd) return false;
+		if (lockStart != other.lockStart) return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("Key: %d, Lock: %d--%d", keyLocation, lockStart, lockEnd);
 	}

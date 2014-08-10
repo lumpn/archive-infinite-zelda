@@ -51,6 +51,28 @@ public final class PistonGene extends ZeldaGene {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + color.hashCode();
+		result = prime * result + pistonEnd;
+		result = prime * result + pistonStart;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof PistonGene)) return false;
+		PistonGene other = (PistonGene) obj;
+		if (color != other.color) return false;
+		if (pistonEnd != other.pistonEnd) return false;
+		if (pistonStart != other.pistonStart) return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("Piston: %d--%d", pistonStart, pistonEnd);
 	}

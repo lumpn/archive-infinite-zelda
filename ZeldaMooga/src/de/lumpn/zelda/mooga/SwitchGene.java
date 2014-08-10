@@ -24,6 +24,24 @@ public final class SwitchGene extends ZeldaGene {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + switchLocation;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof SwitchGene)) return false;
+		SwitchGene other = (SwitchGene) obj;
+		if (switchLocation != other.switchLocation) return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("Switch: %d", switchLocation);
 	}

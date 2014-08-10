@@ -30,6 +30,26 @@ public final class TwoWayGene extends ZeldaGene {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + wayEnd;
+		result = prime * result + wayStart;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof TwoWayGene)) return false;
+		TwoWayGene other = (TwoWayGene) obj;
+		if (wayEnd != other.wayEnd) return false;
+		if (wayStart != other.wayStart) return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return String.format("%d--%d", wayStart, wayEnd);
 	}
