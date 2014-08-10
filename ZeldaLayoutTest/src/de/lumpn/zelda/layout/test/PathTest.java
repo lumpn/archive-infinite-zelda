@@ -2,7 +2,6 @@ package de.lumpn.zelda.layout.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import de.lumpn.util.Pair;
 import de.lumpn.zelda.layout.Path;
 import de.lumpn.zelda.layout.Position;
 
