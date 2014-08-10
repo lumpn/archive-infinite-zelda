@@ -28,7 +28,7 @@ public class Main {
 		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			System.out.print("gen " + i + ": ");
 			genomes = evolution.evolve(genomes, random);
 		}
