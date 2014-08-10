@@ -7,7 +7,9 @@ public final class ZeldaGeneFactory implements GeneFactory<ZeldaGene> {
 	@Override
 	public ZeldaGene createGene(ZeldaConfiguration configuration, Random random) {
 		// TODO: support weighted probability
-		switch (random.nextInt(2)) {
+		switch (random.nextInt(5)) {
+			case 0:
+				return new TwoWayGene(configuration, random);
 			case 1:
 				return new OneWayGene(configuration, random);
 			case 2:
