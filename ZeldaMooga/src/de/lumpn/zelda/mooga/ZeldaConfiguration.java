@@ -14,7 +14,7 @@ public final class ZeldaConfiguration {
 	// complexification
 	private final double mutationCoefficient = 0.10; // ~10% ([0%, 75%])
 	private final double deletionCoefficient = 0.05; // ~5% ([0%, 35%])
-	private final double insertionCoefficient = 0.10; // ~10% ([0%, 75%])
+	private final double insertionCoefficient = 0.05; // ~5% ([0%, 35%])
 
 	public int randomLocation(Random random) {
 		return random.nextInt(numLocations);
