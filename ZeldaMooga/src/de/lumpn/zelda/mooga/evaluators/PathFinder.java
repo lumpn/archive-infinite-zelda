@@ -10,12 +10,17 @@ import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
 public final class PathFinder {
 
+	public static int shortestPathLength(ZeldaPuzzle puzzle, State initialState) {
+		Step step = puzzle.getStep(ZeldaPuzzle.ENTRANCE, initialState);
+		if (step == null) return Step.UNREACHABLE;
+		return step.distanceFromExit();
+	}
+
 	/**
 	 * Finds the shortest path from source to destination given an initial state.
 	 * @return Length of shortest path. -1 if no path exists.
 	 */
-	public static int shortestPathLength(ZeldaPuzzle puzzle, State state, int source,
-			int destination) {
+	public static int shortestPathLength(ZeldaPuzzle puzzle, State state, int source, int destination) {
 
 		// find initial step
 		Step step = puzzle.getStep(source, state);

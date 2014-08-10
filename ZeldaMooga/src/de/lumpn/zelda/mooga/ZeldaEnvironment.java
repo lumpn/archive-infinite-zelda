@@ -32,8 +32,8 @@ public final class ZeldaEnvironment implements Environment {
 
 		// evaluate puzzle
 		System.out.println("evaluating puzzle " + genome);
-		int numErrors = ErrorCounter.countErrors(puzzle, initialState);
-		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState, ZeldaPuzzle.entranceId, ZeldaPuzzle.exitId);
+		int numErrors = ErrorCounter.countErrors(puzzle);
+		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState);
 
 		// create individual
 		System.out.println("creating individual " + genome);

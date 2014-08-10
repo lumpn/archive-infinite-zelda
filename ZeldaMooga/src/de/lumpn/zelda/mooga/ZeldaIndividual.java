@@ -2,6 +2,7 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Genome;
 import de.lumpn.mooga.Individual;
+import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
 public final class ZeldaIndividual implements Individual {
@@ -14,8 +15,11 @@ public final class ZeldaIndividual implements Individual {
 		return value;
 	}
 
-	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors,
-			int shortestPathLength) {
+	private static int prefer(boolean value) {
+		return value ? 1 : 0;
+	}
+
+	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors, int shortestPathLength) {
 		this.genome = genome;
 		this.puzzle = puzzle;
 		this.numErrors = numErrors;
@@ -29,15 +33,17 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public int numAttributes() {
-		return 2;
+		return 3;
 	}
 
 	@Override
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(numErrors);
+				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 1:
+				return minimize(numErrors);
+			case 2:
 				return maximize(shortestPathLength);
 			default:
 				assert false;
