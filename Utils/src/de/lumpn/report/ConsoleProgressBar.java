@@ -11,9 +11,9 @@ public class ConsoleProgressBar implements ProgressConsumer {
 
 	@Override
 	public void set(int current, int total) {
-		String filled = repeat('#', current);
+		String filled = repeat('-', current);
 		String empty = repeat(' ', total - current);
-		System.out.println("[" + filled + empty + "]");
+		System.out.println("[" + filled + ">" + empty + "]");
 	}
 
 	private static String repeat(char c, int count) {
