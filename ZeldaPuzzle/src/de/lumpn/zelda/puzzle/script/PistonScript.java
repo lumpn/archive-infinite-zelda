@@ -7,8 +7,8 @@ import de.lumpn.zelda.puzzle.ZeldaStates;
 
 public final class PistonScript implements ZeldaScript {
 
-	public PistonScript(VariableIdentifier colorSwitch, int pistonColor) {
-		this.colorSwitch = colorSwitch;
+	public PistonScript(VariableIdentifier switchIdentifier, int pistonColor) {
+		this.switchIdentifier = switchIdentifier;
 		this.pistonColor = pistonColor;
 	}
 
@@ -16,7 +16,8 @@ public final class PistonScript implements ZeldaScript {
 	public State execute(State state) {
 
 		// color correct?
-		if (state.getOrDefault(colorSwitch, ZeldaStates.SWITCH_DEFAULT) == pistonColor) {
+		int switchColor = state.getOrDefault(switchIdentifier, ZeldaStates.SWITCH_DEFAULT);
+		if (switchColor == pistonColor) {
 			return state; // pass
 		}
 
@@ -37,7 +38,7 @@ public final class PistonScript implements ZeldaScript {
 		}
 	}
 
-	private final VariableIdentifier colorSwitch;
+	private final VariableIdentifier switchIdentifier;
 
 	private final int pistonColor;
 }

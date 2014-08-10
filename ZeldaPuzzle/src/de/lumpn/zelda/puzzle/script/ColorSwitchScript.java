@@ -8,23 +8,23 @@ import de.lumpn.zelda.puzzle.ZeldaStates;
 
 public final class ColorSwitchScript implements ZeldaScript {
 
-	public ColorSwitchScript(VariableIdentifier colorSwitch) {
-		this.colorSwitch = colorSwitch;
+	public ColorSwitchScript(VariableIdentifier switchIdentifier) {
+		this.switchIdentifier = switchIdentifier;
 	}
 
 	@Override
 	public State execute(State state) {
 
-		int switchState = state.getOrDefault(colorSwitch, ZeldaStates.SWITCH_DEFAULT);
+		int switchState = state.getOrDefault(switchIdentifier, ZeldaStates.SWITCH_DEFAULT);
 
-		// switch color
+		// colorSwitch color
 		StateBuilder mutable = state.mutable();
 		switch (switchState) {
 			case ZeldaStates.SWITCH_RED:
-				mutable.set(colorSwitch, ZeldaStates.SWITCH_BLUE);
+				mutable.set(switchIdentifier, ZeldaStates.SWITCH_BLUE);
 				break;
 			case ZeldaStates.SWITCH_BLUE:
-				mutable.set(colorSwitch, ZeldaStates.SWITCH_RED);
+				mutable.set(switchIdentifier, ZeldaStates.SWITCH_RED);
 				break;
 			default:
 				assert false;
@@ -37,5 +37,5 @@ public final class ColorSwitchScript implements ZeldaScript {
 		builder.setLabel("switch");
 	}
 
-	private final VariableIdentifier colorSwitch;
+	private final VariableIdentifier switchIdentifier;
 }

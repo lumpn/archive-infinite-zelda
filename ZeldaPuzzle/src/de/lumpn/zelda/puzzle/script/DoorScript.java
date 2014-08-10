@@ -11,14 +11,15 @@ public final class DoorScript implements ZeldaScript {
 
 	public DoorScript(VariableIdentifier keyIdentifier, VariableLookup resolution) {
 		this.keyIdentifier = keyIdentifier;
-		this.lockIdentifier = resolution.unique();
+		this.doorStateIdentifier = resolution.unique("door state");
 	}
 
 	@Override
 	public State execute(State state) {
 
 		// already unlocked?
-		if (state.getOrDefault(lockIdentifier, ZeldaStates.DOOR_LOCKED) == ZeldaStates.DOOR_UNLOCKED) {
+		int doorState = state.getOrDefault(doorStateIdentifier, ZeldaStates.DOOR_LOCKED);
+		if (doorState == ZeldaStates.DOOR_UNLOCKED) {
 			return state; // pass
 		}
 
@@ -31,7 +32,7 @@ public final class DoorScript implements ZeldaScript {
 		// consume key & unlock
 		StateBuilder mutable = state.mutable();
 		mutable.set(keyIdentifier, numKeys - 1);
-		mutable.set(lockIdentifier, ZeldaStates.DOOR_UNLOCKED);
+		mutable.set(doorStateIdentifier, ZeldaStates.DOOR_UNLOCKED);
 		return mutable.state();
 	}
 
@@ -40,5 +41,5 @@ public final class DoorScript implements ZeldaScript {
 		builder.setLabel("door");
 	}
 
-	private final VariableIdentifier keyIdentifier, lockIdentifier;
+	private final VariableIdentifier keyIdentifier, doorStateIdentifier;
 }

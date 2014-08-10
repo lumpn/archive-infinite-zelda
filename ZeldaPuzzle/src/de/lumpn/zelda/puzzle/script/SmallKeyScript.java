@@ -10,30 +10,31 @@ import de.lumpn.zelda.puzzle.ZeldaStates;
 public final class SmallKeyScript implements ZeldaScript {
 
 	public SmallKeyScript(VariableIdentifier key, VariableLookup lookup) {
-		this.key = key;
-		this.keyState = lookup.unique();
+		this.keyIdentifier = key;
+		this.keyStateIdentifier = lookup.unique("key state");
 	}
 
 	@Override
 	public State execute(State state) {
 
 		// already taken?
-		if (state.getOrDefault(keyState, ZeldaStates.KEY_AVAILABLE) == ZeldaStates.KEY_TAKEN) {
+		int keyState = state.getOrDefault(keyStateIdentifier, ZeldaStates.KEY_AVAILABLE);
+		if (keyState == ZeldaStates.KEY_TAKEN) {
 			return state;
 		}
 
 		// acquire key
-		int numKeys = state.getOrDefault(key, 0);
+		int numKeys = state.getOrDefault(keyIdentifier, 0);
 		StateBuilder mutable = state.mutable();
-		mutable.set(key, numKeys + 1);
-		mutable.set(keyState, ZeldaStates.KEY_TAKEN);
+		mutable.set(keyIdentifier, numKeys + 1);
+		mutable.set(keyStateIdentifier, ZeldaStates.KEY_TAKEN);
 		return mutable.state();
 	}
 
 	@Override
 	public void express(DotTransitionBuilder builder) {
-		builder.setLabel("key");
+		builder.setLabel("small\nkey");
 	}
 
-	private final VariableIdentifier key, keyState;
+	private final VariableIdentifier keyIdentifier, keyStateIdentifier;
 }
