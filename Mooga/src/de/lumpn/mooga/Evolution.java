@@ -8,8 +8,7 @@ import de.lumpn.util.Pair;
 
 public class Evolution {
 
-	public Evolution(int populationSize, double crossoverFraction, double mutationFraction,
-			GenomeFactory factory, Selection selection) {
+	public Evolution(int populationSize, double crossoverFraction, double mutationFraction, GenomeFactory factory, Selection selection) {
 
 		this.populationSize = populationSize;
 		this.crossoverQuota = (int) (populationSize * crossoverFraction);

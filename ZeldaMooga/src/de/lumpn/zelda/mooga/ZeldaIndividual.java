@@ -42,7 +42,7 @@ public final class ZeldaIndividual implements Individual {
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(genome.size());
+				return minimize(genome.size() / 4); // TODO: minimize unused transitions
 			case 1:
 				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 2:

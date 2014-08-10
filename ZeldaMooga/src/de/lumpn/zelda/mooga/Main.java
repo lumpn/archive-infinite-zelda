@@ -19,7 +19,7 @@ public class Main {
 		ZeldaGenomeFactory factory = new ZeldaGenomeFactory(configuration, random);
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		ZeldaEnvironment environment = new ZeldaEnvironment(initialState);
+		ZeldaEnvironment environment = new ZeldaEnvironment(initialState, 1000);
 
 		ZeldaGenome best = factory.createGenome();
 		ZeldaIndividual individual = environment.evaluate(best);
@@ -28,7 +28,7 @@ public class Main {
 		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			System.out.print("gen " + i + ": ");
 			genomes = evolution.evolve(genomes, random);
 		}

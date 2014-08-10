@@ -26,6 +26,7 @@ public class ElitistEvolution {
 		// spawn individuals
 		List<Individual> population = new ArrayList<Individual>();
 		for (Genome genome : genomes) {
+			// TODO: only evaluate genomes not previously seen
 			Individual individual = environment.evaluate(genome);
 			population.add(individual);
 		}

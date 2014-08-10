@@ -19,7 +19,7 @@ public final class ZeldaPuzzle {
 		this.locations = CollectionUtils.immutable(locations);
 	}
 
-	public void crawl(List<State> initialStates, ProgressConsumer progressConsumer) {
+	public void crawl(List<State> initialStates, int maxSteps, ProgressConsumer progressConsumer) {
 
 		// find entrance
 		Location entrance = locations.get(ENTRANCE);
@@ -36,7 +36,7 @@ public final class ZeldaPuzzle {
 		}
 
 		// forward crawl (keep track of states at exit location for backward pass)
-		List<Step> terminalSteps = forwardPass(initialSteps, progressConsumer);
+		List<Step> terminalSteps = forwardPass(initialSteps, maxSteps, progressConsumer);
 
 		// initialize distance from exit
 		for (Step step : terminalSteps) {
@@ -47,7 +47,7 @@ public final class ZeldaPuzzle {
 		backwardPass(terminalSteps, progressConsumer);
 	}
 
-	private static List<Step> forwardPass(List<Step> initialSteps, ProgressConsumer progressConsumer) {
+	private static List<Step> forwardPass(List<Step> initialSteps, int maxSteps, ProgressConsumer progressConsumer) {
 
 		// keep track of terminals
 		List<Step> terminalSteps = new ArrayList<Step>();
@@ -60,7 +60,7 @@ public final class ZeldaPuzzle {
 		// crawl!
 		progressConsumer.reset("forward pass");
 		progressConsumer.set(visitedSteps, totalSteps);
-		while (!queue.isEmpty()) {
+		while (!queue.isEmpty() && (visitedSteps < maxSteps)) {
 
 			// fetch step
 			Step step = queue.remove();

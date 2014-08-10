@@ -13,13 +13,16 @@ import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 
 public final class ZeldaEnvironment implements Environment {
 
-	public ZeldaEnvironment(State initialState) {
+	public ZeldaEnvironment(State initialState, int maxSteps) {
 		this.initialState = initialState;
+		this.maxSteps = maxSteps;
 	}
 
 	@Override
 	public ZeldaIndividual evaluate(Genome g) {
 		ZeldaGenome genome = (ZeldaGenome) g;
+
+		// TODO: restrict number of key/locks etc because of exponential complexity.
 
 		// build puzzle
 		// System.out.println("building puzzle " + genome);
@@ -29,7 +32,7 @@ public final class ZeldaEnvironment implements Environment {
 
 		// crawl puzzle
 		// System.out.println("crawling puzzle " + genome);
-		puzzle.crawl(Arrays.asList(initialState), progress);
+		puzzle.crawl(Arrays.asList(initialState), maxSteps, progress);
 
 		// evaluate puzzle
 		// System.out.println("evaluating puzzle " + genome);
@@ -42,5 +45,6 @@ public final class ZeldaEnvironment implements Environment {
 	}
 
 	private final State initialState;
+	private final int maxSteps;
 	private static final ProgressConsumer progress = new MockProgressBar();
 }
