@@ -130,16 +130,16 @@ public class ZeldaPuzzleTest {
 	}
 
 	@Test
-	public void testCrawlKeyLockLinear() {
+	public void testCrawlKeyDoorLinear() {
 
 		// 0 -d- 2 -d- 3 -d- 1
 		// k . . k . . k
 		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
 		VariableLookup lookup = builder.lookup();
 
-		builder.addUndirectedTransition(0, 2, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(2, 3, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(3, 1, ZeldaScripts.createLock(lookup));
+		builder.addUndirectedTransition(0, 2, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(2, 3, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(3, 1, ZeldaScripts.createDoor(lookup));
 		builder.addScript(0, ZeldaScripts.createKey(lookup));
 		builder.addScript(2, ZeldaScripts.createKey(lookup));
 		builder.addScript(3, ZeldaScripts.createKey(lookup));
@@ -153,16 +153,16 @@ public class ZeldaPuzzleTest {
 	}
 
 	@Test
-	public void testCrawlKeyLockBatch() {
+	public void testCrawlKeyDoorBatch() {
 
 		// .0 -d- 2 -d- 3 -d- 1
 		// kkk
 		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
 		VariableLookup lookup = builder.lookup();
 
-		builder.addUndirectedTransition(0, 2, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(2, 3, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(3, 1, ZeldaScripts.createLock(lookup));
+		builder.addUndirectedTransition(0, 2, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(2, 3, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(3, 1, ZeldaScripts.createDoor(lookup));
 		builder.addScript(0, ZeldaScripts.createKey(lookup));
 		builder.addScript(0, ZeldaScripts.createKey(lookup));
 		builder.addScript(0, ZeldaScripts.createKey(lookup));
@@ -178,8 +178,8 @@ public class ZeldaPuzzleTest {
 	@Test
 	public void testCrawlGenome() {
 
-		// [3--2, 0--7, Switch: 4, Key: 3, Lock: 9--8, Key: 9, Lock: 4--6, 9--0, Key: 8, Lock: 8--5, Piston: 7--1, Key: 7, Lock: 5--6, Piston: 2--6]
-		// 0--7, 0--9, 2--3, Key: 3, Key: 7, Key: 8, Key: 9, Lock: 4--6, Lock: 5--6, Lock: 5--8, Lock: 8--9, Switch: 4, Piston: 1--7, Piston: 2--6
+		// [3--2, 0--7, Switch: 4, Key: 3, Door: 9--8, Key: 9, Door: 4--6, 9--0, Key: 8, Door: 8--5, Piston: 7--1, Key: 7, Door: 5--6, Piston: 2--6]
+		// 0--7, 0--9, 2--3, Key: 3, Key: 7, Key: 8, Key: 9, Door: 4--6, Door: 5--6, Door: 5--8, Door: 8--9, Switch: 4, Piston: 1--7, Piston: 2--6
 
 		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
 		VariableLookup lookup = builder.lookup();
@@ -195,11 +195,11 @@ public class ZeldaPuzzleTest {
 		builder.addScript(8, ZeldaScripts.createKey(lookup));
 		builder.addScript(9, ZeldaScripts.createKey(lookup));
 
-		// Lock: 4--6, Lock: 5--6, Lock: 5--8, Lock: 8--9
-		builder.addUndirectedTransition(4, 6, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(5, 6, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(5, 8, ZeldaScripts.createLock(lookup));
-		builder.addUndirectedTransition(8, 9, ZeldaScripts.createLock(lookup));
+		// Door: 4--6, Door: 5--6, Door: 5--8, Door: 8--9
+		builder.addUndirectedTransition(4, 6, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(5, 6, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(5, 8, ZeldaScripts.createDoor(lookup));
+		builder.addUndirectedTransition(8, 9, ZeldaScripts.createDoor(lookup));
 
 		// Switch: 4, Piston: 1--7, Piston: 2--6
 		builder.addScript(4, ZeldaScripts.createSwitch(lookup));

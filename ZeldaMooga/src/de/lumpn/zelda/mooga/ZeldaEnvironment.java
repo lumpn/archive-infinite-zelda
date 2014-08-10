@@ -22,7 +22,7 @@ public final class ZeldaEnvironment implements Environment {
 	public ZeldaIndividual evaluate(Genome g) {
 		ZeldaGenome genome = (ZeldaGenome) g;
 
-		// TODO: restrict number of key/locks etc because of exponential complexity.
+		// TODO: restrict number of key/doors etc because of exponential complexity.
 
 		// build puzzle
 		// System.out.println("building puzzle " + genome);

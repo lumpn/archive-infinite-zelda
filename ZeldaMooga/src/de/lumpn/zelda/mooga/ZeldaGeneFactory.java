@@ -13,7 +13,7 @@ public final class ZeldaGeneFactory implements GeneFactory<ZeldaGene> {
 			case 1:
 				return new OneWayGene(configuration, random);
 			case 2:
-				return new KeyLockGene(configuration, random);
+				return new KeyDoorGene(configuration, random);
 			case 3:
 				return new SwitchGene(configuration, random);
 			case 4:

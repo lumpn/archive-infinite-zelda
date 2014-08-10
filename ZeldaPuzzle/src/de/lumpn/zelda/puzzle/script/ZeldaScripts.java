@@ -12,7 +12,7 @@ public final class ZeldaScripts {
 		return new SmallKeyScript(lookup.resolve(KEY_NAME), lookup);
 	}
 
-	public static DoorScript createLock(VariableLookup lookup) {
+	public static DoorScript createDoor(VariableLookup lookup) {
 		return new DoorScript(lookup.resolve(KEY_NAME), lookup);
 	}
 

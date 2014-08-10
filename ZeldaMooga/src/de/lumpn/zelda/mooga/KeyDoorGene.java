@@ -5,28 +5,28 @@ import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
-public final class KeyLockGene extends ZeldaGene {
+public final class KeyDoorGene extends ZeldaGene {
 
-	public KeyLockGene(ZeldaConfiguration configuration, Random random) {
+	public KeyDoorGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
 
 		this.keyLocation = randomLocation(random);
 		int a = randomLocation(random);
 		int b = differentLocation(a, random);
-		this.lockStart = Math.min(a, b);
-		this.lockEnd = Math.max(a, b);
+		this.doorStart = Math.min(a, b);
+		this.doorEnd = Math.max(a, b);
 	}
 
-	private KeyLockGene(ZeldaConfiguration configuration, int keyLocation, int lockStart, int lockEnd) {
+	private KeyDoorGene(ZeldaConfiguration configuration, int keyLocation, int doorStart, int doorEnd) {
 		super(configuration);
 		this.keyLocation = keyLocation;
-		this.lockStart = lockStart;
-		this.lockEnd = lockEnd;
+		this.doorStart = doorStart;
+		this.doorEnd = doorEnd;
 	}
 
 	@Override
-	public KeyLockGene mutate(Random random) {
-		return new KeyLockGene(getConfiguration(), random);
+	public KeyDoorGene mutate(Random random) {
+		return new KeyDoorGene(getConfiguration(), random);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public final class KeyLockGene extends ZeldaGene {
 		// spawn key
 		builder.addScript(keyLocation, ZeldaScripts.createKey(lookup));
 
-		// spawn lock
-		builder.addUndirectedTransition(lockStart, lockEnd, ZeldaScripts.createLock(lookup));
+		// spawn door
+		builder.addUndirectedTransition(doorStart, doorEnd, ZeldaScripts.createDoor(lookup));
 	}
 
 	@Override
@@ -45,8 +45,8 @@ public final class KeyLockGene extends ZeldaGene {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + keyLocation;
-		result = prime * result + lockEnd;
-		result = prime * result + lockStart;
+		result = prime * result + doorEnd;
+		result = prime * result + doorStart;
 		return result;
 	}
 
@@ -54,22 +54,22 @@ public final class KeyLockGene extends ZeldaGene {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (!(obj instanceof KeyLockGene)) return false;
-		KeyLockGene other = (KeyLockGene) obj;
+		if (!(obj instanceof KeyDoorGene)) return false;
+		KeyDoorGene other = (KeyDoorGene) obj;
 		if (keyLocation != other.keyLocation) return false;
-		if (lockEnd != other.lockEnd) return false;
-		if (lockStart != other.lockStart) return false;
+		if (doorEnd != other.doorEnd) return false;
+		if (doorStart != other.doorStart) return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("key %d, lock %d--%d", keyLocation, lockStart, lockEnd);
+		return String.format("key %d, door %d--%d", keyLocation, doorStart, doorEnd);
 	}
 
 	// location of key
 	private final int keyLocation;
 
-	// transition location of lock
-	private final int lockStart, lockEnd;
+	// transition location of door
+	private final int doorStart, doorEnd;
 }
