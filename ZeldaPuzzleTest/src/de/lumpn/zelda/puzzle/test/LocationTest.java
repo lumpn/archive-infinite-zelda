@@ -2,16 +2,16 @@ package de.lumpn.zelda.puzzle.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import de.lumpn.zelda.puzzle.VariableIdentifier;
+import de.lumpn.zelda.puzzle.Location;
 
-public class VariableIdentifierTest {
+public class LocationTest {
 
 	@Test
 	public void testEquality() {
 
-		VariableIdentifier x = new VariableIdentifier(42, "x");
-		VariableIdentifier y = new VariableIdentifier(42, "y");
-		VariableIdentifier z = new VariableIdentifier(0, "z");
+		Location x = new Location(42);
+		Location y = new Location(42);
+		Location z = new Location(0);
 		Object o = y;
 		Integer i = 42;
 
@@ -42,9 +42,9 @@ public class VariableIdentifierTest {
 	@Test
 	public void testHashCode() {
 
-		VariableIdentifier x = new VariableIdentifier(42, "x");
-		VariableIdentifier y = new VariableIdentifier(42, "y");
-		VariableIdentifier z = new VariableIdentifier(0, "z");
+		Location x = new Location(42);
+		Location y = new Location(42);
+		Location z = new Location(0);
 		Object o = y;
 		Integer i = 42;
 

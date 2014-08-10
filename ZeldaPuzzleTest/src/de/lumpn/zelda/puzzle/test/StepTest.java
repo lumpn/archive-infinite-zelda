@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
+import de.lumpn.zelda.puzzle.Location;
 import de.lumpn.zelda.puzzle.State;
+import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.VariableIdentifier;
 
-public class StateTest {
+public class StepTest {
 
 	private static Map<VariableIdentifier, Integer> createVariables1() {
 		return Collections.emptyMap();
@@ -33,11 +35,11 @@ public class StateTest {
 
 		Map<VariableIdentifier, Integer> variables = createVariables3();
 
-		State a = new State(createVariables1());
-		State b = new State(createVariables2());
-		State x = new State(variables);
-		State y = new State(variables);
-		State z = new State(createVariables3());
+		Step a = new Step(new Location(42), new State(createVariables1()));
+		Step b = new Step(new Location(42), new State(createVariables2()));
+		Step x = new Step(new Location(42), new State(variables));
+		Step y = new Step(new Location(42), new State(variables));
+		Step z = new Step(new Location(42), new State(createVariables3()));
 
 		Object o = z;
 		Integer i = 42;
@@ -85,11 +87,11 @@ public class StateTest {
 
 		Map<VariableIdentifier, Integer> variables = createVariables3();
 
-		State a = new State(createVariables1());
-		State b = new State(createVariables2());
-		State x = new State(variables);
-		State y = new State(variables);
-		State z = new State(createVariables3());
+		Step a = new Step(new Location(42), new State(createVariables1()));
+		Step b = new Step(new Location(42), new State(createVariables2()));
+		Step x = new Step(new Location(42), new State(variables));
+		Step y = new Step(new Location(42), new State(variables));
+		Step z = new Step(new Location(42), new State(createVariables3()));
 
 		Object o = z;
 		Integer i = 42;
