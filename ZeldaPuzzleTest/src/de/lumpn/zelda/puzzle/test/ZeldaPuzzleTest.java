@@ -1,11 +1,13 @@
 package de.lumpn.zelda.puzzle.test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 import de.lumpn.report.ConsoleProgressBar;
 import de.lumpn.report.ProgressConsumer;
 import de.lumpn.zelda.puzzle.State;
+import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.VariableIdentifier;
 import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
@@ -26,7 +28,7 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		Assert.assertNotNull(puzzle.getStep(0, initialState));
 		Assert.assertNotNull(puzzle.getStep(1, initialState));
@@ -48,7 +50,7 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		Assert.assertNotNull(puzzle.getStep(0, initialState));
 		Assert.assertNotNull(puzzle.getStep(1, initialState));
@@ -68,7 +70,7 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		Assert.assertNotNull(puzzle.getStep(0, initialState));
 		Assert.assertNotNull(puzzle.getStep(1, initialState));
@@ -89,7 +91,7 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		Assert.assertNotNull(puzzle.getStep(0, initialState));
 		Assert.assertNotNull(puzzle.getStep(1, initialState));
@@ -113,14 +115,17 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		Assert.assertNotNull(puzzle.getStep(0, initialState));
 		Assert.assertNotNull(puzzle.getStep(1, initialState));
 		Assert.assertNotNull(puzzle.getStep(2, initialState));
 		Assert.assertNotNull(puzzle.getStep(3, initialState));
 		Assert.assertNotNull(puzzle.getStep(4, initialState));
-		// TODO test for dead end
+		Assert.assertNotEquals(Step.UNREACHABLE, puzzle.getStep(0, initialState).distanceFromExit());
+		Assert.assertEquals(Step.UNREACHABLE, puzzle.getStep(2, initialState).distanceFromExit());
+		Assert.assertEquals(Step.UNREACHABLE, puzzle.getStep(3, initialState).distanceFromExit());
+		Assert.assertEquals(Step.UNREACHABLE, puzzle.getStep(4, initialState).distanceFromExit());
 	}
 
 	@Test
@@ -140,9 +145,10 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
-		// TODO test for exit reached
+		// test for exit reached
+		Assert.assertNotEquals(Step.UNREACHABLE, puzzle.getStep(0, initialState).distanceFromExit());
 	}
 
 	@Test
@@ -162,9 +168,10 @@ public class ZeldaPuzzleTest {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
-		puzzle.crawl(initialState, progress);
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
-		// TODO test for exit reached
+		// test for exit reached
+		Assert.assertNotEquals(Step.UNREACHABLE, puzzle.getStep(0, initialState).distanceFromExit());
 	}
 
 	private static <T> boolean isEmpty(Iterable<T> iterable) {
