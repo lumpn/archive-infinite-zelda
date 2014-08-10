@@ -6,6 +6,11 @@ public class ZeldaLayout {
 		this.grid = grid;
 		System.out.println(grid);
 	}
-	
+
+	@Override
+	public String toString() {
+		return grid.toString();
+	}
+
 	private Grid grid;
 }

@@ -10,7 +10,6 @@ public class ZeldaLayoutBuilderTest {
 
 	@Test
 	public void testBuild1() {
-		// TODO terminate earlier than exhaustive search by extension
 		Bounds bounds = new Bounds(-2, 2, 0, 4, 0, 0);
 		Random random = new Random();
 		ZeldaLayoutBuilder builder = new ZeldaLayoutBuilder(bounds, random);

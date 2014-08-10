@@ -44,63 +44,6 @@ public class ZeldaLayoutBuilder {
 	}
 
 	public ZeldaLayout build() {
-		// 1 -- 2
-		// 0 -- 1
-
-		// 2 -- 3
-		// 0 -- 1
-		// 0 -- 2
-		// 1 -- 3
-
-		// create entrance at 0,0
-		// transition entrance to 1 (implicitly place)
-		// transition 1 to 2 (implicitly create node 2)
-		//
-
-		// really simple algorithm (backtracking automata):
-		// create entrance at predefined location
-		// T: on script | on transition
-		// - on script: find room, find place in room, place script, T
-		// - find room: lookup room | create room
-		// - lookup room: lookup, T
-		// - create room: place room, T
-		// - find place in room: find place | extend room
-		// - extend room: place extension, T
-		// bah!
-
-		// options automata:
-		// - find room: lookup room ?? create room
-		// - create room: return complete list of available positions
-		// - lookup room: return list of room positions
-
-		// input
-		// B
-		// |
-		// A - 0 - 1 - 4
-		// | \ | /
-		// 3 - 2
-
-		// topological sort
-		// A - 0 - 1 - 2 - 4
-		// 3
-		// B
-
-		// sort transitions by destination then source
-		// A - 0
-		// 0 - 1
-		// 0 - 2
-		// 1 - 2
-		// 0 - 3
-		// 2 - 3
-		// 1 - 4
-		// 2 - 4
-		// 1 - B
-
-		// create entrance A at predefined position
-		// transition A to 0 (implicit room creation)
-		// transition 0 to 1 (implicit room creation)
-		// transition 0 to 2 (implicit room creation)
-		// transition 1 to 2 (connect existing rooms)
 
 		// TODO sort schedule for faster convergence
 
@@ -153,29 +96,6 @@ public class ZeldaLayoutBuilder {
 			}
 		}
 		return min;
-	}
-
-	private static List<State> getMinima(Set<State> states) {
-
-		// first pass: find minimum cost
-		double minCost = Double.MAX_VALUE;
-		for (State state : states) {
-			double cost = estimateTotalCost(state);
-			if (cost < minCost) {
-				minCost = cost;
-			}
-		}
-
-		// second pass: select minima
-		List<State> minima = new ArrayList<State>();
-		for (State state : states) { // TODO: iterate in reproducible order
-			double cost = estimateTotalCost(state);
-			if (cost <= minCost) {
-				minima.add(state);
-			}
-		}
-
-		return minima;
 	}
 
 	private static double estimateTotalCost(State state) {

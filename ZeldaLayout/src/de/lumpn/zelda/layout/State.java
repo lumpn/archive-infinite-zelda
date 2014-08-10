@@ -87,8 +87,7 @@ public final class State {
 			// remove from schedule
 			List<Transition> tmpSchedule = schedule.toList();
 			tmpSchedule.remove(transition);
-			ImmutableList<Transition> nextSchedule = new ImmutableArrayList<Transition>(
-					tmpSchedule);
+			ImmutableList<Transition> nextSchedule = new ImmutableArrayList<Transition>(tmpSchedule);
 
 			// implement transition
 			List<Grid> implementations = grid.implement(transition);
@@ -96,14 +95,6 @@ public final class State {
 				result.add(new State(implementation, nextSchedule));
 			}
 		}
-
-		// extend room
-		// HACK: disable extensions for now!
-		// TODO: Are extensions really necessary if no room has more than 3 neighbors?
-		// List<Grid> extensions = grid.extend();
-		// for (Grid extension : extensions) {
-		// result.add(new State(extension, schedule));
-		// }
 
 		return result;
 	}
