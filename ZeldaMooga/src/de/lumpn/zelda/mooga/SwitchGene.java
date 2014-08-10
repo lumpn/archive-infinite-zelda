@@ -14,7 +14,6 @@ public final class SwitchGene extends ZeldaGene {
 
 	@Override
 	public SwitchGene mutate(Random random) {
-		// TODO: make less random than fully random constructor!
 		return new SwitchGene(getConfiguration(), random);
 	}
 

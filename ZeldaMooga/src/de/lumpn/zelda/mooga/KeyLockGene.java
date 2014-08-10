@@ -24,11 +24,7 @@ public final class KeyLockGene extends ZeldaGene {
 
 	@Override
 	public KeyLockGene mutate(Random random) {
-		// TODO: make less random than fully random constructor!
-		int newKey = randomLocation(random);
-		int newStart = randomLocation(random);
-		int newEnd = differentLocation(newStart, random);
-		return new KeyLockGene(getConfiguration(), newKey, newStart, newEnd);
+		return new KeyLockGene(getConfiguration(), random);
 	}
 
 	@Override

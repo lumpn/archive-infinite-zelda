@@ -29,7 +29,6 @@ public final class PistonGene extends ZeldaGene {
 
 	@Override
 	public PistonGene mutate(Random random) {
-		// TODO: make less random than fully random constructor!
 		return new PistonGene(getConfiguration(), random);
 	}
 

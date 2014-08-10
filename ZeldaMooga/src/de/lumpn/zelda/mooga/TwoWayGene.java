@@ -21,10 +21,7 @@ public final class TwoWayGene extends ZeldaGene {
 
 	@Override
 	public TwoWayGene mutate(Random random) {
-		// TODO: make less random than fully random constructor!
-		int newStart = randomLocation(random);
-		int newEnd = differentLocation(newStart, random);
-		return new TwoWayGene(getConfiguration(), newStart, newEnd);
+		return new TwoWayGene(getConfiguration(), random);
 	}
 
 	@Override
