@@ -17,6 +17,11 @@ public interface Individual {
 	 */
 	public double getScore(int attribute);
 
+	/**
+	 * Wether or not this individual can be considered best
+	 */
+	public boolean isElite();
+
 	@Override
 	public int hashCode();
 

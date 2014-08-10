@@ -21,16 +21,19 @@ public class Main {
 		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
 		ZeldaEnvironment environment = new ZeldaEnvironment(initialState, 1000);
 
-		ZeldaGenome best = factory.createGenome();
-		ZeldaIndividual individual = environment.evaluate(best);
+		ZeldaGenome example = factory.createGenome();
+		ZeldaIndividual individual = environment.evaluate(example);
 		System.out.println("test: " + individual);
 
 		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 1000; i++) {
-			System.out.print("gen " + i + ": ");
+		for (int i = 0; i < 200; i++) {
+			System.out.println("gen " + i);
 			genomes = evolution.evolve(genomes, random);
 		}
+
+		ZeldaIndividual best = (ZeldaIndividual) evolution.getBest();
+		best.export();
 	}
 }

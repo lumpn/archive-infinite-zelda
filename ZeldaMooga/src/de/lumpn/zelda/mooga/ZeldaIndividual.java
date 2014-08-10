@@ -2,6 +2,7 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Genome;
 import de.lumpn.mooga.Individual;
+import de.lumpn.zelda.puzzle.DotBuilder;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
@@ -56,6 +57,11 @@ public final class ZeldaIndividual implements Individual {
 	}
 
 	@Override
+	public boolean isElite() {
+		return (numErrors == 0) && (shortestPathLength > 0);
+	}
+
+	@Override
 	public int hashCode() {
 		return genome.hashCode();
 	}
@@ -78,6 +84,11 @@ public final class ZeldaIndividual implements Individual {
 			builder.append(" ");
 		}
 		return String.format("%s: %s", builder.toString(), genome);
+	}
+
+	public void export() {
+		DotBuilder builder = new DotBuilder();
+		puzzle.express(builder);
 	}
 
 	private final ZeldaGenome genome;
