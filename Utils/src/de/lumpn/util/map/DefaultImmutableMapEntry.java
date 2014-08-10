@@ -72,10 +72,14 @@ public class DefaultImmutableMapEntry<K, V> implements ImmutableMap.Entry<K, V> 
 	 * @see    #hashCode
 	 */
 	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof ImmutableMap.Entry)) return false;
-		ImmutableMap.Entry<?, ?> e = (ImmutableMap.Entry<?, ?>) o;
-		return Nullables.equals(key, e.getKey()) && Nullables.equals(value, e.getValue());
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ImmutableMap.Entry<?, ?>)) return false;
+		ImmutableMap.Entry<?, ?> other = (ImmutableMap.Entry<?, ?>) obj;
+		if (!Nullables.equals(key, other.getKey())) return false;
+		if (!Nullables.equals(value, other.getValue())) return false;
+		return true;
 	}
 
 	/**

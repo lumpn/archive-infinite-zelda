@@ -73,4 +73,19 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 	public Map<K, V> toUnmodifiableMap() {
 		return Collections.unmodifiableMap(items);
 	}
+
+	@Override
+	public int hashCode() {
+		return items.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ImmutableHashMap<?, ?>)) return false;
+		ImmutableHashMap<?, ?> other = (ImmutableHashMap<?, ?>) obj;
+		if (!items.equals(other.items)) return false;
+		return true;
+	}
 }

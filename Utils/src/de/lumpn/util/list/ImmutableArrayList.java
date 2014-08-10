@@ -88,14 +88,14 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, RandomAccess {
 		return Collections.unmodifiableList(items);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (!(obj instanceof ImmutableArrayList)) return false;
-		ImmutableArrayList other = (ImmutableArrayList) obj;
-		return items.equals(other.items);
+		if (!(obj instanceof ImmutableArrayList<?>)) return false;
+		ImmutableArrayList<?> other = (ImmutableArrayList<?>) obj;
+		if (!items.equals(other.items)) return false;
+		return true;
 	}
 
 	@Override
