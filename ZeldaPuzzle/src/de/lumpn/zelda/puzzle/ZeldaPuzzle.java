@@ -19,7 +19,7 @@ public final class ZeldaPuzzle {
 		this.locations = CollectionUtils.immutable(locations);
 	}
 
-	public void crawl(State initialState, ProgressConsumer progressConsumer) {
+	public void crawl(List<State> initialStates, ProgressConsumer progressConsumer) {
 
 		// find entrance
 		Location entrance = locations.get(entranceId);
@@ -27,12 +27,16 @@ public final class ZeldaPuzzle {
 			return; // invalid puzzle
 		}
 
-		// initialize first step
-		Step initialStep = entrance.createStep(initialState);
-		initialStep.setDistanceFromEntry(0);
+		// initialize initial steps
+		List<Step> initialSteps = new ArrayList<Step>();
+		for (State state : initialStates) {
+			Step step = entrance.createStep(state);
+			step.setDistanceFromEntry(0);
+			initialSteps.add(step);
+		}
 
 		// forward crawl (keep track of states at exit location for backward pass)
-		List<Step> terminalSteps = forwardPass(initialStep, progressConsumer);
+		List<Step> terminalSteps = forwardPass(initialSteps, progressConsumer);
 
 		// initialize distance from exit
 		for (Step step : terminalSteps) {
@@ -43,17 +47,15 @@ public final class ZeldaPuzzle {
 		backwardPass(terminalSteps, progressConsumer);
 	}
 
-	private static List<Step> forwardPass(Step initialStep,
-			ProgressConsumer progressConsumer) {
+	private static List<Step> forwardPass(List<Step> initialSteps, ProgressConsumer progressConsumer) {
 
 		// keep track of terminals
 		List<Step> terminalSteps = new ArrayList<Step>();
 
 		// initialize BFS
-		Queue<Step> queue = new ArrayDeque<Step>();
-		queue.add(initialStep);
+		Queue<Step> queue = new ArrayDeque<Step>(initialSteps);
 		int visitedSteps = 0;
-		int totalSteps = 1;
+		int totalSteps = initialSteps.size();
 
 		// crawl!
 		progressConsumer.reset("forward pass");
@@ -73,7 +75,7 @@ public final class ZeldaPuzzle {
 
 			// try every transition
 			State state = step.state();
-			int distanceFromEntry = step.distanceFromEntry();
+			int nextDistanceFromEntry = step.distanceFromEntry() + 1;
 			for (Transition transition : location.transitions()) {
 
 				// execute transition
@@ -87,9 +89,12 @@ public final class ZeldaPuzzle {
 
 					// location reached with new state -> enqueue
 					nextStep = nextLocation.createStep(nextState);
-					step.setDistanceFromEntry(distanceFromEntry + 1);
+					step.setDistanceFromEntry(nextDistanceFromEntry);
 					queue.add(nextStep);
 					totalSteps++;
+				} else {
+					// sanity check
+					assert nextStep.distanceFromEntry() <= nextDistanceFromEntry;
 				}
 
 				// connect steps
@@ -101,8 +106,7 @@ public final class ZeldaPuzzle {
 		return terminalSteps;
 	}
 
-	private static void backwardPass(List<Step> terminalSteps,
-			ProgressConsumer progressConsumer) {
+	private static void backwardPass(List<Step> terminalSteps, ProgressConsumer progressConsumer) {
 
 		// initialize BFS
 		Queue<Step> queue = new ArrayDeque<Step>(terminalSteps);
@@ -121,14 +125,17 @@ public final class ZeldaPuzzle {
 			progressConsumer.set(visitedSteps, totalSteps);
 
 			// try every predecessor
-			int distanceFromExit = step.distanceFromExit();
+			int nextDistanceFromExit = step.distanceFromExit() + 1;
 			for (Step nextStep : step.precedessors()) {
 				if (visited.add(nextStep)) {
 
 					// unseen step reached -> enqueue
-					nextStep.setDistanceFromExit(distanceFromExit + 1);
+					nextStep.setDistanceFromExit(nextDistanceFromExit);
 					queue.add(nextStep);
 					totalSteps++;
+				} else {
+					// sanity check
+					assert nextStep.distanceFromExit() <= nextDistanceFromExit;
 				}
 			}
 		}
