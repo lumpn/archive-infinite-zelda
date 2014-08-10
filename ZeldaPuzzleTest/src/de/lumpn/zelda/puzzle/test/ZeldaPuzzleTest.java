@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import de.lumpn.report.ConsoleProgressBar;
 import de.lumpn.report.ProgressConsumer;
+import de.lumpn.zelda.puzzle.DotBuilder;
 import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.VariableIdentifier;
@@ -172,6 +173,51 @@ public class ZeldaPuzzleTest {
 
 		// test for exit reached
 		Assert.assertNotEquals(Step.UNREACHABLE, puzzle.getStep(0, initialState).distanceFromExit());
+	}
+
+	@Test
+	public void testCrawlGenome() {
+
+		// [3--2, 0--7, Switch: 4, Key: 3, Lock: 9--8, Key: 9, Lock: 4--6, 9--0, Key: 8, Lock: 8--5, Piston: 7--1, Key: 7, Lock: 5--6, Piston: 2--6]
+		// 0--7, 0--9, 2--3, Key: 3, Key: 7, Key: 8, Key: 9, Lock: 4--6, Lock: 5--6, Lock: 5--8, Lock: 8--9, Switch: 4, Piston: 1--7, Piston: 2--6
+
+		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
+		VariableLookup lookup = builder.lookup();
+
+		// 0--7, 0--9, 2--3
+		builder.addUndirectedTransition(0, 7, IdentityScript.INSTANCE);
+		builder.addUndirectedTransition(0, 9, IdentityScript.INSTANCE);
+		builder.addUndirectedTransition(2, 3, IdentityScript.INSTANCE);
+
+		// Key: 3, Key: 7, Key: 8, Key: 9
+		builder.addScript(3, ZeldaScripts.createKey(lookup));
+		builder.addScript(7, ZeldaScripts.createKey(lookup));
+		builder.addScript(8, ZeldaScripts.createKey(lookup));
+		builder.addScript(9, ZeldaScripts.createKey(lookup));
+
+		// Lock: 4--6, Lock: 5--6, Lock: 5--8, Lock: 8--9
+		builder.addUndirectedTransition(4, 6, ZeldaScripts.createLock(lookup));
+		builder.addUndirectedTransition(5, 6, ZeldaScripts.createLock(lookup));
+		builder.addUndirectedTransition(5, 8, ZeldaScripts.createLock(lookup));
+		builder.addUndirectedTransition(8, 9, ZeldaScripts.createLock(lookup));
+
+		// Switch: 4, Piston: 1--7, Piston: 2--6
+		builder.addScript(4, ZeldaScripts.createSwitch(lookup));
+		
+		// Piston: 1--7, Piston: 2--6
+		builder.addUndirectedTransition(1, 7, ZeldaScripts.createBluePiston(lookup));
+		builder.addUndirectedTransition(2, 6, ZeldaScripts.createRedPiston(lookup));
+
+		ZeldaPuzzle puzzle = builder.puzzle();
+		DotBuilder dot = new DotBuilder();
+		puzzle.express(dot);
+
+		State initialState = new State(Collections.<VariableIdentifier, Integer> emptyMap());
+		puzzle.crawl(Arrays.asList(initialState), 10000, progress);
+
+		// test for exit reached
+		Assert.assertNotEquals(Step.UNREACHABLE, puzzle.getStep(0, initialState).distanceFromExit());
+
 	}
 
 	private static <T> boolean isEmpty(Iterable<T> iterable) {
