@@ -9,6 +9,11 @@ public final class Transition {
 		this.destination = destination;
 		this.script = script;
 	}
+	
+	public Location source()
+	{
+		return source;
+	}
 
 	public Location destination() {
 		return destination;

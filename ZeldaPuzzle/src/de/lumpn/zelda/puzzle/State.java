@@ -31,7 +31,8 @@ public final class State {
 		if (obj == null) return false;
 		if (!(obj instanceof State)) return false;
 		State other = (State) obj;
-		return variables.equals(other.variables);
+		if (!variables.equals(other.variables)) return false;
+		return true;
 	}
 
 	private final Map<VariableIdentifier, Integer> variables;

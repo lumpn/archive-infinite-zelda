@@ -12,10 +12,6 @@ public final class StateBuilder {
 		this.variables = new HashMap<VariableIdentifier, Integer>(variables);
 	}
 
-	public int getOrDefault(VariableIdentifier identifier, int defaultValue) {
-		return StateUtils.getOrDefault(variables, identifier, defaultValue);
-	}
-
 	public void set(VariableIdentifier identifier, int value) {
 		variables.put(identifier, value);
 	}

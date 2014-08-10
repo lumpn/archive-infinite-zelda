@@ -20,8 +20,8 @@ public class DotBuilder {
 		out.format("loc%d [label=\"%d\"];\n", id, id);
 	}
 
-	public void addEdge(int start, int end, String script) {
-		out.format("loc%d -> loc%d [label=\"%s\"];\n", start, end, script);
+	public void addEdge(int start, int end, String label) {
+		out.format("loc%d -> loc%d [label=\"%s\"];\n", start, end, label);
 	}
 
 	private final PrintStream out;
