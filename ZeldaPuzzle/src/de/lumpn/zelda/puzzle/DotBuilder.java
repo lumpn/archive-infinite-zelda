@@ -8,6 +8,10 @@ public class DotBuilder {
 		this.out = System.out;
 	}
 
+	public DotBuilder(PrintStream out) {
+		this.out = out;
+	}
+
 	public void begin() {
 		out.println("digraph {");
 	}
