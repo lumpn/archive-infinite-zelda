@@ -34,6 +34,10 @@ public class Location {
 		return steps.get(state);
 	}
 
+	public void getSteps(List<Step> out) {
+		out.addAll(steps.values());
+	}
+
 	/**
 	 * Reach this location with the specified state
 	 */
@@ -69,12 +73,12 @@ public class Location {
 	}
 
 	private final int id;
-	
+
 	/**
 	 * outgoing transitions
 	 */
 	private final List<Transition> transitions = new ArrayList<Transition>();
-	
+
 	/**
 	 * steps that reached this location
 	 */

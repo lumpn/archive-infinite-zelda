@@ -12,8 +12,8 @@ import de.lumpn.util.CollectionUtils;
 
 public final class ZeldaPuzzle {
 
-	public static final int entranceId = 0;
-	public static final int exitId = 1;
+	public static final int ENTRANCE = 0;
+	public static final int EXIT = 1;
 
 	public ZeldaPuzzle(Map<Integer, Location> locations) {
 		this.locations = CollectionUtils.immutable(locations);
@@ -22,7 +22,7 @@ public final class ZeldaPuzzle {
 	public void crawl(List<State> initialStates, ProgressConsumer progressConsumer) {
 
 		// find entrance
-		Location entrance = locations.get(entranceId);
+		Location entrance = locations.get(ENTRANCE);
 		if (entrance == null) {
 			return; // invalid puzzle
 		}
@@ -69,7 +69,7 @@ public final class ZeldaPuzzle {
 
 			// keep track of terminals
 			Location location = step.location();
-			if (location.id() == exitId) {
+			if (location.id() == EXIT) {
 				terminalSteps.add(step);
 			}
 
@@ -145,6 +145,14 @@ public final class ZeldaPuzzle {
 		Location location = locations.get(locationId);
 		if (location == null) return null;
 		return location.getStep(state);
+	}
+
+	public List<Step> getSteps() {
+		List<Step> result = new ArrayList<Step>();
+		for (Location location : locations.values()) {
+			location.getSteps(result);
+		}
+		return result;
 	}
 
 	public void express(DotBuilder builder) {
