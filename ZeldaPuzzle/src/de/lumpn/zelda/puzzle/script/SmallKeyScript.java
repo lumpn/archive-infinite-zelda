@@ -33,7 +33,7 @@ public final class SmallKeyScript implements ZeldaScript {
 
 	@Override
 	public void express(DotTransitionBuilder builder) {
-		builder.setLabel("small\nkey");
+		builder.setLabel("small\\nkey");
 	}
 
 	private final VariableIdentifier keyIdentifier, keyStateIdentifier;

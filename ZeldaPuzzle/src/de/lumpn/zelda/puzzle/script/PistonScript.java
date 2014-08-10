@@ -28,10 +28,10 @@ public final class PistonScript implements ZeldaScript {
 	public void express(DotTransitionBuilder builder) {
 		switch (pistonColor) {
 			case ZeldaStates.SWITCH_RED:
-				builder.setLabel("red\npistons");
+				builder.setLabel("red\\npistons");
 				break;
 			case ZeldaStates.SWITCH_BLUE:
-				builder.setLabel("blue\npistons");
+				builder.setLabel("blue\\npistons");
 				break;
 			default:
 				assert false;
