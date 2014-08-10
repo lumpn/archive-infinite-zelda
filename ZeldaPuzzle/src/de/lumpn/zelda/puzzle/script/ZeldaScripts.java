@@ -7,6 +7,8 @@ public final class ZeldaScripts {
 
 	private static final String KEY_NAME = "small key";
 	private static final String SWITCH_NAME = "red/blue switch";
+	private static final String[] ITEM_NAME = { "bow", "flippers" };
+	private static final String[] OBSTACLE_NAME = { "statue", "water" };
 
 	public static SmallKeyScript createKey(VariableLookup lookup) {
 		return new SmallKeyScript(lookup.resolve(KEY_NAME), lookup);
@@ -28,4 +30,11 @@ public final class ZeldaScripts {
 		return new PistonScript(lookup.resolve(SWITCH_NAME), ZeldaStates.SWITCH_BLUE);
 	}
 
+	public static ItemScript createItem(int item, VariableLookup lookup) {
+		return new ItemScript(lookup.resolve(ITEM_NAME[item]), ITEM_NAME[item]);
+	}
+
+	public static ObstacleScript createObstacle(int requiredItem, VariableLookup lookup) {
+		return new ObstacleScript(lookup.resolve(ITEM_NAME[requiredItem]), OBSTACLE_NAME[requiredItem]);
+	}
 }

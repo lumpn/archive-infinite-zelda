@@ -12,4 +12,6 @@ public class ZeldaStates {
 	public static final int SWITCH_BLUE = 1;
 	public static final int SWITCH_DEFAULT = SWITCH_RED;
 
+	public static final int ITEM_AVAILABLE = 0;
+	public static final int ITEM_TAKEN = 1;
 }

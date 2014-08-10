@@ -7,6 +7,7 @@ public final class ZeldaConfiguration {
 
 	// environment
 	private final int numLocations = 10;
+	private final int numItems = 2;
 
 	// initialization
 	private final double initialGeneMedian = 2;
@@ -18,6 +19,10 @@ public final class ZeldaConfiguration {
 
 	public int randomLocation(Random random) {
 		return random.nextInt(numLocations);
+	}
+
+	public int randomItem(Random random) {
+		return random.nextInt(numItems);
 	}
 
 	public int calcNumInitialGenes(Random random) {
