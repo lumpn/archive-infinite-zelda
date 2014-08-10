@@ -9,12 +9,12 @@ public final class ZeldaConfiguration {
 	private final int numLocations = 10;
 
 	// initialization
-	private final double initialGeneMedian = numLocations; // linear
+	private final double initialGeneMedian = 2;
 
 	// complexification
 	private final double mutationCoefficient = 0.10; // ~10% ([0%, 75%])
 	private final double deletionCoefficient = 0.05; // ~5% ([0%, 35%])
-	private final double insertionCoefficient = 0.05; // ~5% ([0%, 35%])
+	private final double insertionCoefficient = 0.10; // ~10% ([0%, 75%])
 
 	public int randomLocation(Random random) {
 		return random.nextInt(numLocations);

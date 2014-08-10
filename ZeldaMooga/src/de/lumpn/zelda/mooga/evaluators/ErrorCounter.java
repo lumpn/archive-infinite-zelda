@@ -15,7 +15,6 @@ public final class ErrorCounter {
 	private static int countDeadEnds(ZeldaPuzzle puzzle) {
 		int deadEnds = 0;
 		List<Step> steps = puzzle.getSteps();
-		System.out.format("puzzle has %d steps\n", steps.size());
 		for (Step step : steps) {
 			if (step.distanceFromExit() == Step.UNREACHABLE) deadEnds++;
 		}

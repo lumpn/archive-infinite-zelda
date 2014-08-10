@@ -25,10 +25,10 @@ public class Main {
 		ZeldaIndividual individual = environment.evaluate(best);
 		System.out.println("test: " + individual);
 
-		ElitistEvolution evolution = new ElitistEvolution(100, 100, factory, environment);
+		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 1000; i++) {
 			System.out.print("gen " + i + ": ");
 			genomes = evolution.evolve(genomes, random);
 		}
