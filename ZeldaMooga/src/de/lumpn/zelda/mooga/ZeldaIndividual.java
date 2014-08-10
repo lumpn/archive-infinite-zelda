@@ -20,6 +20,8 @@ public final class ZeldaIndividual implements Individual {
 	}
 
 	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors, int shortestPathLength) {
+		assert genome != null;
+		assert puzzle != null;
 		this.genome = genome;
 		this.puzzle = puzzle;
 		this.numErrors = numErrors;
@@ -33,17 +35,19 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public int numAttributes() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return prefer(shortestPathLength != Step.UNREACHABLE);
+				return minimize(genome.size());
 			case 1:
-				return minimize(numErrors);
+				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 2:
+				return minimize(numErrors);
+			case 3:
 				return maximize(shortestPathLength);
 			default:
 				assert false;
@@ -52,8 +56,28 @@ public final class ZeldaIndividual implements Individual {
 	}
 
 	@Override
+	public int hashCode() {
+		return genome.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof ZeldaIndividual)) return false;
+		ZeldaIndividual other = (ZeldaIndividual) obj;
+		if (!genome.equals(other.genome)) return false; // TODO: compare genomes in canonical form
+		return true;
+	}
+
+	@Override
 	public String toString() {
-		return String.format("%f %f %f: %s", getScore(0), getScore(1), getScore(2), genome);
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < numAttributes(); i++) {
+			builder.append(getScore(i));
+			builder.append(" ");
+		}
+		return String.format("%s: %s", builder.toString(), genome);
 	}
 
 	private final ZeldaGenome genome;

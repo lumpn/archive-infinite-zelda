@@ -16,4 +16,10 @@ public interface Individual {
 	 * Score of specific attribute.
 	 */
 	public double getScore(int attribute);
+
+	@Override
+	public int hashCode();
+
+	@Override
+	public boolean equals(Object obj);
 }
