@@ -19,6 +19,7 @@ public class Location {
 	}
 
 	public void addTransition(Transition transition) {
+		assert transition.source() == this;
 		transitions.add(transition);
 	}
 
@@ -26,10 +27,16 @@ public class Location {
 		return transitions;
 	}
 
+	/**
+	 * See if the location has been reached with the specified state
+	 */
 	public Step getStep(State state) {
 		return steps.get(state);
 	}
 
+	/**
+	 * Reach this location with the specified state
+	 */
 	public Step createStep(State state) {
 		Step step = new Step(this, state);
 		Step previous = steps.put(state, step);
@@ -46,9 +53,30 @@ public class Location {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof Location)) return false;
+		Location other = (Location) obj;
+		if (id != other.id) return false;
+		return true;
+	}
+
 	private final int id;
-
+	
+	/**
+	 * outgoing transitions
+	 */
 	private final List<Transition> transitions = new ArrayList<Transition>();
-
+	
+	/**
+	 * steps that reached this location
+	 */
 	private final Map<State, Step> steps = new HashMap<State, Step>();
 }
