@@ -1,14 +1,18 @@
 package de.lumpn.zelda.puzzle;
 
+/**
+ * Immutable variable identifier.
+ */
 public final class VariableIdentifier {
 
-	public VariableIdentifier(int id) {
+	public VariableIdentifier(int id, String name) {
 		this.id = id;
+		this.name = name;
 	}
 
 	@Override
 	public int hashCode() {
-		return 31 + id;
+		return id;
 	}
 
 	@Override
@@ -22,8 +26,9 @@ public final class VariableIdentifier {
 
 	@Override
 	public String toString() {
-		return String.format("Var: %d", id);
+		return String.format("Var: %d (%s)", id, name);
 	}
 
 	private final int id;
+	private final String name;
 }

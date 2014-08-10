@@ -5,14 +5,15 @@ import java.util.Map;
 
 public final class VariableLookup {
 
-	public VariableIdentifier unique() {
-		return new VariableIdentifier(serial++);
+	public VariableIdentifier unique(String name) {
+		int uniqueId = serial++;
+		return new VariableIdentifier(uniqueId, name);
 	}
 
 	public VariableIdentifier resolve(String name) {
 		VariableIdentifier identifier = lookup.get(name);
 		if (identifier == null) {
-			identifier = unique();
+			identifier = unique(name);
 			lookup.put(name, identifier);
 		}
 		return identifier;
