@@ -3,8 +3,6 @@ package de.lumpn.zelda.mooga;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
-import de.lumpn.zelda.puzzle.script.IdentityScript;
-import de.lumpn.zelda.puzzle.script.ZeldaScript;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
 public final class ObstacleGene extends ZeldaGene {
