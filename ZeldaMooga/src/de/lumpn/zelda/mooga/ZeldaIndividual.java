@@ -2,7 +2,6 @@ package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Genome;
 import de.lumpn.mooga.Individual;
-import de.lumpn.zelda.puzzle.DotBuilder;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
@@ -43,7 +42,7 @@ public final class ZeldaIndividual implements Individual {
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(Math.max(genome.size() - 10, 0)); // TODO: minimize unused transitions
+				return minimize(genome.countErrors());
 			case 1:
 				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 2:
@@ -51,7 +50,7 @@ public final class ZeldaIndividual implements Individual {
 			case 3:
 				return maximize(shortestPathLength);
 			default:
-				assert false;
+				assert false;// TODO: minimize unused transitions
 		}
 		return 0;
 	}
@@ -86,9 +85,8 @@ public final class ZeldaIndividual implements Individual {
 		return String.format("%s: %s", builder.toString(), genome);
 	}
 
-	public void export() {
-		DotBuilder builder = new DotBuilder();
-		puzzle.express(builder);
+	public ZeldaPuzzle puzzle() {
+		return puzzle;
 	}
 
 	private final ZeldaGenome genome;

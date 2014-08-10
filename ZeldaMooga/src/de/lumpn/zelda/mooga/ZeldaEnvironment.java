@@ -22,25 +22,19 @@ public final class ZeldaEnvironment implements Environment {
 	public ZeldaIndividual evaluate(Genome g) {
 		ZeldaGenome genome = (ZeldaGenome) g;
 
-		// TODO: restrict number of key/doors etc because of exponential complexity.
-
 		// build puzzle
-		// System.out.println("building puzzle " + genome);
 		ZeldaPuzzleBuilder builder = new ZeldaPuzzleBuilder();
 		genome.express(builder);
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		// crawl puzzle
-		// System.out.println("crawling puzzle " + genome);
 		puzzle.crawl(Arrays.asList(initialState), maxSteps, progress);
 
 		// evaluate puzzle
-		// System.out.println("evaluating puzzle " + genome);
 		int numErrors = ErrorCounter.countErrors(puzzle);
 		int shortestPathLength = PathFinder.shortestPathLength(puzzle, initialState);
 
 		// create individual
-		// System.out.println("creating individual " + genome);
 		return new ZeldaIndividual(genome, puzzle, numErrors, shortestPathLength);
 	}
 

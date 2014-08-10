@@ -4,6 +4,9 @@ import java.util.Random;
 import de.lumpn.util.MathUtils;
 
 public final class ZeldaConfiguration {
+	
+	// constraints
+	public final int maxKeyDoors = 4;
 
 	// environment
 	private final int numLocations = 10;

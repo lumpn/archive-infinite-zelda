@@ -52,6 +52,14 @@ public final class ZeldaGenome implements Genome {
 		return genes.size();
 	}
 
+	public int countErrors() {
+		int numErrors = 0;
+		for (ZeldaGene gene : genes) {
+			numErrors += gene.countErrors(genes);
+		}
+		return numErrors;
+	}
+
 	public void express(ZeldaPuzzleBuilder builder) {
 		for (ZeldaGene gene : genes) {
 			gene.express(builder);

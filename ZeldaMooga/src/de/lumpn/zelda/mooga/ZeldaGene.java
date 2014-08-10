@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 
@@ -23,6 +24,10 @@ public abstract class ZeldaGene implements Gene {
 			location = configuration.randomLocation(random);
 		} while (location == forbidden);
 		return location;
+	}
+
+	public int countErrors(List<ZeldaGene> genes) {
+		return 0;
 	}
 
 	public abstract void express(ZeldaPuzzleBuilder builder);

@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
@@ -27,6 +28,18 @@ public final class KeyDoorGene extends ZeldaGene {
 	@Override
 	public KeyDoorGene mutate(Random random) {
 		return new KeyDoorGene(getConfiguration(), random);
+	}
+
+	@Override
+	public int countErrors(List<ZeldaGene> genes) {
+
+		// count key/door scripts
+		int num = 0;
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof KeyDoorGene) num++;
+		}
+
+		return Math.max(0, num - getConfiguration().maxKeyDoors);
 	}
 
 	@Override

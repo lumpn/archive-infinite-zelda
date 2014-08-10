@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
@@ -23,6 +24,21 @@ public final class ItemGene extends ZeldaGene {
 	@Override
 	public ItemGene mutate(Random random) {
 		return new ItemGene(getConfiguration(), random);
+	}
+
+	@Override
+	public int countErrors(List<ZeldaGene> genes) {
+
+		// find duplicates
+		int numErrors = 0;
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof ItemGene) {
+				ItemGene other = (ItemGene) gene;
+				if (other != this && other.item == item) numErrors++;
+			}
+		}
+
+		return numErrors;
 	}
 
 	@Override
