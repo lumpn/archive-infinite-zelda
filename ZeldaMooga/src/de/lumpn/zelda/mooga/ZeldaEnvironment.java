@@ -3,7 +3,8 @@ package de.lumpn.zelda.mooga;
 import java.util.Arrays;
 import de.lumpn.mooga.Environment;
 import de.lumpn.mooga.Genome;
-import de.lumpn.report.ConsoleProgressBar;
+import de.lumpn.report.MockProgressBar;
+import de.lumpn.report.ProgressConsumer;
 import de.lumpn.zelda.mooga.evaluators.ErrorCounter;
 import de.lumpn.zelda.mooga.evaluators.PathFinder;
 import de.lumpn.zelda.puzzle.State;
@@ -28,7 +29,7 @@ public final class ZeldaEnvironment implements Environment {
 
 		// crawl puzzle
 		System.out.println("crawling puzzle " + genome);
-		puzzle.crawl(Arrays.asList(initialState), new ConsoleProgressBar());
+		puzzle.crawl(Arrays.asList(initialState), progress);
 
 		// evaluate puzzle
 		System.out.println("evaluating puzzle " + genome);
@@ -41,4 +42,5 @@ public final class ZeldaEnvironment implements Environment {
 	}
 
 	private final State initialState;
+	private static final ProgressConsumer progress = new MockProgressBar();
 }

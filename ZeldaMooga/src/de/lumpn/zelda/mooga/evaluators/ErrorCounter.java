@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga.evaluators;
 
+import java.util.List;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
@@ -13,7 +14,9 @@ public final class ErrorCounter {
 
 	private static int countDeadEnds(ZeldaPuzzle puzzle) {
 		int deadEnds = 0;
-		for (Step step : puzzle.getSteps()) {
+		List<Step> steps = puzzle.getSteps();
+		System.out.format("puzzle has %d steps\n", steps.size());
+		for (Step step : steps) {
 			if (step.distanceFromExit() == Step.UNREACHABLE) deadEnds++;
 		}
 

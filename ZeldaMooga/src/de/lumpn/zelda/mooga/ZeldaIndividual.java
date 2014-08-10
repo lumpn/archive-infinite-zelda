@@ -53,7 +53,7 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public String toString() {
-		return String.format("%s", puzzle);
+		return String.format("%f %f %f: %s", getScore(0), getScore(1), getScore(2), genome);
 	}
 
 	private final ZeldaGenome genome;

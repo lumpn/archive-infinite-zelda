@@ -10,11 +10,9 @@ import de.lumpn.mooga.selection.BinaryTournamentSelection;
 
 public class ElitistEvolution {
 
-	public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory,
-			Environment environment) {
+	public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory, Environment environment) {
 		this.archiveSize = archiveSize;
-		this.evolution = new Evolution(populationSize, 0.5, 0.4, factory,
-				new BinaryTournamentSelection(new Random()));
+		this.evolution = new Evolution(populationSize, 0.5, 0.4, factory, new BinaryTournamentSelection(new Random()));
 		this.environment = environment;
 		this.ranking = new CrowdingDistanceRanking();
 	}
@@ -43,7 +41,7 @@ public class ElitistEvolution {
 
 		// update archive
 		archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
-		// print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
+		print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
 		System.out.println(rankedPopulation.size() + " distinct individuals");
 		Individual best = rankedPopulation.get(0);
 		System.out.print("best: ");
