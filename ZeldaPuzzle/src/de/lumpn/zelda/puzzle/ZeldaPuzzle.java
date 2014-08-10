@@ -155,6 +155,10 @@ public final class ZeldaPuzzle {
 		return result;
 	}
 
+	public List<Location> getLocations() {
+		return new ArrayList<Location>(locations.values());
+	}
+
 	public void express(DotBuilder builder) {
 		builder.begin();
 		for (Location location : locations.values()) {

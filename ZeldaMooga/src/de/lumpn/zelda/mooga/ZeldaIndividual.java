@@ -15,17 +15,23 @@ public final class ZeldaIndividual implements Individual {
 		return value;
 	}
 
+	private static double maximize(double value) {
+		return value;
+	}
+
 	private static int prefer(boolean value) {
 		return value ? 1 : 0;
 	}
 
-	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors, int shortestPathLength) {
+	public ZeldaIndividual(ZeldaGenome genome, ZeldaPuzzle puzzle, int numErrors, int shortestPathLength, double revisitFactor, double branchFactor) {
 		assert genome != null;
 		assert puzzle != null;
 		this.genome = genome;
 		this.puzzle = puzzle;
 		this.numErrors = numErrors;
 		this.shortestPathLength = shortestPathLength;
+		this.revisitFactor = revisitFactor;
+		this.branchFactor = branchFactor;
 	}
 
 	@Override
@@ -35,20 +41,24 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public int numAttributes() {
-		return 4;
+		return 6;
 	}
 
 	@Override
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(genome.countErrors());
+				return minimize(Math.max(0, genome.size() - 10)); // allow some genes
 			case 1:
 				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 2:
 				return minimize(numErrors);
 			case 3:
 				return maximize(shortestPathLength);
+			case 4:
+				return maximize(revisitFactor);
+			case 5:
+				return maximize(branchFactor);
 			default:
 				assert false;// TODO: minimize unused transitions
 		}
@@ -96,4 +106,6 @@ public final class ZeldaIndividual implements Individual {
 	// statistics
 	private final int numErrors;
 	private final int shortestPathLength;
+	private final double revisitFactor;
+	private final double branchFactor;
 }

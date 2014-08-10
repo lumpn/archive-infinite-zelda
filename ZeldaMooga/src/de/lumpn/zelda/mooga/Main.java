@@ -27,10 +27,17 @@ public class Main {
 		ZeldaIndividual individual = environment.evaluate(example);
 		System.out.println("test: " + individual);
 
+		// TODO: implement staged multi objective optimization
+		// example:
+		// important attributes: goal reachable
+		// quite important attributes: minimize genome errors, minimize puzzle errors
+		// less important attributes: maximize shortestPathLength, maximize revisitFactor, maximize branchFactor
+		// least important attribute: minimize genome
+		
 		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 100; i++) {
 			System.out.println("gen " + i);
 			genomes = evolution.evolve(genomes, random);
 		}
