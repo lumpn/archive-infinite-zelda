@@ -43,6 +43,7 @@ public class ElitistEvolution {
 		// update archive
 		archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
 		print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
+		printStats(rankedPopulation);
 		System.out.println(rankedPopulation.size() + " distinct individuals");
 
 		// evolve population
@@ -64,6 +65,46 @@ public class ElitistEvolution {
 			System.out.println(individual);
 		}
 		System.out.println("----------------------------------------------------");
+	}
+
+	private static void printStats(Iterable<Individual> individuals) {
+		List<Double> mins = new ArrayList<Double>();
+		List<Double> maxs = new ArrayList<Double>();
+		List<Double> avgs = new ArrayList<Double>();
+
+		int count = 0;
+		int attributes = 0;
+		for (Individual individual : individuals) {
+
+			// initialize lists
+			if (mins.isEmpty()) {
+				attributes = individual.numAttributes();
+				mins.addAll(repeat(Double.MAX_VALUE, attributes));
+				maxs.addAll(repeat(Double.MIN_VALUE, attributes));
+				avgs.addAll(repeat(0, attributes));
+			}
+
+			// record stats
+			for (int i = 0; i < attributes; i++) {
+				double score = individual.getScore(i);
+				mins.set(i, Math.min(mins.get(i), score));
+				maxs.set(i, Math.max(maxs.get(i), score));
+				avgs.set(i, avgs.get(i) + score);
+				count++;
+			}
+		}
+
+		// print stats
+		for (int i = 0; i < attributes; i++) {
+			System.out.format("%d: min %f, max %f, mid %f, avg %f\n", i, mins.get(i), maxs.get(i), (mins.get(i) + maxs.get(i)) / 2, avgs.get(i) / count);
+		}
+	}
+
+	private static List<Double> repeat(double value, int times) {
+		List<Double> result = new ArrayList<Double>(times);
+		for (int i = 0; i < times; i++)
+			result.add(value);
+		return result;
 	}
 
 	private final int archiveSize;
