@@ -32,6 +32,8 @@ public final class ZeldaIndividual implements Individual {
 		assert puzzle != null;
 		this.genome = genome;
 		this.puzzle = puzzle;
+		this.genomeSize = genome.size();
+		this.genomeErrors = genome.countErrors();
 		this.numErrors = numErrors;
 		this.shortestPathLength = shortestPathLength;
 		this.revisitFactor = revisitFactor;
@@ -45,7 +47,7 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public int numAttributes() {
-		return 7;
+		return 10;
 	}
 
 	@Override
@@ -54,17 +56,23 @@ public final class ZeldaIndividual implements Individual {
 			case 0:
 				return 10;
 			case 1:
-				return 70;
+				return 50;
 			case 2:
-				return 70;
+				return 50;
 			case 3:
 				return 100;
 			case 4:
-				return 50;
+				return 70;
 			case 5:
 				return 30;
 			case 6:
 				return 30;
+			case 7:
+				return 30;
+			case 8:
+				return 90;
+			case 9:
+				return 90;
 			default:
 				assert false;
 		}
@@ -75,9 +83,9 @@ public final class ZeldaIndividual implements Individual {
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(genome.size());
+				return minimize(genomeSize);
 			case 1:
-				return minimize(genome.countErrors());
+				return minimize(genomeErrors);
 			case 2:
 				return minimize(numErrors);
 			case 3:
@@ -88,6 +96,12 @@ public final class ZeldaIndividual implements Individual {
 				return maximize(revisitFactor);
 			case 6:
 				return maximize(branchFactor);
+			case 7:
+				return maximize(shortestPathLength);
+			case 8:
+				return prefer(genomeErrors < 10);
+			case 9:
+				return prefer(numErrors < 10);
 			default:
 				assert false;// TODO: minimize unused transitions
 		}
@@ -134,6 +148,8 @@ public final class ZeldaIndividual implements Individual {
 	private final ZeldaPuzzle puzzle;
 
 	// statistics
+	private final int genomeSize;
+	private final int genomeErrors;
 	private final int numErrors;
 	private final int shortestPathLength;
 	private final double revisitFactor;

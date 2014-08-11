@@ -18,7 +18,7 @@ public interface Individual {
 	public int getPriority(int attribute);
 
 	/**
-	 * Score of specific attribute.
+	 * Score of specific attribute. Make sure getting these values is fast (use cache)!
 	 */
 	public double getScore(int attribute);
 

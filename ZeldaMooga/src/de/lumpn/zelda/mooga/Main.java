@@ -27,7 +27,7 @@ public class Main {
 		ZeldaIndividual individual = environment.evaluate(example);
 		System.out.println("test: " + individual);
 
-		ElitistEvolution evolution = new ElitistEvolution(100, 10000, factory, environment);
+		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
 

@@ -24,12 +24,14 @@ public class ElitistEvolution {
 	public List<Genome> evolve(List<Genome> genomes, Random random) {
 
 		// spawn individuals
+		long t1 = System.currentTimeMillis();
 		List<Individual> population = new ArrayList<Individual>();
 		for (Genome genome : genomes) {
 			// TODO: only evaluate genomes not previously seen
 			Individual individual = environment.evaluate(genome);
 			population.add(individual);
 		}
+		long t2 = System.currentTimeMillis();
 
 		// combine with archive
 		population.addAll(archive);
@@ -38,12 +40,14 @@ public class ElitistEvolution {
 		population = new ArrayList<Individual>(new HashSet<Individual>(population));
 
 		// rank population
+		long t3 = System.currentTimeMillis();
 		List<Individual> rankedPopulation = ranking.rank(population);
+		long t4 = System.currentTimeMillis();
 
 		// update archive
 		archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
 		print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
-		printStats(rankedPopulation);
+		printStats(rankedPopulation, t1, t2, t3, t4);
 		System.out.println(rankedPopulation.size() + " distinct individuals");
 
 		// evolve population
@@ -67,7 +71,7 @@ public class ElitistEvolution {
 		System.out.println("----------------------------------------------------");
 	}
 
-	private static void printStats(Iterable<Individual> individuals) {
+	private static void printStats(Iterable<Individual> individuals, long t1, long t2, long t3, long t4) {
 		List<Double> mins = new ArrayList<Double>();
 		List<Double> maxs = new ArrayList<Double>();
 		List<Double> avgs = new ArrayList<Double>();
@@ -98,6 +102,9 @@ public class ElitistEvolution {
 		for (int i = 0; i < attributes; i++) {
 			System.out.format("%d: min %f, max %f, mid %f, avg %f\n", i, mins.get(i), maxs.get(i), (mins.get(i) + maxs.get(i)) / 2, avgs.get(i) / count);
 		}
+
+		// print times
+		System.out.format("%dms eval, %dms rank, %dms total\n", t2 - t1, t4 - t3, t4 - t1);
 	}
 
 	private static List<Double> repeat(double value, int times) {
