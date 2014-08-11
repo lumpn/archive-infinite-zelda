@@ -31,7 +31,7 @@ public final class ZeldaEnvironment implements Environment {
 		ZeldaPuzzle puzzle = builder.puzzle();
 
 		// crawl puzzle
-		if (genomeErrors < 3) { // allow some genetic erros
+		if (genomeErrors < 10) { // allow some genetic errors
 			puzzle.crawl(Arrays.asList(initialState), maxSteps, progress);
 		}
 

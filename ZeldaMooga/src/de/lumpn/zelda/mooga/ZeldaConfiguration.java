@@ -6,7 +6,7 @@ import de.lumpn.util.MathUtils;
 public final class ZeldaConfiguration {
 	
 	// constraints
-	public final int maxKeyDoors = 4;
+	public final int maxKeyDoors = 2;
 
 	// environment
 	private final int numLocations = 10;
