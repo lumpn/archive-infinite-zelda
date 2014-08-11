@@ -7,8 +7,8 @@ public final class ZeldaScripts {
 
 	private static final String KEY_NAME = "small key";
 	private static final String SWITCH_NAME = "red/blue switch";
-	private static final String[] ITEM_NAME = { "bow", "flippers" };
-	private static final String[] OBSTACLE_NAME = { "statue", "water" };
+	private static final String[] ITEM_NAME = { "sword", "shield", "boomerang", "bow", "flippers", "feather", "bombs" };
+	private static final String[] OBSTACLE_NAME = { "bush", "trap", "orb", "statue", "water", "gap", "crack" };
 
 	public static SmallKeyScript createKey(VariableLookup lookup) {
 		return new SmallKeyScript(lookup.resolve(KEY_NAME), lookup);

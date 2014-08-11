@@ -10,7 +10,7 @@ public final class ZeldaConfiguration {
 
 	// environment
 	private final int numLocations = 10;
-	private final int numItems = 2;
+	private final int numItems = 4;
 
 	// initialization
 	private final double initialGeneMedian = 2;

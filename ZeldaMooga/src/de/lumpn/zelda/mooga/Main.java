@@ -30,6 +30,9 @@ public class Main {
 		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
+		
+		// TODO: replace fixed weight multirank optimization by dynamic randomized weighting
+		// i.e. in some generations prefer some attribute over others
 
 		// evolve
 		for (int i = 0; i < 1000; i++) {
@@ -38,7 +41,7 @@ public class Main {
 
 			// target reached?
 			ZeldaIndividual best = (ZeldaIndividual) evolution.getBest();
-			if (best != null && best.getScore(4) == 20) break;
+			if (best != null && best.getScore(7) == 20) break;
 		}
 
 		// refine

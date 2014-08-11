@@ -91,7 +91,7 @@ public final class ZeldaIndividual implements Individual {
 			case 3:
 				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 4:
-				return target(shortestPathLength, 20);
+				return prefer(shortestPathLength > 10);
 			case 5:
 				return maximize(revisitFactor);
 			case 6:
