@@ -97,8 +97,8 @@ public final class CrowdingDistanceRanking implements Ranking {
 			}
 
 			// update extremes
-			min.addCrowdingDistance(1.0);
-			max.addCrowdingDistance(1.0);
+			min.addCrowdingDistance(2.0);
+			max.addCrowdingDistance(2.0);
 		}
 
 		// sort by descending crowding distance
