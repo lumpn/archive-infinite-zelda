@@ -27,18 +27,23 @@ public class Main {
 		ZeldaIndividual individual = environment.evaluate(example);
 		System.out.println("test: " + individual);
 
-		// TODO: implement staged multi objective optimization
-		// example:
-		// important attributes: goal reachable
-		// quite important attributes: minimize genome errors, minimize puzzle errors
-		// less important attributes: maximize shortestPathLength, maximize revisitFactor, maximize branchFactor
-		// least important attribute: minimize genome
-		
-		ElitistEvolution evolution = new ElitistEvolution(100, 1000, factory, environment);
+		ElitistEvolution evolution = new ElitistEvolution(100, 10000, factory, environment);
 
 		List<Genome> genomes = evolution.initialize();
-		for (int i = 0; i < 100; i++) {
+
+		// evolve
+		for (int i = 0; i < 1000; i++) {
 			System.out.println("gen " + i);
+			genomes = evolution.evolve(genomes, random);
+
+			// target reached?
+			ZeldaIndividual best = (ZeldaIndividual) evolution.getBest();
+			if (best != null && best.getScore(4) == 20) break;
+		}
+
+		// refine
+		for (int i = 0; i < 50; i++) {
+			System.out.println("refine " + i);
 			genomes = evolution.evolve(genomes, random);
 		}
 
@@ -48,7 +53,7 @@ public class Main {
 		ZeldaPuzzle puzzle = best.puzzle();
 		DotBuilder builder = new DotBuilder();
 		puzzle.express(builder);
-		
+
 		// TODO: output genome to puzzle unit test (puzzle building statements)
 	}
 }
