@@ -11,6 +11,11 @@ public interface Individual {
 	 * Number of attributes evaluated.
 	 */
 	public int numAttributes();
+	
+	/**
+	 * Priority of specific attribute for multi stage multi object optimization
+	 */
+	public int getPriority(int attribute);
 
 	/**
 	 * Score of specific attribute.

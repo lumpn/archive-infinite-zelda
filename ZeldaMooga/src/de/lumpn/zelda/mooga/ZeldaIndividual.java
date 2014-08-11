@@ -15,6 +15,10 @@ public final class ZeldaIndividual implements Individual {
 		return value;
 	}
 
+	private static int target(int value, int target) {
+		return maximize(target - Math.abs(value - target));
+	}
+
 	private static double maximize(double value) {
 		return value;
 	}
@@ -41,23 +45,48 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public int numAttributes() {
-		return 6;
+		return 7;
+	}
+
+	@Override
+	public int getPriority(int attribute) {
+		switch (attribute) {
+			case 0:
+				return 10;
+			case 1:
+				return 70;
+			case 2:
+				return 70;
+			case 3:
+				return 100;
+			case 4:
+				return 50;
+			case 5:
+				return 30;
+			case 6:
+				return 30;
+			default:
+				assert false;
+		}
+		return 0;
 	}
 
 	@Override
 	public double getScore(int attribute) {
 		switch (attribute) {
 			case 0:
-				return minimize(Math.max(0, genome.size() - 10)); // allow some genes
+				return minimize(genome.size());
 			case 1:
-				return prefer(shortestPathLength != Step.UNREACHABLE);
+				return minimize(genome.countErrors());
 			case 2:
 				return minimize(numErrors);
 			case 3:
-				return maximize(shortestPathLength);
+				return prefer(shortestPathLength != Step.UNREACHABLE);
 			case 4:
-				return maximize(revisitFactor);
+				return target(shortestPathLength, 20);
 			case 5:
+				return maximize(revisitFactor);
+			case 6:
 				return maximize(branchFactor);
 			default:
 				assert false;// TODO: minimize unused transitions
@@ -67,7 +96,7 @@ public final class ZeldaIndividual implements Individual {
 
 	@Override
 	public boolean isElite() {
-		return (numErrors == 0) && (shortestPathLength > 0);
+		return (numErrors == 0) && (shortestPathLength > 1);
 	}
 
 	@Override
@@ -92,6 +121,7 @@ public final class ZeldaIndividual implements Individual {
 			builder.append(getScore(i));
 			builder.append(" ");
 		}
+		builder.append(String.format("(%d)", puzzle.getSteps().size()));
 		return String.format("%s: %s", builder.toString(), genome);
 	}
 

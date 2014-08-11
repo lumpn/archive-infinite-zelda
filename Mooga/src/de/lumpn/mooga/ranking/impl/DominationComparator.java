@@ -14,17 +14,27 @@ public final class DominationComparator implements Comparator<Individual> {
 
 		boolean aIsPartiallyBetter = false;
 		boolean bIsPartiallyBetter = false;
+		int aPriority = Integer.MIN_VALUE;
+		int bPriority = Integer.MIN_VALUE;
 
 		// compare each score
 		int numScores = a.numAttributes();
 		for (int i = 0; i < numScores; i++) {
 			double aScore = a.getScore(i);
 			double bScore = b.getScore(i);
+			int priority = a.getPriority(i);
 			if (aScore > bScore) {
 				aIsPartiallyBetter = true;
+				aPriority = Math.max(aPriority, priority);
 			} else if (aScore < bScore) {
 				bIsPartiallyBetter = true;
+				bPriority = Math.max(bPriority, priority);
 			}
+		}
+
+		// look at priorities
+		if (aPriority != bPriority) {
+			return Integer.compare(aPriority, bPriority);
 		}
 
 		// determine domination
