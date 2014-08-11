@@ -81,8 +81,8 @@ public final class PistonGene extends ZeldaGene {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + color.hashCode();
-		result = prime * result + pistonEnd;
 		result = prime * result + pistonStart;
+		result = prime * result + pistonEnd;
 		return result;
 	}
 
@@ -93,8 +93,8 @@ public final class PistonGene extends ZeldaGene {
 		if (!(obj instanceof PistonGene)) return false;
 		PistonGene other = (PistonGene) obj;
 		if (color != other.color) return false;
-		if (pistonEnd != other.pistonEnd) return false;
 		if (pistonStart != other.pistonStart) return false;
+		if (pistonEnd != other.pistonEnd) return false;
 		return true;
 	}
 

@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.IdentityScript;
@@ -20,6 +21,21 @@ public final class OneWayGene extends ZeldaGene {
 	}
 
 	@Override
+	public int countErrors(List<ZeldaGene> genes) {
+
+		// find duplicates
+		int numErrors = 0;
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof OneWayGene) {
+				OneWayGene other = (OneWayGene) gene;
+				if (other != this && other.equals(this)) numErrors++;
+			}
+		}
+
+		return numErrors;
+	}
+
+	@Override
 	public OneWayGene mutate(Random random) {
 		return new OneWayGene(getConfiguration(), random);
 	}
@@ -33,8 +49,8 @@ public final class OneWayGene extends ZeldaGene {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + wayEnd;
 		result = prime * result + wayStart;
+		result = prime * result + wayEnd;
 		return result;
 	}
 
@@ -44,8 +60,8 @@ public final class OneWayGene extends ZeldaGene {
 		if (obj == null) return false;
 		if (!(obj instanceof OneWayGene)) return false;
 		OneWayGene other = (OneWayGene) obj;
-		if (wayEnd != other.wayEnd) return false;
 		if (wayStart != other.wayStart) return false;
+		if (wayEnd != other.wayEnd) return false;
 		return true;
 	}
 

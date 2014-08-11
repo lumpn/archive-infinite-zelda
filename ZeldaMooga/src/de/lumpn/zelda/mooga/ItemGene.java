@@ -21,6 +21,10 @@ public final class ItemGene extends ZeldaGene {
 		this.itemLocation = itemLocation;
 	}
 
+	public int item() {
+		return item;
+	}
+
 	@Override
 	public ItemGene mutate(Random random) {
 		return new ItemGene(getConfiguration(), random);
@@ -34,11 +38,20 @@ public final class ItemGene extends ZeldaGene {
 		for (ZeldaGene gene : genes) {
 			if (gene instanceof ItemGene) {
 				ItemGene other = (ItemGene) gene;
-				if (other != this && other.item == item) numErrors++;
+				if (other != this && other.equals(this)) numErrors++;
 			}
 		}
 
-		return numErrors;
+		// find obstacle
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof ObstacleGene) {
+				ObstacleGene other = (ObstacleGene) gene;
+				if (other.requiredItem() == item) return numErrors;
+			}
+		}
+
+		// no obstacle -> useless item
+		return numErrors + 1;
 	}
 
 	@Override

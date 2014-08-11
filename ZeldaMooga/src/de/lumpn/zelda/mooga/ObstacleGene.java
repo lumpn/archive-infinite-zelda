@@ -17,6 +17,10 @@ public final class ObstacleGene extends ZeldaGene {
 		this.obstacleEnd = Math.max(a, b);
 	}
 
+	public int requiredItem() {
+		return requiredItem;
+	}
+
 	@Override
 	public ObstacleGene mutate(Random random) {
 		return new ObstacleGene(getConfiguration(), random);
@@ -24,8 +28,16 @@ public final class ObstacleGene extends ZeldaGene {
 
 	@Override
 	public int countErrors(List<ZeldaGene> genes) {
-		// TODO: find item
-		return 0;
+
+		// find item
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof ItemGene) {
+				ItemGene other = (ItemGene) gene;
+				if (other.item() == requiredItem) return 0;
+			}
+		}
+
+		return 1;
 	}
 
 	@Override

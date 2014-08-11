@@ -26,9 +26,7 @@ public abstract class ZeldaGene implements Gene {
 		return location;
 	}
 
-	public int countErrors(List<ZeldaGene> genes) {
-		return 0;
-	}
+	public abstract int countErrors(List<ZeldaGene> genes);
 
 	public abstract void express(ZeldaPuzzleBuilder builder);
 

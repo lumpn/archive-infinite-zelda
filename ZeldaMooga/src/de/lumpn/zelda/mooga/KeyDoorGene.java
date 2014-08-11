@@ -58,8 +58,8 @@ public final class KeyDoorGene extends ZeldaGene {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + keyLocation;
-		result = prime * result + doorEnd;
 		result = prime * result + doorStart;
+		result = prime * result + doorEnd;
 		return result;
 	}
 
@@ -70,8 +70,8 @@ public final class KeyDoorGene extends ZeldaGene {
 		if (!(obj instanceof KeyDoorGene)) return false;
 		KeyDoorGene other = (KeyDoorGene) obj;
 		if (keyLocation != other.keyLocation) return false;
-		if (doorEnd != other.doorEnd) return false;
 		if (doorStart != other.doorStart) return false;
+		if (doorEnd != other.doorEnd) return false;
 		return true;
 	}
 

@@ -1,5 +1,6 @@
 package de.lumpn.zelda.mooga;
 
+import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
@@ -15,6 +16,18 @@ public final class SwitchGene extends ZeldaGene {
 	@Override
 	public SwitchGene mutate(Random random) {
 		return new SwitchGene(getConfiguration(), random);
+	}
+
+	@Override
+	public int countErrors(List<ZeldaGene> genes) {
+
+		// find a piston
+		for (ZeldaGene gene : genes) {
+			if (gene instanceof PistonGene) return 0;
+		}
+
+		// no piston -> useless switch
+		return 1;
 	}
 
 	@Override
