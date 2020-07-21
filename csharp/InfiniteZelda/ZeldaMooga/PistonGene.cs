@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
@@ -8,7 +8,7 @@ import de.lumpn.zelda.puzzle.script.IdentityScript;
 import de.lumpn.zelda.puzzle.script.ZeldaScript;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
-public final class PistonGene extends ZeldaGene {
+public sealed class PistonGene extends ZeldaGene {
 
 	private static enum Color {
 		COLOR_RED, COLOR_BLUE,
@@ -106,10 +106,10 @@ public final class PistonGene extends ZeldaGene {
 	/**
 	 * Piston color
 	 */
-	private final Color color;
+	private readonly Color color;
 
 	/**
 	 * Piston transition location
 	 */
-	private final int pistonStart, pistonEnd;
+	private readonly int pistonStart, pistonEnd;
 }

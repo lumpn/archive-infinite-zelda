@@ -1,8 +1,8 @@
-package de.lumpn.zelda.mooga.evaluators;
+﻿package de.lumpn.zelda.mooga.evaluators;
 
 import de.lumpn.zelda.puzzle.Step;
 
-public final class Path {
+public sealed class Path {
 
 	public Path(Path prefix, Step step) {
 		this.prefix = prefix;
@@ -22,6 +22,6 @@ public final class Path {
 		return prefix.length() + 1;
 	}
 
-	private final Path prefix;
-	private final Step step;
+	private readonly Path prefix;
+	private readonly Step step;
 }

@@ -1,29 +1,30 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Lumpn.Utils;
+using System.Diagnostics;
 
 namespace Lumpn.Mooga
 {
-    public sealed class BinaryTournamentSelection : ISelection
+    public sealed class BinaryTournamentSelection : Selection
     {
-        public BinaryTournamentSelection(IRandom random)
+        public BinaryTournamentSelection(Random random)
         {
             this.random = random;
         }
 
-        public IIndividual Select(List<IIndividual> individuals)
+        public Individual Select(List<Individual> individuals)
         {
             int size = individuals.Count;
             int pos1 = random.NextInt(size);
             int pos2 = random.NextInt(size);
-            int pos = Math.Min(pos1, pos2);
+            int pos = System.Math.Min(pos1, pos2);
             return individuals[pos];
         }
 
-        public List<IIndividual> Select(List<IIndividual> individuals, int count)
+        public List<Individual> Select(List<Individual> individuals, int count)
         {
-            Debug.Assert(count < individuals.Count);
+            System.Diagnostics.Debug.Assert(count < individuals.Count);
 
-            var result = new List<IIndividual>();
+            var result = new List<Individual>();
             while (result.Count < count)
             {
                 var individual = Select(individuals);
@@ -35,6 +36,6 @@ namespace Lumpn.Mooga
             return result;
         }
 
-        private readonly IRandom random;
+        private readonly Random random;
     }
 }

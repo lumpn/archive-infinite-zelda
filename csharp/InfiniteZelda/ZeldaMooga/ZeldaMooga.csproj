@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ZeldaMooga</RootNamespace>
     <AssemblyName>ZeldaMooga</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <BaseIntermediateOutputPath>C:\Work\MonoDevelop\bin</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -32,12 +32,9 @@
     <IntermediateOutputPath>obj\x86\Release</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KeyDoorGene.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ZeldaMooga.cs" />
     <Compile Include="ObstacleGene.cs" />
     <Compile Include="OneWayGene.cs" />
     <Compile Include="Path.cs" />
@@ -62,6 +59,18 @@
     <ProjectReference Include="..\Mooga\Mooga.csproj">
       <Project>{00D7D97F-8F40-47D3-807A-9F242F1B7BA0}</Project>
       <Name>Mooga</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZeldaLayout\ZeldaLayout.csproj">
+      <Project>{A4F351FA-78A5-4518-A0CE-F9AA369FFC07}</Project>
+      <Name>ZeldaLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{2CA9113E-A497-473F-B74F-F0AED4E9764F}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZeldaPuzzle\ZeldaPuzzle.csproj">
+      <Project>{A1C8364B-3AEE-4A38-9C79-9A47621FF767}</Project>
+      <Name>ZeldaPuzzle</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

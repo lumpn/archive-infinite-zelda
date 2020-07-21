@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
@@ -73,5 +73,5 @@ public sealed class TwoWayGene : ZeldaGene {
 	}
 
 	// transition location of one-way
-	private final int wayStart, wayEnd;
+	private readonly int wayStart, wayEnd;
 }

@@ -1,14 +1,12 @@
-﻿using System;
-
-namespace Lumpn.Mooga
+﻿namespace Lumpn.Utils
 {
-    public sealed class SystemRandom : IRandom
+    public sealed class SystemRandom : Random
     {
-        private readonly Random random;
+        private readonly System.Random random;
 
         public SystemRandom(int seed)
         {
-            random = new Random(seed);
+            random = new System.Random(seed);
         }
 
         public int NextInt(int max)

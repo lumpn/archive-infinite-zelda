@@ -1,0 +1,2 @@
+W:\Github\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.csprojAssemblyReference.cache
+W:\Github\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.csproj.CoreCompileInputs.cache

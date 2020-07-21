@@ -1,11 +1,11 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.IdentityScript;
 
-public final class OneWayGene extends ZeldaGene {
+public sealed class OneWayGene extends ZeldaGene {
 
 	public OneWayGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
@@ -71,5 +71,5 @@ public final class OneWayGene extends ZeldaGene {
 	}
 
 	// transition location of one-way
-	private final int wayStart, wayEnd;
+	private readonly int wayStart, wayEnd;
 }

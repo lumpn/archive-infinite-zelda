@@ -1,11 +1,11 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import de.lumpn.mooga.Genome;
 import de.lumpn.mooga.Individual;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
-public final class ZeldaIndividual implements Individual {
+public sealed class ZeldaIndividual implements Individual {
 
 	private static int minimize(int value) {
 		return -value;
@@ -143,15 +143,15 @@ public final class ZeldaIndividual implements Individual {
 		return puzzle;
 	}
 
-	private final ZeldaGenome genome;
+	private readonly ZeldaGenome genome;
 
-	private final ZeldaPuzzle puzzle;
+	private readonly ZeldaPuzzle puzzle;
 
 	// statistics
-	private final int genomeSize;
-	private final int genomeErrors;
-	private final int numErrors;
-	private final int shortestPathLength;
-	private final double revisitFactor;
-	private final double branchFactor;
+	private readonly int genomeSize;
+	private readonly int genomeErrors;
+	private readonly int numErrors;
+	private readonly int shortestPathLength;
+	private readonly double revisitFactor;
+	private readonly double branchFactor;
 }

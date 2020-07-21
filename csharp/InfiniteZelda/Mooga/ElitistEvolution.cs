@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Lumpn.Mooga
@@ -13,12 +13,12 @@ namespace Lumpn.Mooga
             this.ranking = new CrowdingDistanceRanking();
         }
 
-        public List<IGenome> initialize()
+        public List<Genome> initialize()
         {
             return evolution.initialize();
         }
 
-        public List<IGenome> evolve(List<Genome> genomes, Random random)
+        public List<Genome> evolve(List<Genome> genomes, Random random)
         {
 
             // spawn individuals

@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace Lumpn.Mooga
 {
-    public interface ISelection
+    public interface Selection
     {
         /// Selects a single individual.
-        IIndividual Select(List<IIndividual> individuals);
+        Individual Select(List<Individual> individuals);
 
         /// Selects a sample of mutually different individuals.
-        List<IIndividual> Select(List<IIndividual> individuals, int count);
+        List<Individual> Select(List<Individual> individuals, int count);
     }
 }

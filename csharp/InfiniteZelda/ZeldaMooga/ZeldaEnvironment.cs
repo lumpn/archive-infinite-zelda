@@ -10,8 +10,7 @@ namespace Lumpn.ZeldaMooga
             this.maxSteps = maxSteps;
         }
 
-        @Override
-        public ZeldaIndividual evaluate(Genome g)
+        public ZeldaIndividual Evaluate(IGenome g)
         {
             ZeldaGenome genome = (ZeldaGenome)g;
 
@@ -39,8 +38,8 @@ namespace Lumpn.ZeldaMooga
             return new ZeldaIndividual(genome, puzzle, genomeErrors + numErrors, shortestPathLength, revisitFactor, branchFactor);
         }
 
-        private final State initialState;
-	private final int maxSteps;
-        private static final ProgressConsumer progress = new MockProgressBar();
+        private readonly State initialState;
+        private readonly int maxSteps;
+        private static readonly ProgressConsumer progress = new MockProgressBar();
     }
 }

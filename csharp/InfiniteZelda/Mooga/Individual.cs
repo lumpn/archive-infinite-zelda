@@ -1,9 +1,9 @@
 namespace Lumpn.Mooga
 {
-    public interface IIndividual
+    public interface Individual
     {
         /// The individual's genome.
-        IGenome Genome { get; }
+        Genome Genome { get; }
 
         /// Number of attributes evaluated.
         int NumAttributes { get; }

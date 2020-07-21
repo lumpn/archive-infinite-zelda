@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
@@ -6,7 +6,7 @@ import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
-public final class SwitchGene extends ZeldaGene {
+public sealed class SwitchGene extends ZeldaGene {
 
 	public SwitchGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
@@ -59,5 +59,5 @@ public final class SwitchGene extends ZeldaGene {
 		return String.format("switch %d", switchLocation);
 	}
 
-	private final int switchLocation;
+	private readonly int switchLocation;
 }

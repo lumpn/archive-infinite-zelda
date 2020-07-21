@@ -1,10 +1,10 @@
-package de.lumpn.zelda.mooga.evaluators;
+﻿package de.lumpn.zelda.mooga.evaluators;
 
 import java.util.List;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
-public final class ErrorCounter {
+public sealed class ErrorCounter {
 
 	public static int countErrors(ZeldaPuzzle puzzle) {
 		int errors = 0;

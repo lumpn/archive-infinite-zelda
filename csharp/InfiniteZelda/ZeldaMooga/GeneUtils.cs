@@ -1,11 +1,11 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import de.lumpn.util.CollectionUtils;
 
-public final class GeneUtils {
+public sealed class GeneUtils {
 
 	public static <T extends Gene> List<T> generate(int count, GeneFactory<T> factory, ZeldaConfiguration configuration,
 			Random random) {

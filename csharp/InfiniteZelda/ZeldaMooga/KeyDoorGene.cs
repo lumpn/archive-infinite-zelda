@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
@@ -6,7 +6,7 @@ import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
-public final class KeyDoorGene extends ZeldaGene {
+public sealed class KeyDoorGene extends ZeldaGene {
 
 	public KeyDoorGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
@@ -81,8 +81,8 @@ public final class KeyDoorGene extends ZeldaGene {
 	}
 
 	// location of key
-	private final int keyLocation;
+	private readonly int keyLocation;
 
 	// transition location of door
-	private final int doorStart, doorEnd;
+	private readonly int doorStart, doorEnd;
 }

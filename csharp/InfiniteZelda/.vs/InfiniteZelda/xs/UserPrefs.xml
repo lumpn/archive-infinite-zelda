@@ -1,18 +1,19 @@
-﻿<Properties StartupConfiguration="{CF146C21-3A73-4E0F-BF25-25CAFDD317B5}|Default">
-  <MonoDevelop.Ide.ItemProperties.ZeldaMooga PreferredExecutionTarget="MonoDevelop.Default" FirstBuild="True" />
+﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="ZeldaMooga\ItemGene.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Mooga\CrowdingDistanceIndividual.cs">
     <Files>
-      <File FileName="ZeldaMooga\Program.cs" Line="11" Column="14" />
-      <File FileName="ZeldaMooga\ZeldaGenomeFactory.cs" Line="13" Column="26" />
-      <File FileName="ZeldaMooga\ZeldaGenome.cs" Line="96" Column="67" />
-      <File FileName="ZeldaMooga\ZeldaGeneFactory.cs" Line="5" Column="11" />
-      <File FileName="ZeldaMooga\IGeneFactory.cs" Line="7" Column="1" />
-      <File FileName="ZeldaMooga\ItemGene.cs" Line="8" Column="54" />
+      <File FileName="Utils\Bounds3.cs" Line="1" Column="1" />
+      <File FileName="Utils\Int3.cs" Line="20" Column="6" />
+      <File FileName="Utils\SystemRandom.cs" Line="5" Column="32" />
+      <File FileName="Mooga\BinaryTournamentSelection.cs" Line="22" Column="9" />
+      <File FileName="Mooga\Selection.cs" Line="7" Column="8" />
+      <File FileName="Mooga\CrowdingDistanceComparator.cs" Line="1" Column="1" />
+      <File FileName="Mooga\CrowdingDistanceIndividual.cs" Line="4" Column="25" />
+      <File FileName="Mooga\CrowdingDistanceRanking.cs" Line="93" Column="90" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,16 +21,22 @@
           <Node name="InfiniteZelda" expanded="True">
             <Node name="Mooga" expanded="True">
               <Node name="References" expanded="True" />
+              <Node name="CrowdingDistanceIndividual.cs" selected="True" />
             </Node>
-            <Node name="ZeldaMooga" expanded="True">
-              <Node name="References" expanded="True" />
-              <Node name="ZeldaConfiguration.cs" selected="True" />
-            </Node>
+            <Node name="Mooga.Test" expanded="True" />
+            <Node name="Utils" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
+  <DisabledProjects>
+    <String>ZeldaLayout\ZeldaLayout.csproj</String>
+    <String>ZeldaMooga\ZeldaMooga.csproj</String>
+    <String>ZeldaPuzzle\ZeldaPuzzle.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.ItemProperties.Utils FirstBuild="True" />
+  <MonoDevelop.Ide.ItemProperties.Mooga.Test PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.ItemProperties.Mooga PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

@@ -1,9 +1,9 @@
-namespace Lumpn.Mooga
+﻿namespace Lumpn.Mooga
 {
     /// Wrapper around individuals to store total crowding distance.
     public sealed class CrowdingDistanceIndividual
     {
-        public CrowdingDistanceIndividual(IIndividual individual)
+        public CrowdingDistanceIndividual(Individual individual)
         {
             this.individual = individual;
         }
@@ -23,6 +23,6 @@ namespace Lumpn.Mooga
 
         private double totalDistance = 0.0;
 
-        public readonly IIndividual individual;
+        public readonly Individual individual;
     }
 }

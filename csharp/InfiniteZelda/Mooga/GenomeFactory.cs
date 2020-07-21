@@ -1,8 +1,8 @@
 namespace Lumpn.Mooga
 {
-    public interface IGenomeFactory
+    public interface GenomeFactory
     {
         ///Creates a random genome.
-        IGenome CreateGenome();
+        Genome CreateGenome();
     }
 }

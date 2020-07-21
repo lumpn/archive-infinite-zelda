@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga.evaluators;
+﻿package de.lumpn.zelda.mooga.evaluators;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import de.lumpn.zelda.puzzle.State;
 import de.lumpn.zelda.puzzle.Step;
 import de.lumpn.zelda.puzzle.ZeldaPuzzle;
 
-public final class PathFinder {
+public sealed class PathFinder {
 
 	public static int shortestPathLength(ZeldaPuzzle puzzle, State initialState) {
 		Step step = puzzle.getStep(ZeldaPuzzle.ENTRANCE, initialState);

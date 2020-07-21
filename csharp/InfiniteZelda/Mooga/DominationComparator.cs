@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Lumpn.Mooga
 {
     ///Compares individuals by domination of attributes.
-    public sealed class DominationComparator : Comparer<IIndividual>
+    public sealed class DominationComparator : Comparer<Individual>
     {
-        public int Compare(IIndividual a, IIndividual b)
+        public int Compare(Individual a, Individual b)
         {
             Debug.Assert(a.NumAttributes == b.NumAttributes);
 

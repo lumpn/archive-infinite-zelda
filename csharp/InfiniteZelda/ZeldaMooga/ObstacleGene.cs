@@ -1,4 +1,4 @@
-package de.lumpn.zelda.mooga;
+﻿package de.lumpn.zelda.mooga;
 
 import java.util.List;
 import java.util.Random;
@@ -6,7 +6,7 @@ import de.lumpn.zelda.puzzle.VariableLookup;
 import de.lumpn.zelda.puzzle.ZeldaPuzzleBuilder;
 import de.lumpn.zelda.puzzle.script.ZeldaScripts;
 
-public final class ObstacleGene extends ZeldaGene {
+public sealed class ObstacleGene extends ZeldaGene {
 
 	public ObstacleGene(ZeldaConfiguration configuration, Random random) {
 		super(configuration);
@@ -76,10 +76,10 @@ public final class ObstacleGene extends ZeldaGene {
 	/**
 	 * item to overcome obstacle
 	 */
-	private final int requiredItem;
+	private readonly int requiredItem;
 
 	/**
 	 * obstacle transition location
 	 */
-	private final int obstacleStart, obstacleEnd;
+	private readonly int obstacleStart, obstacleEnd;
 }

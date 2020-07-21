@@ -1,19 +1,21 @@
+using System;
 using Lumpn.Mooga;
+using Lumpn.Utils;
 
-public sealed class Program
+public sealed class ZeldaMooga
 {
     public static void Main(string[] args)
     {
-        IRandom random = new SystemRandom();
+        IRandom random = new SystemRandom(42);
 
         ZeldaConfiguration configuration = new ZeldaConfiguration();
 
         ZeldaGenomeFactory factory = new ZeldaGenomeFactory(configuration, random);
 
-        State initialState = new State(Collections.< VariableIdentifier, Integer > emptyMap());
+        //State initialState = new State(Collections.< VariableIdentifier, Integer > emptyMap());
         ZeldaEnvironment environment = new ZeldaEnvironment(initialState, 10000);
 
-        ZeldaGenome example = factory.createGenome();
+        ZeldaGenome example = factory.CreateGenome();
         ZeldaIndividual individual = environment.evaluate(example);
         System.out.println("test: " + individual);
 

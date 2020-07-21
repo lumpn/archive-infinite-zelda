@@ -1,26 +1,26 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Lumpn.Mooga
 {
     public sealed class CrowdingDistanceRanking : IRanking
     {
-        public IEnumerable<IIndividual> Rank(IList<IIndividual> individuals)
+        public IEnumerable<Individual> Rank(IList<Individual> individuals)
         {
             // trivial?
             if (individuals.Count < 2)
             {
-                return new List<IIndividual>(individuals);
+                return new List<Individual>(individuals);
             }
 
             // split into non-dominated and dominated
-            List<IIndividual> nonDominated = new List<IIndividual>();
-            List<IIndividual> dominated = new List<IIndividual>();
-            foreach (IIndividual individual in individuals)
+            List<Individual> nonDominated = new List<Individual>();
+            List<Individual> dominated = new List<Individual>();
+            foreach (Individual individual in individuals)
             {
                 // check domination
                 bool isDominated = false;
-                foreach (IIndividual other in individuals)
+                foreach (Individual other in individuals)
                 {
                     if (other == individual) continue;
                     if (comparator.Compare(individual, other) < 0)
@@ -42,19 +42,19 @@ namespace Lumpn.Mooga
             }
 
             // sort non-dominated by crowding distance
-            List<IIndividual> sortedNonDominated = sortByCrowdingDistance(nonDominated);
+            List<Individual> sortedNonDominated = sortByCrowdingDistance(nonDominated);
 
             // recursively rank the dominated individuals
-            List<IIndividual> rankedDominated = Rank(dominated);
+            List<Individual> rankedDominated = Rank(dominated);
 
             // concatenate both lists
-            List<IIndividual> result = new List<IIndividual>();
+            List<Individual> result = new List<Individual>();
             result.AddRange(sortedNonDominated);
             result.AddRange(rankedDominated);
             return result;
         }
 
-        private List<IIndividual> SortByCrowdingDistance(List<IIndividual> individuals)
+        private List<Individual> SortByCrowdingDistance(List<Individual> individuals)
         {
             // trivial?
             if (individuals.Count < 2)
@@ -71,16 +71,16 @@ namespace Lumpn.Mooga
 
             // calculate each crowding distance
             int lastIndex = wrappedIndividuals.Count - 1;
-            int numAttributes = individuals[0].numAttributes();
+            int numAttributes = individuals[0].NumAttributes;
             for (int attribute = 0; attribute < numAttributes; attribute++)
             {
-                wrappedIndividuals.sort(new ScoreComparator(attribute));
+                wrappedIndividuals.Sort(new ScoreComparator(attribute));
 
                 CrowdingDistanceIndividual min = wrappedIndividuals[0];
                 CrowdingDistanceIndividual max = wrappedIndividuals[lastIndex];
 
-                double minValue = min.getIndividual().getScore(attribute);
-                double maxValue = max.getIndividual().getScore(attribute);
+                double minValue = min.individual.Score(attribute);
+                double maxValue = max.individual.Score(attribute);
 
                 // no divergence?
                 if (minValue >= maxValue) continue;
@@ -88,30 +88,31 @@ namespace Lumpn.Mooga
                 // calculate crowding distance
                 for (int i = 1; i < lastIndex; i++)
                 {
-                    CrowdingDistanceIndividual current = wrappedIndividuals.get(i);
-                    CrowdingDistanceIndividual leftNeighbor = wrappedIndividuals.get(i - 1);
-                    CrowdingDistanceIndividual rightNeighbor = wrappedIndividuals.get(i + 1);
+                    CrowdingDistanceIndividual current = wrappedIndividuals[i];
+                    CrowdingDistanceIndividual leftNeighbor = wrappedIndividuals[i - 1];
+                    CrowdingDistanceIndividual rightNeighbor = wrappedIndividuals[i + 1];
 
                     // calculate & accumulate normalized crowding distance
-                    double leftValue = leftNeighbor.getIndividual().getScore(attribute);
-                    double rightValue = rightNeighbor.getIndividual().getScore(attribute);
+                    double leftValue = leftNeighbor.individual.Score(attribute);
+                    double rightValue = rightNeighbor.individual.Score(attribute);
                     double distance = (rightValue - leftValue) / (maxValue - minValue);
-                    current.addCrowdingDistance(distance);
+                    current.AddCrowdingDistance(distance);
                 }
 
                 // update extremes
-                min.addCrowdingDistance(2.0);
-                max.addCrowdingDistance(2.0);
+                min.AddCrowdingDistance(2.0);
+                max.AddCrowdingDistance(2.0);
             }
 
             // sort by descending crowding distance
-            wrappedIndividuals.sort(Collections.reverseOrder(new CrowdingDistanceComparator()));
+            wrappedIndividuals.Sort(new CrowdingDistanceComparator());
+            wrappedIndividuals.Reverse();
 
             // strip crowding distance wrapper
             List<Individual> result = new List<Individual>();
             foreach (CrowdingDistanceIndividual crowdingDistanceIndividual in wrappedIndividuals)
             {
-                result.Add(crowdingDistanceIndividual.getIndividual());
+                result.Add(crowdingDistanceIndividual.individual);
             }
 
             return result;
