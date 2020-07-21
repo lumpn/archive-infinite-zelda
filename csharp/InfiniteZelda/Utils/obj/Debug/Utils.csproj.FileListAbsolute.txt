@@ -1,5 +1,0 @@
-W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Utils\bin\Debug\Utils.dll
-W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Utils\bin\Debug\Utils.pdb
-W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Utils\obj\Debug\Utils.csprojAssemblyReference.cache
-W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Utils\obj\Debug\Utils.dll
-W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Utils\obj\Debug\Utils.pdb

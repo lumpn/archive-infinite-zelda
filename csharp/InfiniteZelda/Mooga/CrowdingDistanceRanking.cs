@@ -40,8 +40,13 @@ namespace Lumpn.Mooga
             return sortedNonDominated.Concat(rankedDominated);
         }
 
-        private IEnumerable<Individual> SortByCrowdingDistance(IEnumerable<Individual> individuals)
+        private IEnumerable<Individual> SortByCrowdingDistance(List<Individual> individuals)
         {
+            if (individuals.Count < 2)
+            {
+                return individuals;
+            }
+
             // create crowding distance wrapper
             var wrappedIndividuals = individuals.Select(p => new CrowdingDistanceIndividual(p)).ToList();
 
