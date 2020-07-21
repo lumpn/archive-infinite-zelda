@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Lumpn.Utils;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lumpn.Mooga
 {
@@ -7,57 +10,53 @@ namespace Lumpn.Mooga
     {
         public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory, Environment environment)
         {
+            var random = new SystemRandom(42);
+            var selection = new BinaryTournamentSelection(random);
+
             this.archiveSize = archiveSize;
-            this.evolution = new Evolution(populationSize, 0.5, 0.4, factory, new BinaryTournamentSelection(new Random()));
+            this.evolution = new Evolution(populationSize, 0.5, 0.4, factory, selection);
             this.environment = environment;
             this.ranking = new CrowdingDistanceRanking();
         }
 
-        public List<Genome> initialize()
+        public List<Genome> Initialize()
         {
-            return evolution.initialize();
+            return evolution.Initialize();
         }
 
-        public List<Genome> evolve(List<Genome> genomes, Random random)
+        public List<Genome> Evolve(List<Genome> genomes, RandomNumberGenerator random)
         {
-
             // spawn individuals
-            long t1 = System.currentTimeMillis();
-            List<Individual> population = new ArrayList<Individual>();
-            for (Genome genome : genomes)
+            List<Individual> population = new List<Individual>();
+            foreach (Genome genome in genomes)
             {
                 // TODO: only evaluate genomes not previously seen
-                Individual individual = environment.evaluate(genome);
-                population.add(individual);
+                Individual individual = environment.Evaluate(genome);
+                population.Add(individual);
             }
-            long t2 = System.currentTimeMillis();
 
             // combine with archive
-            population.addAll(archive);
-
-            // distinct
-            population = new ArrayList<Individual>(new HashSet<Individual>(population));
+            population.AddRange(archive);
 
             // rank population
-            long t3 = System.currentTimeMillis();
-            List<Individual> rankedPopulation = ranking.rank(population);
-            long t4 = System.currentTimeMillis();
+            var rankedPopulation = ranking.Rank(population.Distinct()).ToList();
 
             // update archive
-            archive = rankedPopulation.subList(0, Math.min(archiveSize, rankedPopulation.size()));
-            print(rankedPopulation.subList(0, Math.min(10, rankedPopulation.size())));
-            printStats(rankedPopulation, t1, t2, t3, t4);
-            System.out.println(rankedPopulation.size() + " distinct individuals");
+            archive.Clear();
+            archive.AddRange(rankedPopulation.Take(archiveSize));
+            Print(rankedPopulation.Take(10));
+            PrintStats(rankedPopulation);
+            Console.WriteLine("{0} distinct individuals", rankedPopulation.Count);
 
             // evolve population
-            return evolution.evolve(rankedPopulation, random);
+            return evolution.Evolve(rankedPopulation, random);
         }
 
-        public Individual getBest()
+        public Individual GetBest()
         {
-            for (Individual individual : archive)
+            foreach (Individual individual in archive)
             {
-                if (individual.isElite())
+                if (individual.IsElite)
                 {
                     return individual;
                 }
@@ -65,43 +64,42 @@ namespace Lumpn.Mooga
             return null;
         }
 
-        private static void print(Iterable<Individual> individuals)
+        private static void Print(IEnumerable<Individual> individuals)
         {
-            System.out.println("----------------------------------------------------");
-            for (Individual individual : individuals)
+            Console.WriteLine("----------------------------------------------------");
+            foreach (Individual individual in individuals)
             {
-                System.out.println(individual);
+                Console.WriteLine(individual);
             }
-            System.out.println("----------------------------------------------------");
+            Console.WriteLine("----------------------------------------------------");
         }
 
-        private static void printStats(Iterable<Individual> individuals, long t1, long t2, long t3, long t4)
+        private static void PrintStats(IEnumerable<Individual> individuals)
         {
-            List<Double> mins = new ArrayList<Double>();
-            List<Double> maxs = new ArrayList<Double>();
-            List<Double> avgs = new ArrayList<Double>();
+            List<double> mins = new List<double>();
+            List<double> maxs = new List<double>();
+            List<double> avgs = new List<double>();
 
             int count = 0;
             int attributes = 0;
-            for (Individual individual : individuals)
+            foreach (Individual individual in individuals)
             {
-
                 // initialize lists
-                if (mins.isEmpty())
+                if (mins.Count < 1)
                 {
-                    attributes = individual.numAttributes();
-                    mins.addAll(repeat(Double.MAX_VALUE, attributes));
-                    maxs.addAll(repeat(Double.MIN_VALUE, attributes));
-                    avgs.addAll(repeat(0, attributes));
+                    attributes = individual.NumAttributes;
+                    mins.AddRange(Enumerable.Repeat(double.MaxValue, attributes));
+                    maxs.AddRange(Enumerable.Repeat(double.MinValue, attributes));
+                    avgs.AddRange(Enumerable.Repeat(0.0, attributes));
                 }
 
                 // record stats
                 for (int i = 0; i < attributes; i++)
                 {
-                    double score = individual.getScore(i);
-                    mins.set(i, Math.min(mins.get(i), score));
-                    maxs.set(i, Math.max(maxs.get(i), score));
-                    avgs.set(i, avgs.get(i) + score);
+                    double score = individual.Score(i);
+                    mins[i] = Math.Min(mins[i], score);
+                    maxs[i] = Math.Max(maxs[i], score);
+                    avgs[i] = avgs[i] + score;
                     count++;
                 }
             }
@@ -109,19 +107,8 @@ namespace Lumpn.Mooga
             // print stats
             for (int i = 0; i < attributes; i++)
             {
-                System.out.format("%d: min %f, max %f, mid %f, avg %f\n", i, mins.get(i), maxs.get(i), (mins.get(i) + maxs.get(i)) / 2, avgs.get(i) / count);
+                Console.WriteLine("{0}: min {1}, max {2}, mid {3}, avg {4}\n", i, mins[i], maxs[i], (mins[i] + maxs[i]) / 2, avgs[i] / count);
             }
-
-            // print times
-            System.out.format("%dms eval, %dms rank, %dms total\n", t2 - t1, t4 - t3, t4 - t1);
-        }
-
-        private static List<Double> repeat(double value, int times)
-        {
-            List<Double> result = new ArrayList<Double>(times);
-            for (int i = 0; i < times; i++)
-                result.add(value);
-            return result;
         }
 
         private readonly int archiveSize;
@@ -129,7 +116,7 @@ namespace Lumpn.Mooga
         private readonly Evolution evolution;
         private readonly Environment environment;
 
-        private readonly IRanking ranking;
+        private readonly Ranking ranking;
 
         private readonly List<Individual> archive = new List<Individual>();
     }

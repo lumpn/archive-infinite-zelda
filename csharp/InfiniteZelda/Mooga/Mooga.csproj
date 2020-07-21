@@ -32,10 +32,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BinaryTournamentSelection.cs" />
-    <Compile Include="CrowdingDistanceComparator.cs" />
+    <Compile Include="CrowdingDistanceComparer.cs" />
     <Compile Include="CrowdingDistanceIndividual.cs" />
     <Compile Include="CrowdingDistanceRanking.cs" />
-    <Compile Include="DominationComparator.cs" />
+    <Compile Include="DominationComparer.cs" />
     <Compile Include="ElitistEvolution.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Evolution.cs" />
@@ -43,7 +43,7 @@
     <Compile Include="GenomeFactory.cs" />
     <Compile Include="Individual.cs" />
     <Compile Include="Ranking.cs" />
-    <Compile Include="ScoreComparator.cs" />
+    <Compile Include="ScoreComparer.cs" />
     <Compile Include="Selection.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿namespace Lumpn.Mooga
 {
-    public interface IEnvironment
+    public interface Environment
     {
         Individual Evaluate(Genome genome);
     }

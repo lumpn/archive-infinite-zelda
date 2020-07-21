@@ -1,2 +1,12 @@
 W:\Github\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.csprojAssemblyReference.cache
-W:\Github\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.csproj.CoreCompileInputs.cache
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Mooga.Test.dll
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Mooga.Test.pdb
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Mooga.dll
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\nunit.framework.dll
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Utils.dll
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Mooga.pdb
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\Utils.pdb
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\bin\Debug\nunit.framework.xml
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.csproj.CopyComplete
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.dll
+W:\GitHub\infinite-zelda\csharp\InfiniteZelda\Mooga.Test\obj\Debug\Mooga.Test.pdb

@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lumpn.Mooga
 {
-    public sealed class CrowdingDistanceRanking : IRanking
+    public sealed class CrowdingDistanceRanking : Ranking
     {
-        public IEnumerable<Individual> Rank(IList<Individual> individuals)
+        public IEnumerable<Individual> Rank(IEnumerable<Individual> individuals)
         {
-            // trivial?
-            if (individuals.Count < 2)
-            {
-                return new List<Individual>(individuals);
-            }
-
             // split into non-dominated and dominated
-            List<Individual> nonDominated = new List<Individual>();
-            List<Individual> dominated = new List<Individual>();
+            var nonDominated = new List<Individual>();
+            var dominated = new List<Individual>();
             foreach (Individual individual in individuals)
             {
                 // check domination
@@ -23,7 +18,7 @@ namespace Lumpn.Mooga
                 foreach (Individual other in individuals)
                 {
                     if (other == individual) continue;
-                    if (comparator.Compare(individual, other) < 0)
+                    if (comparer.Compare(individual, other) < 0)
                     {
                         isDominated = true;
                         break;
@@ -31,56 +26,38 @@ namespace Lumpn.Mooga
                 }
 
                 // put in respective list
-                if (isDominated)
-                {
-                    dominated.Add(individual);
-                }
-                else
-                {
-                    nonDominated.Add(individual);
-                }
+                var list = isDominated ? dominated : nonDominated;
+                list.Add(individual);
             }
 
             // sort non-dominated by crowding distance
-            List<Individual> sortedNonDominated = sortByCrowdingDistance(nonDominated);
+            var sortedNonDominated = SortByCrowdingDistance(nonDominated);
 
             // recursively rank the dominated individuals
-            List<Individual> rankedDominated = Rank(dominated);
+            var rankedDominated = Rank(dominated);
 
             // concatenate both lists
-            List<Individual> result = new List<Individual>();
-            result.AddRange(sortedNonDominated);
-            result.AddRange(rankedDominated);
-            return result;
+            return sortedNonDominated.Concat(rankedDominated);
         }
 
-        private List<Individual> SortByCrowdingDistance(List<Individual> individuals)
+        private IEnumerable<Individual> SortByCrowdingDistance(IEnumerable<Individual> individuals)
         {
-            // trivial?
-            if (individuals.Count < 2)
-            {
-                return new List<Individual>(individuals);
-            }
-
             // create crowding distance wrapper
-            List<CrowdingDistanceIndividual> wrappedIndividuals = new List<CrowdingDistanceIndividual>();
-            foreach (Individual individual in individuals)
-            {
-                wrappedIndividuals.Add(new CrowdingDistanceIndividual(individual));
-            }
+            var wrappedIndividuals = individuals.Select(p => new CrowdingDistanceIndividual(p)).ToList();
 
             // calculate each crowding distance
             int lastIndex = wrappedIndividuals.Count - 1;
-            int numAttributes = individuals[0].NumAttributes;
+            int numAttributes = wrappedIndividuals[0].NumAttributes; // TODO Jonas: use configuration
             for (int attribute = 0; attribute < numAttributes; attribute++)
             {
-                wrappedIndividuals.Sort(new ScoreComparator(attribute));
+                wrappedIndividuals.Sort(new ScoreComparer(attribute));
 
                 CrowdingDistanceIndividual min = wrappedIndividuals[0];
                 CrowdingDistanceIndividual max = wrappedIndividuals[lastIndex];
 
-                double minValue = min.individual.Score(attribute);
-                double maxValue = max.individual.Score(attribute);
+                double minValue = min.Score(attribute);
+                double maxValue = max.Score(attribute);
+                double range = maxValue - minValue;
 
                 // no divergence?
                 if (minValue >= maxValue) continue;
@@ -93,9 +70,10 @@ namespace Lumpn.Mooga
                     CrowdingDistanceIndividual rightNeighbor = wrappedIndividuals[i + 1];
 
                     // calculate & accumulate normalized crowding distance
-                    double leftValue = leftNeighbor.individual.Score(attribute);
-                    double rightValue = rightNeighbor.individual.Score(attribute);
-                    double distance = (rightValue - leftValue) / (maxValue - minValue);
+                    double leftValue = leftNeighbor.Score(attribute);
+                    double rightValue = rightNeighbor.Score(attribute);
+                    double crowdingRange = rightValue - leftValue;
+                    double distance = crowdingRange / range;
                     current.AddCrowdingDistance(distance);
                 }
 
@@ -105,19 +83,13 @@ namespace Lumpn.Mooga
             }
 
             // sort by descending crowding distance
-            wrappedIndividuals.Sort(new CrowdingDistanceComparator());
+            wrappedIndividuals.Sort(new CrowdingDistanceComparer());
             wrappedIndividuals.Reverse();
 
             // strip crowding distance wrapper
-            List<Individual> result = new List<Individual>();
-            foreach (CrowdingDistanceIndividual crowdingDistanceIndividual in wrappedIndividuals)
-            {
-                result.Add(crowdingDistanceIndividual.individual);
-            }
-
-            return result;
+            return wrappedIndividuals.Select(p => p.individual);
         }
 
-        private readonly DominationComparator comparator = new DominationComparator();
+        private readonly DominationComparer comparer = new DominationComparer();
     }
 }

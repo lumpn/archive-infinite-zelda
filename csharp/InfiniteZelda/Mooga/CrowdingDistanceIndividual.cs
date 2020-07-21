@@ -1,7 +1,7 @@
 ﻿namespace Lumpn.Mooga
 {
     /// Wrapper around individuals to store total crowding distance.
-    public sealed class CrowdingDistanceIndividual
+    public sealed class CrowdingDistanceIndividual : Individual
     {
         public CrowdingDistanceIndividual(Individual individual)
         {
@@ -13,10 +13,15 @@
             totalDistance += distance;
         }
 
+        public Genome Genome { get { return individual.Genome; } }
+        public int NumAttributes { get { return individual.NumAttributes; } }
+        public int Priority(int attribute) { return individual.Priority(attribute); }
+        public double Score(int attribute) { return individual.Score(attribute); }
+        public bool IsElite { get { return individual.IsElite; } }
+
         public override string ToString()
         {
-            return string.Format("CrowdingDistanceIndividual [totalDistance={0}, individual={1}]",
-                    totalDistance, individual);
+            return string.Format("(totalDistance {0}, individual {1})", totalDistance, individual);
         }
 
         public double Distance { get { return totalDistance; } }

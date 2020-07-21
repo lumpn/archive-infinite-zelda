@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Lumpn.Mooga
 {
     ///Compares individuals by crowding distance.
-    public sealed class CrowdingDistanceComparator : IComparer<CrowdingDistanceIndividual>
+    public sealed class CrowdingDistanceComparer : IComparer<CrowdingDistanceIndividual>
     {
         private static readonly Comparer<double> comparer = Comparer<double>.Default;
 

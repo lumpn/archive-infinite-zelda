@@ -15,6 +15,6 @@ namespace Lumpn.Utils
             return (min <= position && position <= max);
         }
 
-        private readonly Int3 min,max;
+        private readonly Int3 min, max;
     }
 }

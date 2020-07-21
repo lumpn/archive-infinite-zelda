@@ -2,7 +2,7 @@
 
 namespace Lumpn.Mooga
 {
-    public interface IRanking
+    public interface Ranking
     {
         /// Rank individuals. Highest score comes first.
         IEnumerable<Individual> Rank(IEnumerable<Individual> individuals);

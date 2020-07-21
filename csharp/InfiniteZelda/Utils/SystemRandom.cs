@@ -1,12 +1,14 @@
-﻿namespace Lumpn.Utils
+﻿using System;
+
+namespace Lumpn.Utils
 {
-    public sealed class SystemRandom : Random
+    public sealed class SystemRandom : RandomNumberGenerator
     {
-        private readonly System.Random random;
+        private readonly Random random;
 
         public SystemRandom(int seed)
         {
-            random = new System.Random(seed);
+            random = new Random(seed);
         }
 
         public int NextInt(int max)

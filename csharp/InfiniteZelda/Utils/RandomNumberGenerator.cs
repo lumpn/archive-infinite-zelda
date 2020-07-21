@@ -1,6 +1,6 @@
 ﻿namespace Lumpn.Utils
 {
-    public interface Random
+    public interface RandomNumberGenerator
     {
         int NextInt(int max);
     }

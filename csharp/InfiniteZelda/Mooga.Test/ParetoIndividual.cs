@@ -1,6 +1,8 @@
-﻿namespace Lumpn.Mooga.Test
+﻿using Lumpn.Utils;
+
+namespace Lumpn.Mooga.Test
 {
-    private sealed class ParetoIndividual : Individual
+    public sealed class ParetoIndividual : Individual
     {
         public ParetoIndividual(double score1, double score2, double score3, int priority1, int priority2, int priority3)
         {
@@ -20,11 +22,12 @@
                     return null; // not needed for test
                 }
             }
+        }
 
-        public int NumAttributes()
+        public int NumAttributes
         {
             get
-        {
+            {
                 return 3;
             }
         }
@@ -40,9 +43,9 @@
                 case 2:
                     return priority3;
                 default:
-                    Assert.fail();
+                    Debug.Fail();
+                    return 0;
             }
-            return 0;
         }
 
         public double Score(int attribute)
@@ -56,9 +59,9 @@
                 case 2:
                     return score3;
                 default:
-                    Assert.fail();
+                    Debug.Fail();
+                    return 0.0;
             }
-            return 0.0;
         }
 
         public bool IsElite

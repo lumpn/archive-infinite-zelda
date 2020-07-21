@@ -6,7 +6,7 @@ namespace Lumpn.Mooga
 {
     public sealed class BinaryTournamentSelection : Selection
     {
-        public BinaryTournamentSelection(Random random)
+        public BinaryTournamentSelection(RandomNumberGenerator random)
         {
             this.random = random;
         }
@@ -22,7 +22,7 @@ namespace Lumpn.Mooga
 
         public List<Individual> Select(List<Individual> individuals, int count)
         {
-            System.Diagnostics.Debug.Assert(count < individuals.Count);
+            Debug.Assert(count < individuals.Count);
 
             var result = new List<Individual>();
             while (result.Count < count)
@@ -36,6 +36,6 @@ namespace Lumpn.Mooga
             return result;
         }
 
-        private readonly Random random;
+        private readonly RandomNumberGenerator random;
     }
 }
