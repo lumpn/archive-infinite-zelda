@@ -1,48 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using Lumpn.Utils;
+﻿using System.Collections.Generic;
 
 namespace Lumpn.Mooga
 {
-    ///Compares individuals by domination of attributes.
+    /// compares individuals by domination of attribute scores
     public sealed class DominationComparer : IComparer<Individual>
     {
+        public DominationComparer(int numAttributes)
+        {
+            this.numAttributes = numAttributes;
+        }
+
         public int Compare(Individual a, Individual b)
         {
-            Debug.Assert(a.NumAttributes == b.NumAttributes);
-
-            bool aIsPartiallyBetter = false;
-            bool bIsPartiallyBetter = false;
-            int aPriority = int.MinValue;
-            int bPriority = int.MinValue;
+            bool isBetterA = false;
+            bool isBetterB = false;
 
             // compare each score
-            int numScores = a.NumAttributes;
-            for (int i = 0; i < numScores; i++)
+            for (int i = 0; i < numAttributes; i++)
             {
-                double aScore = a.Score(i);
-                double bScore = b.Score(i);
-                int priority = a.Priority(i);
-                if (aScore > bScore)
-                {
-                    aIsPartiallyBetter = true;
-                    aPriority = Math.Max(aPriority, priority);
-                }
-                else if (aScore < bScore)
-                {
-                    bIsPartiallyBetter = true;
-                    bPriority = Math.Max(bPriority, priority);
-                }
-            }
-
-            // look at priorities
-            if (aPriority != bPriority)
-            {
-                return Comparer<int>.Default.Compare(aPriority, bPriority);
+                double scoreA = a.GetScore(i);
+                double scoreB = b.GetScore(i);
+                isBetterA |= (scoreA > scoreB);
+                isBetterB |= (scoreA < scoreB);
             }
 
             // determine domination
-            return Comparer<bool>.Default.Compare(aIsPartiallyBetter, bIsPartiallyBetter);
+            return comparer.Compare(isBetterA, isBetterB);
         }
+
+        private readonly int numAttributes;
+
+        private static readonly Comparer<bool> comparer = Comparer<bool>.Default;
     }
 }

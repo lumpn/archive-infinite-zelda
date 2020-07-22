@@ -1,4 +1,6 @@
-﻿namespace Lumpn.Mooga.Test
+﻿using Lumpn.Utils;
+
+namespace Lumpn.Mooga.Test
 {
     public sealed class SimpleIndividual : Individual
     {
@@ -7,45 +9,32 @@
             this.score = score;
         }
 
-        public Genome Genome
+        public Genome Genome { get { return null; } } // not needed for test
+
+        public double GetScore(int attribute)
         {
-            get
+            switch (attribute)
             {
-                return null; // not needed for test
+                case 0: return distance;
+                case 1: return score;
             }
+
+            Debug.Fail();
+            return 0.0;
         }
 
-        public int NumAttributes
+        public void SetScore(int attribute, double value)
         {
-            get
-            {
-                return 1;
-            }
-        }
-
-        public int Priority(int attribute)
-        {
-            return 0;
-        }
-
-        public double Score(int attribute)
-        {
-            return score;
-        }
-
-        public bool IsElite
-        {
-            get
-            {
-                return true;
-            }
+            Debug.Assert(attribute == 0);
+            distance = value;
         }
 
         public override string ToString()
         {
-            return string.Format("SimpleIndividual (score {0})", score);
+            return string.Format("({0}, {1})", distance, score);
         }
 
+        private double distance;
         private readonly double score;
     }
 }

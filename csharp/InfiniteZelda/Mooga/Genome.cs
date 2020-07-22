@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Lumpn.Utils;
+﻿using Lumpn.Utils;
 
 namespace Lumpn.Mooga
 {
     public interface Genome
     {
-        /// Cross two genomes producing two offsprings.
-        IEnumerable<Genome> Crossover(Genome other, RandomNumberGenerator random);
+        /// cross two genomes producing two offsprings
+        Pair<Genome> Crossover(Genome other, RandomNumberGenerator random);
 
-        /// Mutate genome returning the mutated copy.
+        /// mutate genome returning the mutated copy
         Genome Mutate(RandomNumberGenerator random);
     }
 }

@@ -30,10 +30,7 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BinaryTournamentSelection.cs" />
-    <Compile Include="CrowdingDistanceComparer.cs" />
-    <Compile Include="CrowdingDistanceIndividual.cs" />
     <Compile Include="CrowdingDistanceRanking.cs" />
     <Compile Include="DominationComparer.cs" />
     <Compile Include="ElitistEvolution.cs" />

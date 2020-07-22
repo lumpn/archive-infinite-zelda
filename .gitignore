@@ -1,3 +1,10 @@
+# csharp
+.vs/
+bin/
+obj/
+packages/
+
+# Java
 *.class
 
 # Mobile Tools for Java (J2ME)

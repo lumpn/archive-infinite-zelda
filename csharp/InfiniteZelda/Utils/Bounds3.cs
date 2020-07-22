@@ -1,9 +1,9 @@
 namespace Lumpn.Utils
 {
-    ///Immutable bounds.
+    /// immutable bounds
     public class Bounds3
     {
-        /// Inclusive
+        /// both inclusive
         public Bounds3(Int3 min, Int3 max)
         {
             this.min = min;

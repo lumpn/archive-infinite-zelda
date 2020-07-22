@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Lumpn.Mooga
 {
-    /// Compares individuals by score of specific attribute.
-    public sealed class ScoreComparer : IComparer<CrowdingDistanceIndividual>
+    /// compares individuals by score of specific attribute (larger score first)
+    public sealed class ScoreComparer : IComparer<Individual>
     {
         private static readonly Comparer<double> comparer = Comparer<double>.Default;
 
@@ -12,11 +12,11 @@ namespace Lumpn.Mooga
             this.attribute = attribute;
         }
 
-        public int Compare(CrowdingDistanceIndividual a, CrowdingDistanceIndividual b)
+        public int Compare(Individual a, Individual b)
         {
-            double score1 = a.individual.Score(attribute);
-            double score2 = b.individual.Score(attribute);
-            return comparer.Compare(score1, score2);
+            double scoreA = a.GetScore(attribute);
+            double scoreB = b.GetScore(attribute);
+            return -comparer.Compare(scoreA, scoreB);
         }
 
         private readonly int attribute;

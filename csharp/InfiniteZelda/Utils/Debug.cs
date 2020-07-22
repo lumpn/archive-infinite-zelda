@@ -6,22 +6,22 @@ namespace Lumpn.Utils
     {
         public static void Fail()
         {
-            throw new System.InvalidOperationException();
+            throw new InvalidOperationException();
         }
 
         public static void Fail(string message)
         {
-            throw new System.InvalidOperationException(message);
+            throw new InvalidOperationException(message);
         }
 
         public static void Assert(bool condition)
         {
-            if (!condition) throw new System.InvalidOperationException();
+            if (!condition) throw new InvalidOperationException();
         }
 
         public static void Assert(bool condition, string message)
         {
-            if (!condition) throw new System.InvalidOperationException(message);
+            if (!condition) throw new InvalidOperationException(message);
         }
     }
 }

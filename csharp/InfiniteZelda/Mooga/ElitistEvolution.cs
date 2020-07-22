@@ -1,22 +1,22 @@
-﻿using Lumpn.Utils;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lumpn.Utils;
 
 namespace Lumpn.Mooga
 {
     public sealed class ElitistEvolution
     {
-        public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory, Environment environment)
+        public ElitistEvolution(int populationSize, int archiveSize, GenomeFactory factory, Environment environment, int numAttributes)
         {
             var random = new SystemRandom(42);
             var selection = new BinaryTournamentSelection(random);
 
+            this.numAttributes = numAttributes;
             this.archiveSize = archiveSize;
             this.evolution = new Evolution(populationSize, 0.5, 0.4, factory, selection);
             this.environment = environment;
-            this.ranking = new CrowdingDistanceRanking();
+            this.ranking = new CrowdingDistanceRanking(numAttributes);
         }
 
         public List<Genome> Initialize()
@@ -27,11 +27,10 @@ namespace Lumpn.Mooga
         public List<Genome> Evolve(List<Genome> genomes, RandomNumberGenerator random)
         {
             // spawn individuals
-            List<Individual> population = new List<Individual>();
+            var population = new List<Individual>();
             foreach (Genome genome in genomes)
             {
-                // TODO: only evaluate genomes not previously seen
-                Individual individual = environment.Evaluate(genome);
+                var individual = environment.Evaluate(genome);
                 population.Add(individual);
             }
 
@@ -39,29 +38,22 @@ namespace Lumpn.Mooga
             population.AddRange(archive);
 
             // rank population
-            var rankedPopulation = ranking.Rank(population.Distinct()).ToList();
+            ranking.Rank(population);
 
             // update archive
             archive.Clear();
-            archive.AddRange(rankedPopulation.Take(archiveSize));
-            Print(rankedPopulation.Take(10));
-            PrintStats(rankedPopulation);
-            Console.WriteLine("{0} distinct individuals", rankedPopulation.Count);
+            archive.AddRange(population.Take(archiveSize));
+
+            Print(population.Take(10));
+            PrintStats(population, numAttributes);
 
             // evolve population
-            return evolution.Evolve(rankedPopulation, random);
+            return evolution.Evolve(population, random);
         }
 
-        public Individual GetBest()
+        public Individual GetBest(IComparer<Individual> comparer)
         {
-            foreach (Individual individual in archive)
-            {
-                if (individual.IsElite)
-                {
-                    return individual;
-                }
-            }
-            return null;
+            return archive.OrderBy(p => p, comparer).First();
         }
 
         private static void Print(IEnumerable<Individual> individuals)
@@ -74,43 +66,38 @@ namespace Lumpn.Mooga
             Console.WriteLine("----------------------------------------------------");
         }
 
-        private static void PrintStats(IEnumerable<Individual> individuals)
+        private static void PrintStats(IEnumerable<Individual> individuals, int numAttributes)
         {
-            List<double> mins = new List<double>();
-            List<double> maxs = new List<double>();
-            List<double> avgs = new List<double>();
+            var mins = new List<double>(numAttributes);
+            var maxs = new List<double>(numAttributes);
+            var sums = new List<double>(numAttributes);
 
+            mins.AddRange(Enumerable.Repeat(double.MaxValue, numAttributes));
+            maxs.AddRange(Enumerable.Repeat(double.MinValue, numAttributes));
+            sums.AddRange(Enumerable.Repeat(0.0, numAttributes));
+
+            // record stats
             int count = 0;
-            int attributes = 0;
-            foreach (Individual individual in individuals)
+            foreach (var individual in individuals)
             {
-                // initialize lists
-                if (mins.Count < 1)
+                for (int i = 0; i < numAttributes; i++)
                 {
-                    attributes = individual.NumAttributes;
-                    mins.AddRange(Enumerable.Repeat(double.MaxValue, attributes));
-                    maxs.AddRange(Enumerable.Repeat(double.MinValue, attributes));
-                    avgs.AddRange(Enumerable.Repeat(0.0, attributes));
-                }
-
-                // record stats
-                for (int i = 0; i < attributes; i++)
-                {
-                    double score = individual.Score(i);
+                    double score = individual.GetScore(i);
                     mins[i] = Math.Min(mins[i], score);
                     maxs[i] = Math.Max(maxs[i], score);
-                    avgs[i] = avgs[i] + score;
-                    count++;
+                    sums[i] = sums[i] + score;
                 }
+                count++;
             }
 
             // print stats
-            for (int i = 0; i < attributes; i++)
+            for (int i = 0; i < numAttributes; i++)
             {
-                Console.WriteLine("{0}: min {1}, max {2}, mid {3}, avg {4}\n", i, mins[i], maxs[i], (mins[i] + maxs[i]) / 2, avgs[i] / count);
+                Console.WriteLine("{0}: min {1}, max {2}, mid {3}, avg {4}\n", i, mins[i], maxs[i], (mins[i] + maxs[i]) / 2, sums[i] / count);
             }
         }
 
+        private readonly int numAttributes;
         private readonly int archiveSize;
 
         private readonly Evolution evolution;
