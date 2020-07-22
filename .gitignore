@@ -1,9 +1,3 @@
-# csharp
-.vs/
-bin/
-obj/
-packages/
-
 # Java
 *.class
 
